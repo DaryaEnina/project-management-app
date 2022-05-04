@@ -33,18 +33,17 @@
     "prettier": "prettier --write",
     "husky-install": "husky install"
   },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,md,html}": [
-      "eslint",
-      "prettier --write",
-      "git add"
-    ]
-  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
       "pre-build": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,md,html}": [
+      "eslint",
+      "prettier --write"
+    ]
   },
   "eslintConfig": {
     "extends": [
