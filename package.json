@@ -40,6 +40,12 @@
       "git add"
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-build": "lint-staged"
+    }
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
