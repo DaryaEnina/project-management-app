@@ -1,20 +1,13 @@
-import { Container, TextField } from '@mui/material';
+import { Container, TextField, Button } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 
 export const Login = () => {
-  const {
-    handleSubmit,
-    formState: { errors },
-    control,
-  } = useForm<FormValues>({
+  const { handleSubmit, control } = useForm<FormValues>({
     defaultValues: {
       login: '',
+      password: '',
     },
   });
-
-  type FormValues = {
-    login: string;
-  };
 
   const onSubmit = (data: FormValues) => {
     console.log(data);
@@ -26,8 +19,16 @@ export const Login = () => {
         <Controller
           name="login"
           control={control}
-          render={({ field }) => <TextField {...field} />}
+          render={({ field }) => <TextField {...field} label="Email address" />}
         />
+        <Controller
+          name="password"
+          control={control}
+          render={({ field }) => <TextField {...field} label="Password" type="password" />}
+        />
+        <Button variant="contained" type="submit">
+          Log In
+        </Button>
       </form>
     </Container>
   );
