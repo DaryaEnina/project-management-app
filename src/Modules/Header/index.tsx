@@ -12,6 +12,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import CustomizedSwitches from './Components/Switch';
+import { createBoard } from '../../store/slices/boardsListSlice';
+import { useAppDispatch } from '../../hooks/storeHooks';
 
 const pages = ['Create new board'];
 const settings = ['Profile', 'Edit profile', 'Logout'];
@@ -19,6 +21,7 @@ const settings = ['Profile', 'Edit profile', 'Logout'];
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const dispatch = useAppDispatch();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -97,7 +100,7 @@ const ResponsiveAppBar = () => {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => dispatch(createBoard())}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
