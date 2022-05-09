@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { Board } from '../../Modules/Pages/board/board';
 
 interface BoardsListState {
   currentBoard: Board;
@@ -50,6 +51,37 @@ export const createBoard = createAsyncThunk('boards/create', async () => {
   }
 });
 
+const column = {
+  title: 'IN PROGRESS',
+  order: 2,
+};
+
+export const createColumn = createAsyncThunk('column/create', async (id: string) => {
+  try {
+    const response = await axios.post(`https://${server}/boards/${id}/columns`, column, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+});
+
+export const getColumns = createAsyncThunk('column/get', async (id: string) => {
+  try {
+    const response = await axios.get(`https://${server}/boards/${id}/columns`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+});
+
 export const getBoards = createAsyncThunk('boards/get', async () => {
   try {
     const response = await axios.get(`https://${server}/boards`, {
@@ -76,6 +108,21 @@ export const getCurrentBoard = createAsyncThunk('boards/getCurrent', async (id: 
   }
 });
 
+//TODO: add update for board
+
+/* export const updateCurrentBoard = createAsyncThunk('boards/update', async (id: string) => {
+  try {
+    const response = await axios.put(`https://thawing-tor-58868.herokuapp.com/boards/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}); */
+
 export const boardsListSlice = createSlice({
   name: 'boardsList',
   initialState: { boards: [], loading: true, currentBoard: {} as Board } as BoardsListState,
@@ -86,7 +133,6 @@ export const boardsListSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(signUp.pending, (state) => {
-      console.log('fff');
       state.loading = false;
     });
     builder.addCase(signUp.fulfilled, (state, action) => {
@@ -97,7 +143,6 @@ export const boardsListSlice = createSlice({
     });
     builder.addCase(signIn.fulfilled, (state, action) => {
       token = action.payload.token;
-      console.log(action.payload);
     });
     builder.addCase(createBoard.pending, (state) => {
       state.loading = true;
@@ -111,14 +156,15 @@ export const boardsListSlice = createSlice({
     });
     builder.addCase(getBoards.fulfilled, (state, action) => {
       state.boards = action.payload;
-      console.log(action.payload);
     });
     builder.addCase(getCurrentBoard.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(getCurrentBoard.fulfilled, (state, action) => {
       state.currentBoard = action.payload;
-      console.log(action.payload);
+    });
+    builder.addCase(getColumns.fulfilled, (state, action) => {
+      state.currentBoard.columns = action.payload;
     });
   },
 });
