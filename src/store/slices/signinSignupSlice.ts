@@ -1,12 +1,19 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { api } from '../api';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
-export const signIn = createAsyncThunk('auth/signIn', async (data: signInData) => {
+export const signIn = createAsyncThunk('auth/signIn', async (data: signInData, thunkAPI) => {
+  console.log('signIn');
   try {
     const response = await api.post('/signin', data);
     return response.data;
   } catch (err) {
-    console.log(err);
+    if (axios.isAxiosError(err)) {
+      console.log(err);
+      return thunkAPI.rejectWithValue(((err as AxiosError).response as AxiosResponse).data.message);
+    } else {
+      throw err;
+    }
   }
 });
 

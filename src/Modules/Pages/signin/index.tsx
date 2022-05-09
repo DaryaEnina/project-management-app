@@ -1,10 +1,12 @@
+import { useEffect } from 'react';
 import { Container, TextField, Button } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import './signin.scss';
-import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
+import { signIn } from '../../../store/slices/signinSignupSlice';
 
 const schema = yup.object().shape({
   login: yup.string().email().required(),
@@ -23,14 +25,17 @@ export const SignIn = () => {
     },
     resolver: yupResolver(schema),
   });
+  const { token, error } = useAppSelector((state) => state.signinSignup);
+  const dispatch = useAppDispatch();
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
+    console.log('submit');
+    dispatch(signIn(data));
   };
 
   useEffect(() => {
-    console.log(errors);
-  }, [errors]);
+    console.log(token, error);
+  }, [token, error]);
 
   return (
     <Container maxWidth="xl">
@@ -62,7 +67,7 @@ export const SignIn = () => {
           )}
         />
         <Button variant="contained" type="submit">
-          Log In
+          Sign In
         </Button>
       </form>
     </Container>

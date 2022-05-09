@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path={Paths.home} element={<Template />}>
           <Route index element={<Welcome />} />
-          <Route path={Paths.login} element={<SignIn />} />
+          <Route path={Paths.signIn} element={<SignIn />} />
           <Route path={Paths.board} element={<Board />} />
         </Route>
       </Routes>
