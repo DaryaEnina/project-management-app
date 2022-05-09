@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Container, TextField, Button } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useSnackbar } from 'notistack';
 
 import './signin.scss';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
@@ -25,17 +26,26 @@ export const SignIn = () => {
     },
     resolver: yupResolver(schema),
   });
-  const { token, error } = useAppSelector((state) => state.signinSignup);
+  const { enqueueSnackbar } = useSnackbar();
+  const { error } = useAppSelector((state) => state.signinSignup);
   const dispatch = useAppDispatch();
 
   const onSubmit = (data: FormValues) => {
-    console.log('submit');
     dispatch(signIn(data));
   };
 
+  const showErrorMessage = useCallback(
+    (message: string) => {
+      enqueueSnackbar(message, { variant: 'error', autoHideDuration: 3000 });
+    },
+    [enqueueSnackbar]
+  );
+
   useEffect(() => {
-    console.log(token, error);
-  }, [token, error]);
+    if (error) {
+      showErrorMessage(error);
+    }
+  }, [error, showErrorMessage]);
 
   return (
     <Container maxWidth="xl">
