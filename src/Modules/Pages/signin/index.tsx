@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import './login.scss';
+import './signin.scss';
 import { useEffect } from 'react';
 
 const schema = yup.object().shape({
@@ -11,7 +11,7 @@ const schema = yup.object().shape({
   password: yup.string().min(8).max(15).required(),
 });
 
-export const Login = () => {
+export const SignIn = () => {
   const {
     handleSubmit,
     control,
@@ -34,7 +34,7 @@ export const Login = () => {
 
   return (
     <Container maxWidth="xl">
-      <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
+      <form className="signin-form" onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="login"
           control={control}

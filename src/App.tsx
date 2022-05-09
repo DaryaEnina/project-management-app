@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Welcome from './Modules/Pages/Welcome';
 import Template from './Modules/Template';
-import { Login } from './Modules/Pages/login';
+import { SignIn } from './Modules/Pages/signin';
 import { Paths } from './constants';
 import Board from './Modules/Pages/board';
 
@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path={Paths.home} element={<Template />}>
           <Route index element={<Welcome />} />
-          <Route path={Paths.login} element={<Login />} />
+          <Route path={Paths.login} element={<SignIn />} />
           <Route path={Paths.board} element={<Board />} />
         </Route>
       </Routes>
