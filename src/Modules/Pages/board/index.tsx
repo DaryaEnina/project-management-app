@@ -28,9 +28,9 @@ const Board = () => {
         {
           <div>
             {boardsList.map((board) => (
-              <p key={board.id} onClick={() => dispatch(getCurrentBoard(board.id))}>
+              <span key={board.id} onClick={() => dispatch(getCurrentBoard(board.id))}>
                 {board.title}
-              </p>
+              </span>
             ))}
           </div>
         }
@@ -41,12 +41,14 @@ const Board = () => {
             margin: '32px 32px ',
             minWidth: '1100px',
             maxWidth: '95vw',
-            height: '50vh',
+            height: '66vh',
             overflowY: 'auto',
           }}
         >
           <Typography variant="h3">{currentBoard.title}</Typography>
-          <Button onClick={() => dispatch(createColumn(currentBoard.id))}>Create column</Button>
+          <Button variant="outlined" onClick={() => dispatch(createColumn(currentBoard.id))}>
+            Create column
+          </Button>
           <Box
             sx={{
               display: 'flex',
@@ -68,7 +70,7 @@ const Board = () => {
         </Paper>
       </div>
       <Typography
-        variant="h3"
+        variant="h5"
         sx={{
           textAlign: 'center',
         }}
