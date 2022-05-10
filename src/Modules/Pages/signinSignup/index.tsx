@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { signIn } from '../../../store/slices/signinSignupSlice';
 
 const schema = yup.object().shape({
+  name: yup.string().min(2).max(15).required(),
   login: yup.string().email().required(),
   password: yup.string().min(8).max(15).required(),
 });
@@ -50,6 +51,22 @@ export const SignInSignUp = ({ isRegistrationMode }: SignInSignUpProps) => {
   return (
     <Container maxWidth="xl">
       <form className="signin-form" onSubmit={handleSubmit(onSubmit)}>
+        {isRegistrationMode && (
+          <Controller
+            name="name"
+            control={control}
+            render={({ field, formState }) => (
+              <TextField
+                {...field}
+                label="Your name"
+                sx={{ mb: '30px' }}
+                autoComplete="off"
+                error={!!formState.errors.name}
+                helperText={errors.name?.message ?? ''}
+              />
+            )}
+          />
+        )}
         <Controller
           name="login"
           control={control}
@@ -77,7 +94,7 @@ export const SignInSignUp = ({ isRegistrationMode }: SignInSignUpProps) => {
           )}
         />
         <Button variant="contained" type="submit">
-          Sign In
+          Sign {isRegistrationMode ? 'Up' : 'In'}
         </Button>
       </form>
     </Container>
