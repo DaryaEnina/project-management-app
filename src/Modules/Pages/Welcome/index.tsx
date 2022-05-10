@@ -1,8 +1,25 @@
+import { Box, Button } from '@mui/material';
+import { Paths } from './../../../constants';
 import './welcome.scss';
 
 const Welcome = () => {
   return (
     <div className="welcome">
+      <Box
+        className="welcome__login"
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          maxWidth: '1200px',
+        }}
+      >
+        <Button variant="contained" size="medium" sx={{ mx: 1.5 }} href={Paths.signIn}>
+          Log In
+        </Button>
+        <Button variant="contained" size="medium" sx={{ mx: 1.5 }} href={Paths.signUp}>
+          Sign Up
+        </Button>
+      </Box>
       <div className="welcome__wrapper main">
         <div className="welcome__info">
           <h2 className="welcome__info--title">Project Management App</h2>
