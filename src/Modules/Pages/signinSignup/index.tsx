@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
 
-import './signin.scss';
+import './signinSignup.scss';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { signIn } from '../../../store/slices/signinSignupSlice';
 
@@ -14,7 +14,7 @@ const schema = yup.object().shape({
   password: yup.string().min(8).max(15).required(),
 });
 
-export const SignIn = () => {
+export const SignInSignUp = ({ isRegistrationMode }: SignInSignUpProps) => {
   const {
     handleSubmit,
     control,
