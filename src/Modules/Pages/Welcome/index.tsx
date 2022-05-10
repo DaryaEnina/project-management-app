@@ -14,7 +14,7 @@ const Welcome = () => {
         }}
       >
         <Button variant="contained" size="medium" sx={{ mx: 1.5 }} href={Paths.signIn}>
-          Log In
+          Sign In
         </Button>
         <Button variant="contained" size="medium" sx={{ mx: 1.5 }} href={Paths.signUp}>
           Sign Up
