@@ -1,17 +1,20 @@
+import { useCallback, useEffect } from 'react';
 import { Container, TextField, Button } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useSnackbar } from 'notistack';
 
-import './login.scss';
-import { useEffect } from 'react';
+import './signin.scss';
+import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
+import { signIn } from '../../../store/slices/signinSignupSlice';
 
 const schema = yup.object().shape({
   login: yup.string().email().required(),
   password: yup.string().min(8).max(15).required(),
 });
 
-export const Login = () => {
+export const SignIn = () => {
   const {
     handleSubmit,
     control,
@@ -23,18 +26,30 @@ export const Login = () => {
     },
     resolver: yupResolver(schema),
   });
+  const { enqueueSnackbar } = useSnackbar();
+  const { error } = useAppSelector((state) => state.signinSignup);
+  const dispatch = useAppDispatch();
 
   const onSubmit = (data: FormValues) => {
-    console.log(data);
+    dispatch(signIn(data));
   };
 
+  const showErrorMessage = useCallback(
+    (message: string) => {
+      enqueueSnackbar(message, { variant: 'error', autoHideDuration: 3000 });
+    },
+    [enqueueSnackbar]
+  );
+
   useEffect(() => {
-    console.log(errors);
-  }, [errors]);
+    if (error) {
+      showErrorMessage(error);
+    }
+  }, [error, showErrorMessage]);
 
   return (
     <Container maxWidth="xl">
-      <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
+      <form className="signin-form" onSubmit={handleSubmit(onSubmit)}>
         <Controller
           name="login"
           control={control}
@@ -62,7 +77,7 @@ export const Login = () => {
           )}
         />
         <Button variant="contained" type="submit">
-          Log In
+          Sign In
         </Button>
       </form>
     </Container>
