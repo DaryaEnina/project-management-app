@@ -8,7 +8,7 @@ function Template() {
   return (
     <>
       <Header />
-      <main className="main">
+      <main className="main-container">
         <Outlet />
       </main>
       <Footer />

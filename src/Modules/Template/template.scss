@@ -1,3 +1,4 @@
-// .main {
-//   min-height: calc(100vh - 64 * 2px);
-// }
+// 64px header height / 96px footer height
+.main-container {
+  min-height: calc(100vh - 64px - 96px);
+}
