@@ -10,7 +10,7 @@ interface BoardsListState {
 
 const server = 'thawing-tor-58868.herokuapp.com';
 
-const user = { name: 'Vasya', login: 'developer3', password: 'strong1' };
+const user = { name: 'Vasya', login: 'developer4', password: 'strong1' };
 
 let token: string;
 
@@ -23,7 +23,7 @@ export const signUp = createAsyncThunk('users/signUp', async () => {
   }
 });
 
-const registered = { login: 'developer3', password: 'strong1' };
+const registered = { login: 'developer4', password: 'strong1' };
 
 export const signIn = createAsyncThunk('users/signIn', async () => {
   try {
@@ -50,10 +50,10 @@ export const createBoard = createAsyncThunk('boards/create', async () => {
     throw err;
   }
 });
-
+//TODO: remove hardcode when modal will be delivered
 const column = {
-  title: 'IN PROGRESS',
-  order: 2,
+  title: 'Done',
+  order: 3,
 };
 
 export const createColumn = createAsyncThunk('column/create', async (id: string) => {
@@ -165,6 +165,10 @@ export const boardsListSlice = createSlice({
     });
     builder.addCase(getColumns.fulfilled, (state, action) => {
       state.currentBoard.columns = action.payload;
+    });
+    builder.addCase(createColumn.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.currentBoard.columns.push(action.payload);
     });
   },
 });

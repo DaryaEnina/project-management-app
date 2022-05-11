@@ -9,8 +9,8 @@ import {
   signUp,
   getCurrentBoard,
   createColumn,
-  getColumns,
 } from '../../../store/slices/boardsListSlice';
+import './board.scss';
 
 const Board = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Board = () => {
       <Button onClick={() => dispatch(getBoards())}>Get boards</Button>
       <Button onClick={() => dispatch(signUp())}>Sign up</Button>
       <Button onClick={() => dispatch(signIn())}>Sign in</Button>
-      <div>
+      <div className="boardContainer">
         {
           <div>
             {boardsList.map((board) => (
@@ -34,19 +34,19 @@ const Board = () => {
             ))}
           </div>
         }
-        <p>{currentBoard.id}</p>
-        <p>{currentBoard.columns?.length}</p>
-        <Button onClick={() => dispatch(getColumns(currentBoard.id))}>Get column</Button>
 
-        <Paper elevation={12} sx={{ margin: '0 auto', maxWidth: '95vw' }}>
+        <Paper
+          elevation={12}
+          sx={{
+            margin: '32px 32px ',
+            minWidth: '1100px',
+            maxWidth: '95vw',
+            height: '50vh',
+            overflowY: 'auto',
+          }}
+        >
           <Typography variant="h3">{currentBoard.title}</Typography>
           <Button onClick={() => dispatch(createColumn(currentBoard.id))}>Create column</Button>
-          <Button
-            onClick={() => dispatch(createColumn(currentBoard.id))}
-            disabled={!currentBoard.columns?.length}
-          >
-            Create new task
-          </Button>
           <Box
             sx={{
               display: 'flex',
@@ -67,6 +67,14 @@ const Board = () => {
           </Box>
         </Paper>
       </div>
+      <Typography
+        variant="h3"
+        sx={{
+          textAlign: 'center',
+        }}
+      >
+        Get things done!
+      </Typography>
     </div>
   );
 };
