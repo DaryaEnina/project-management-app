@@ -4,14 +4,17 @@ import Template from './Modules/Template';
 import { SignInSignUp } from './Modules/Pages/signinSignup';
 import { Paths } from './constants';
 import Board from './Modules/Pages/board';
+import { useAppSelector } from './hooks/storeHooks';
+import { Main } from './Modules/Pages/main';
 
 function App() {
+  const { token } = useAppSelector((state) => state.signinSignup);
   return (
     <Router>
       <Routes>
         <Route path={Paths.home} element={<Template />}>
           <Route index element={<Welcome />} />
-          <Route path={Paths.auth} element={<SignInSignUp />} />
+          <Route path={Paths.auth} element={token ? <Main /> : <SignInSignUp />} />
           <Route path={Paths.board} element={<Board />} />
         </Route>
       </Routes>
