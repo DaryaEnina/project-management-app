@@ -9,7 +9,9 @@ import './signinSignup.scss';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { signIn, signUp } from '../../../store/slices/signinSignupSlice';
 
-export const SignInSignUp = ({ isRegistrationMode }: SignInSignUpProps) => {
+export const SignInSignUp = () => {
+  const { isRegistrationMode } = useAppSelector((state) => state.signinSignup);
+
   const schema = isRegistrationMode
     ? yup.object().shape({
         name: yup.string().min(2).max(15).required(),

@@ -11,8 +11,7 @@ function App() {
       <Routes>
         <Route path={Paths.home} element={<Template />}>
           <Route index element={<Welcome />} />
-          <Route path={Paths.signIn} element={<SignInSignUp isRegistrationMode={false} />} />
-          <Route path={Paths.signUp} element={<SignInSignUp isRegistrationMode={true} />} />
+          <Route path={Paths.auth} element={<SignInSignUp />} />
           <Route path={Paths.board} element={<Board />} />
         </Route>
       </Routes>
