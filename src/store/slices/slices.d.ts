@@ -16,6 +16,7 @@ type SigninSignupState = {
   login: string;
   loading: boolean;
   error: string;
+  isRegistrationMode: boolean;
 };
 
 type SignUpResponse = {

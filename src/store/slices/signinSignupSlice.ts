@@ -39,6 +39,7 @@ export const signinSignupSlice = createSlice({
     login: '',
     loading: false,
     error: '',
+    isRegistrationMode: false,
   } as SigninSignupState,
   reducers: {
     signOut: (state: SigninSignupState) => {
@@ -47,6 +48,9 @@ export const signinSignupSlice = createSlice({
       state.name = '';
       state.login = '';
       state.error = '';
+    },
+    setIsRegistrationMode: (state: SigninSignupState, action: PayloadAction<boolean>) => {
+      state.isRegistrationMode = action.payload;
     },
   },
   extraReducers: {
@@ -82,5 +86,5 @@ export const signinSignupSlice = createSlice({
   },
 });
 
-export const { signOut } = signinSignupSlice.actions;
+export const { signOut, setIsRegistrationMode } = signinSignupSlice.actions;
 export default signinSignupSlice.reducer;
