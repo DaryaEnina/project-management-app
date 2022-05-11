@@ -5,10 +5,10 @@ import Column from './Column';
 
 describe('<Column />', () => {
   test('it should mount', () => {
-    render(<Column />);
+    render(<Column title="title" order={1} id="id" />);
 
-    const column = screen.getByTestId('Column');
+    const title = screen.getByTestId('title');
 
-    expect(column).toBeInTheDocument();
+    expect(title).toBeInTheDocument();
   });
 });
