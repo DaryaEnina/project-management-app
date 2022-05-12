@@ -14,7 +14,9 @@ import { Paths } from '../../../constants';
 import jwt_decode from 'jwt-decode';
 
 export const SignInSignUp = () => {
-  const { isRegistrationMode, token, userId } = useAppSelector((state) => state.signinSignup);
+  const { isRegistrationMode, token, userId, login } = useAppSelector(
+    (state) => state.signinSignup
+  );
 
   const schema = isRegistrationMode
     ? yup.object().shape({
@@ -34,7 +36,7 @@ export const SignInSignUp = () => {
         password: '',
       }
     : {
-        login: '',
+        login: login || '',
         password: '',
       };
 
@@ -42,6 +44,8 @@ export const SignInSignUp = () => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
+    unregister,
   } = useForm<SignInFormValues | SignUpFormValues>({
     defaultValues,
     resolver: yupResolver(schema),
@@ -82,6 +86,14 @@ export const SignInSignUp = () => {
       navigate(Paths.main);
     }
   }, [token, navigate, dispatch, userId]);
+
+  useEffect(() => {
+    unregister('name');
+    reset({
+      login,
+      password: '',
+    });
+  }, [login, reset, unregister]);
 
   return (
     <Container maxWidth="xl">

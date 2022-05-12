@@ -90,16 +90,13 @@ export const signinSignupSlice = createSlice({
     },
     [signUp.pending.type]: (state) => {
       state.loading = true;
-      state.userId = '';
-      state.name = '';
       state.login = '';
       state.error = '';
     },
     [signUp.fulfilled.type]: (state, action: PayloadAction<SignUpResponse>) => {
       state.loading = false;
-      state.userId = action.payload.id;
-      state.name = action.payload.name;
       state.login = action.payload.login;
+      state.isRegistrationMode = false;
     },
     [signUp.rejected.type]: (state, action: PayloadAction<string>) => {
       state.loading = false;
