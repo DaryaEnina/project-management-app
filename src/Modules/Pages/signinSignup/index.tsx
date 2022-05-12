@@ -4,13 +4,15 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 
 import './signinSignup.scss';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { signIn, signUp } from '../../../store/slices/signinSignupSlice';
+import { Paths } from '../../../constants';
 
 export const SignInSignUp = () => {
-  const { isRegistrationMode } = useAppSelector((state) => state.signinSignup);
+  const { isRegistrationMode, token } = useAppSelector((state) => state.signinSignup);
 
   const schema = isRegistrationMode
     ? yup.object().shape({
@@ -45,6 +47,7 @@ export const SignInSignUp = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { error } = useAppSelector((state) => state.signinSignup);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = (data: SignInFormValues | SignUpFormValues) => {
     if (isRegistrationMode) {
@@ -66,6 +69,10 @@ export const SignInSignUp = () => {
       showErrorMessage(error);
     }
   }, [error, showErrorMessage]);
+
+  useEffect(() => {
+    if (token) navigate(Paths.main);
+  }, [token, navigate]);
 
   return (
     <Container maxWidth="xl">
