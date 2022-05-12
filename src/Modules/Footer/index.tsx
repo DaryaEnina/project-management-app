@@ -1,4 +1,5 @@
-import { AppBar, Link, Container, Toolbar } from '@mui/material';
+import { AppBar, Link, Container, Toolbar, Grid, IconButton, Button } from '@mui/material';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 function Footer() {
   return (
@@ -15,8 +16,8 @@ function Footer() {
             <svg
               version="1.1"
               xmlns="http://www.w3.org/2000/svg"
-              width="122"
-              height="45"
+              width="100"
+              height="40"
               viewBox="0 0 242 90"
             >
               <title>rss</title>
@@ -32,39 +33,43 @@ function Footer() {
           maxWidth="xs"
           sx={{
             display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
             justifyContent: 'space-between',
             alignItems: 'center',
             textDecoration: 'none',
             mx: '0',
           }}
         >
-          <Link
+          <Button
+            variant="text"
+            startIcon={<GitHubIcon />}
+            sx={{ color: 'white', fontSize: '0.7rem' }}
+            href="https://github.com/BlackBerryID"
             target="_blank"
             rel="noopener noreferrer"
-            href="/"
-            color={'inherit'}
-            sx={{ textDecoration: 'none' }}
           >
             Дмитрий
-          </Link>
-          <Link
+          </Button>
+          <Button
+            variant="text"
+            startIcon={<GitHubIcon />}
+            sx={{ color: 'white', fontSize: '0.7rem' }}
+            href="https://github.com/zabalueva"
             target="_blank"
             rel="noopener noreferrer"
-            href="/"
-            color={'inherit'}
-            sx={{ textDecoration: 'none' }}
           >
             Елена
-          </Link>
-          <Link
+          </Button>
+          <Button
+            variant="text"
+            startIcon={<GitHubIcon />}
+            sx={{ color: 'white', fontSize: '0.7rem' }}
+            href="https://github.com/DaryaEnina"
             target="_blank"
             rel="noopener noreferrer"
-            href="https://github.com/DaryaEnina"
-            color={'inherit'}
-            sx={{ textDecoration: 'none' }}
           >
             Дария
-          </Link>
+          </Button>
         </Container>
       </Container>
     </AppBar>
