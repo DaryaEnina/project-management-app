@@ -13,6 +13,11 @@ import MenuItem from '@mui/material/MenuItem';
 import CustomizedSwitches from './Components/Switch';
 import { createBoard } from '../../store/slices/boardsListSlice';
 import { useAppDispatch } from '../../hooks/storeHooks';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import { Link } from 'react-router-dom';
+import { Paths } from '../../constants';
+
+import './Header.scss';
 
 const pages = ['Create new board'];
 const settings = ['Profile', 'Edit profile', 'Logout'];
@@ -42,9 +47,9 @@ const ResponsiveAppBar = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
           <Box sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
-            <Typography variant="h6" noWrap component="div">
+            <Link to={Paths.home} className="logo__link">
               PMApp
-            </Typography>
+            </Link>
           </Box>
 
           <Box
@@ -120,9 +125,9 @@ const ResponsiveAppBar = () => {
             <CustomizedSwitches />
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <Typography onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  Name
-                </Typography>
+                <IconButton size="large" onClick={handleOpenUserMenu}>
+                  <PermIdentityIcon fontSize="inherit" sx={{ color: 'white' }}></PermIdentityIcon>
+                </IconButton>
               </Tooltip>
               <Menu
                 sx={{ mt: '45px' }}
