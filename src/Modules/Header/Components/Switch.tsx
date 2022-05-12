@@ -48,10 +48,10 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 
 export default function CustomizedSwitches() {
   return (
-    <FormGroup sx={{ mr: 4 }}>
+    <FormGroup>
       <Stack direction="row" spacing={1} alignItems="center">
         <Typography>EN</Typography>
-        <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
+        <AntSwitch inputProps={{ 'aria-label': 'ant design' }} />
         <Typography>RU</Typography>
       </Stack>
     </FormGroup>
