@@ -1,8 +1,9 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { Paths } from './../../../constants';
 import { setIsRegistrationMode } from '../../../store/slices/signinSignupSlice';
 import { useAppDispatch } from '../../../hooks/storeHooks';
 import './welcome.scss';
+import { Link } from 'react-router-dom';
 
 const Welcome = () => {
   const dispatch = useAppDispatch();
@@ -16,24 +17,20 @@ const Welcome = () => {
           maxWidth: '1200px',
         }}
       >
-        <Button
-          variant="contained"
-          size="medium"
-          sx={{ mx: 1.5 }}
-          href={Paths.auth}
+        <Link
+          className="signButton"
+          to={Paths.auth}
           onClick={() => dispatch(setIsRegistrationMode(false))}
         >
           Sign In
-        </Button>
-        <Button
-          variant="contained"
-          size="medium"
-          sx={{ mx: 1.5 }}
-          href={Paths.auth}
+        </Link>
+        <Link
+          className="signButton"
+          to={Paths.auth}
           onClick={() => dispatch(setIsRegistrationMode(true))}
         >
           Sign Up
-        </Button>
+        </Link>
       </Box>
       <div className="welcome__wrapper main">
         <div className="welcome__info">

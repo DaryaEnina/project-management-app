@@ -4,6 +4,21 @@
   margin: 0 auto;
   .welcome__login {
     margin: 20px auto;
+    .signButton {
+      width: 100px;
+      height: 40px;
+      color: white;
+      text-decoration: none;
+      background-color: #1976d2;
+      border-radius: 5%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 15px;
+      &:hover {
+        background-color: #3c89d6;
+      }
+    }
   }
   .welcome__wrapper {
     max-width: 1200px;
