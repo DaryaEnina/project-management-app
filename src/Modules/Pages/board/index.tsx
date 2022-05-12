@@ -1,11 +1,10 @@
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Column from '../../../components/Column/Column';
-import { ColumnInterface } from '../../../components/Column/columnInterface';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import {
   getBoards,
-  signIn,
+  signInD,
   signUp,
   getCurrentBoard,
   createColumn,
@@ -23,7 +22,7 @@ const Board = () => {
       <Button onClick={() => navigate(-1)}>Back to main page </Button>
       <Button onClick={() => dispatch(getBoards())}>Get boards</Button>
       <Button onClick={() => dispatch(signUp())}>Sign up</Button>
-      <Button onClick={() => dispatch(signIn())}>Sign in</Button>
+      <Button onClick={() => dispatch(signInD())}>Sign in</Button>
       <div className="boardContainer">
         {
           <div>

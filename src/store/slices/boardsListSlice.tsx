@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { Board } from '../../Modules/Pages/board/board';
+import { api } from '../api';
 
 interface BoardsListState {
   currentBoard: Board;
@@ -8,15 +8,13 @@ interface BoardsListState {
   loading: boolean;
 }
 
-const server = 'thawing-tor-58868.herokuapp.com';
-
 const user = { name: 'Vasya', login: 'developer4', password: 'strong1' };
 
 let token: string;
 
 export const signUp = createAsyncThunk('users/signUp', async () => {
   try {
-    const response = await axios.post(`https://${server}/signup`, user);
+    const response = await api.post(`/signup`, user);
     return response.data;
   } catch (err) {
     throw err;
@@ -25,9 +23,9 @@ export const signUp = createAsyncThunk('users/signUp', async () => {
 
 const registered = { login: 'developer4', password: 'strong1' };
 
-export const signIn = createAsyncThunk('users/signIn', async () => {
+export const signInD = createAsyncThunk('users/signIn', async () => {
   try {
-    const response = await axios.post(`https://${server}/signin`, registered);
+    const response = await api.post(`/signin`, registered);
     return response.data;
   } catch (err) {
     throw err;
@@ -40,7 +38,7 @@ const board = {
 
 export const createBoard = createAsyncThunk('boards/create', async () => {
   try {
-    const response = await axios.post(`https://${server}/boards`, board, {
+    const response = await api.post(`/boards`, board, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -58,7 +56,7 @@ const column = {
 
 export const createColumn = createAsyncThunk('column/create', async (id: string) => {
   try {
-    const response = await axios.post(`https://${server}/boards/${id}/columns`, column, {
+    const response = await api.post(`/boards/${id}/columns`, column, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -71,7 +69,7 @@ export const createColumn = createAsyncThunk('column/create', async (id: string)
 
 export const getColumns = createAsyncThunk('column/get', async (id: string) => {
   try {
-    const response = await axios.get(`https://${server}/boards/${id}/columns`, {
+    const response = await api.get(`/boards/${id}/columns`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -84,7 +82,7 @@ export const getColumns = createAsyncThunk('column/get', async (id: string) => {
 
 export const getBoards = createAsyncThunk('boards/get', async () => {
   try {
-    const response = await axios.get(`https://${server}/boards`, {
+    const response = await api.get(`/boards`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -97,7 +95,7 @@ export const getBoards = createAsyncThunk('boards/get', async () => {
 
 export const getCurrentBoard = createAsyncThunk('boards/getCurrent', async (id: string) => {
   try {
-    const response = await axios.get(`https://thawing-tor-58868.herokuapp.com/boards/${id}`, {
+    const response = await api.get(`/boards/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -138,10 +136,10 @@ export const boardsListSlice = createSlice({
     builder.addCase(signUp.fulfilled, (state, action) => {
       console.log(action.payload);
     });
-    builder.addCase(signIn.pending, (state) => {
+    builder.addCase(signInD.pending, (state) => {
       state.loading = false;
     });
-    builder.addCase(signIn.fulfilled, (state, action) => {
+    builder.addCase(signInD.fulfilled, (state, action) => {
       token = action.payload.token;
     });
     builder.addCase(createBoard.pending, (state) => {

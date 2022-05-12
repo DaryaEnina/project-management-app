@@ -1,7 +1,6 @@
 import { Button, Fab, Paper, Stack } from '@mui/material';
 import Task from '../Task/Task';
 import './Column.scss';
-import { ColumnInterface } from './columnInterface';
 
 const Column = (column: ColumnInterface) => {
   let editMode = true;
