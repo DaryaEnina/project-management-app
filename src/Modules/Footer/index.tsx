@@ -1,4 +1,4 @@
-import { AppBar, Link, Container, Toolbar, Grid, IconButton, Button } from '@mui/material';
+import { AppBar, Container, Toolbar, Button } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
 function Footer() {
