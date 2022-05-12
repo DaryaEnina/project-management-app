@@ -8,11 +8,13 @@ import { useNavigate } from 'react-router-dom';
 
 import './signinSignup.scss';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import { signIn, signUp } from '../../../store/slices/signinSignupSlice';
+import { signIn, signUp, setIdLogin, getUser } from '../../../store/slices/signinSignupSlice';
 import { Paths } from '../../../constants';
 
+import jwt_decode from 'jwt-decode';
+
 export const SignInSignUp = () => {
-  const { isRegistrationMode, token } = useAppSelector((state) => state.signinSignup);
+  const { isRegistrationMode, token, userId } = useAppSelector((state) => state.signinSignup);
 
   const schema = isRegistrationMode
     ? yup.object().shape({
@@ -71,8 +73,15 @@ export const SignInSignUp = () => {
   }, [error, showErrorMessage]);
 
   useEffect(() => {
-    if (token) navigate(Paths.main);
-  }, [token, navigate]);
+    if (token) {
+      const jwtObject = jwt_decode<JwtParseResponse>(token);
+      dispatch(setIdLogin(jwtObject));
+      if (userId) {
+        dispatch(getUser({ userId, token }));
+      }
+      navigate(Paths.main);
+    }
+  }, [token, navigate, dispatch, userId]);
 
   return (
     <Container maxWidth="xl">

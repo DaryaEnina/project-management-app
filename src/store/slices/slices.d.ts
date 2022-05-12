@@ -24,3 +24,19 @@ type SignUpResponse = {
   name: string;
   login: string;
 };
+
+type JwtParseResponse = {
+  userId: string;
+  login: string;
+};
+
+type getUserResponse = {
+  id: string;
+  login: string;
+  name: string;
+};
+
+type getUserData = {
+  userId: string;
+  token: string;
+};

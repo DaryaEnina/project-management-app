@@ -30,6 +30,24 @@ export const signUp = createAsyncThunk('auth/signUp', async (data: SignUpData, t
   }
 });
 
+export const getUser = createAsyncThunk('users/getUser', async (data: getUserData, thunkAPI) => {
+  try {
+    const response = await api.get(`/users/${data.userId}`, {
+      headers: {
+        Authorization: `Bearer ${data.token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      console.log(err);
+      return thunkAPI.rejectWithValue(((err as AxiosError).response as AxiosResponse).data.message);
+    } else {
+      throw err;
+    }
+  }
+});
+
 export const signinSignupSlice = createSlice({
   name: 'signinSignup',
   initialState: {
@@ -51,6 +69,10 @@ export const signinSignupSlice = createSlice({
     },
     setIsRegistrationMode: (state: SigninSignupState, action: PayloadAction<boolean>) => {
       state.isRegistrationMode = action.payload;
+    },
+    setIdLogin: (state: SigninSignupState, action: PayloadAction<JwtParseResponse>) => {
+      state.userId = action.payload.userId;
+      state.login = action.payload.login;
     },
   },
   extraReducers: {
@@ -83,8 +105,14 @@ export const signinSignupSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    [getUser.fulfilled.type]: (state, action: PayloadAction<getUserResponse>) => {
+      state.name = action.payload.name;
+    },
+    [getUser.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
+    },
   },
 });
 
-export const { signOut, setIsRegistrationMode } = signinSignupSlice.actions;
+export const { signOut, setIsRegistrationMode, setIdLogin } = signinSignupSlice.actions;
 export default signinSignupSlice.reducer;
