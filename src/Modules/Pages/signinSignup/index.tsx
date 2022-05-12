@@ -4,13 +4,19 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 
 import './signinSignup.scss';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import { signIn, signUp } from '../../../store/slices/signinSignupSlice';
+import { signIn, signUp, setIdLogin, getUser } from '../../../store/slices/signinSignupSlice';
+import { Paths } from '../../../constants';
+
+import jwt_decode from 'jwt-decode';
 
 export const SignInSignUp = () => {
-  const { isRegistrationMode } = useAppSelector((state) => state.signinSignup);
+  const { isRegistrationMode, token, userId, login } = useAppSelector(
+    (state) => state.signinSignup
+  );
 
   const schema = isRegistrationMode
     ? yup.object().shape({
@@ -30,7 +36,7 @@ export const SignInSignUp = () => {
         password: '',
       }
     : {
-        login: '',
+        login: login || '',
         password: '',
       };
 
@@ -38,6 +44,8 @@ export const SignInSignUp = () => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
+    unregister,
   } = useForm<SignInFormValues | SignUpFormValues>({
     defaultValues,
     resolver: yupResolver(schema),
@@ -45,6 +53,7 @@ export const SignInSignUp = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { error } = useAppSelector((state) => state.signinSignup);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const onSubmit = (data: SignInFormValues | SignUpFormValues) => {
     if (isRegistrationMode) {
@@ -66,6 +75,25 @@ export const SignInSignUp = () => {
       showErrorMessage(error);
     }
   }, [error, showErrorMessage]);
+
+  useEffect(() => {
+    if (token) {
+      const jwtObject = jwt_decode<JwtParseResponse>(token);
+      dispatch(setIdLogin(jwtObject));
+      if (userId) {
+        dispatch(getUser({ userId, token }));
+      }
+      navigate(Paths.main);
+    }
+  }, [token, navigate, dispatch, userId]);
+
+  useEffect(() => {
+    unregister('name');
+    reset({
+      login,
+      password: '',
+    });
+  }, [login, reset, unregister]);
 
   return (
     <Container maxWidth="xl">
