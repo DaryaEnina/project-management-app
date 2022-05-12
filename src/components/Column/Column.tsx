@@ -1,15 +1,22 @@
 import { Button, Fab, Paper, Stack } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
+import { createTask } from '../../store/slices/boardsListSlice';
 import Task from '../Task/Task';
 import './Column.scss';
 
 const Column = (column: ColumnInterface) => {
+  const dispatch = useAppDispatch();
+  const currentBoard = useAppSelector((state) => state.currentBoard);
+
   let editMode = true;
   const handleInput = () => {
     editMode = true;
-    console.log('handlelel');
   };
   return (
-    <Paper elevation={12} sx={{ width: '272px', order: `${column.order}`, height: '53vh' }}>
+    <Paper
+      elevation={12}
+      sx={{ width: '272px', order: `${column.order}`, height: '53vh', backgroundColor: '#B3DCFD' }}
+    >
       <div className="column__title-container title-container">
         <form onSubmit={() => handleInput}>
           <div className="title-container__buttons" hidden={editMode}>
@@ -32,14 +39,22 @@ const Column = (column: ColumnInterface) => {
         </form>
       </div>
       <div className="column__buttons-container button-container">
-        <Button variant="outlined" /* onClick={() => console.log(column.id)} */>Add task</Button>
-        <Button variant="outlined" /* onClick={() => console.log(column.id)} */>
+        <Button
+          variant="contained"
+          //TODO: fix appearing only after check another board
+          onClick={() => dispatch(createTask({ boardId: currentBoard.id, columnId: column.id }))}
+        >
+          Add task
+        </Button>
+        <Button variant="contained" /* onClick={() => console.log(column.id)} */>
           Delete column
         </Button>
       </div>
       <div className="column__tasks-container" data-testid="Column">
         <Stack direction={{ xs: 'column', sm: 'column' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
-          <Task />
+          {column.tasks?.map((task: TaskInterface) => (
+            <Task key={task.id} title={task.title} order={task.order} id={task.id} />
+          ))}
         </Stack>
       </div>
     </Paper>

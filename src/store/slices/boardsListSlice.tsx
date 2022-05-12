@@ -50,13 +50,36 @@ export const createBoard = createAsyncThunk('boards/create', async () => {
 });
 //TODO: remove hardcode when modal will be delivered
 const column = {
-  title: 'Done',
-  order: 3,
+  title: 'Resolved',
+  order: 4,
 };
 
-export const createColumn = createAsyncThunk('column/create', async (id: string) => {
+const task = {
+  title: 'Task: pet the cat',
+  order: 2,
+  description: 'Domestic cat needs to be stroked gently',
+  userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
+};
+
+export const createTask = createAsyncThunk<TaskInterface, { boardId: string; columnId: string }>(
+  'task/create',
+  async ({ boardId, columnId }) => {
+    try {
+      const response = await api.post(`/boards/${boardId}/columns/${columnId}/tasks`, task, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
+  }
+);
+
+export const createColumn = createAsyncThunk('column/create', async (boardId: string) => {
   try {
-    const response = await api.post(`/boards/${id}/columns`, column, {
+    const response = await api.post(`/boards/${boardId}/columns`, column, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -165,8 +188,10 @@ export const boardsListSlice = createSlice({
       state.currentBoard.columns = action.payload;
     });
     builder.addCase(createColumn.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.currentBoard.columns.push(action.payload);
+    });
+    builder.addCase(createTask.fulfilled, (state, action) => {
+      console.log(action.payload);
     });
   },
 });

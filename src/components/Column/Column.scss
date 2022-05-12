@@ -6,8 +6,9 @@
 	}
 
 	&__tasks-container {
-	padding: 8px;
-	overflow-y: auto;
+	  padding: 8px;
+	  overflow-y: auto;
+		height: 80%;
 	}
 	&__buttons-container{
 		display: flex;

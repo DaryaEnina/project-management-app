@@ -5,9 +5,9 @@ import Task from './Task';
 
 describe('<Task />', () => {
   test('it should mount', () => {
-    render(<Task />);
+    render(<Task title="title" order={1} id="id" />);
 
-    const task = screen.getByTestId('Task');
+    const task = screen.getByTestId('title');
 
     expect(task).toBeInTheDocument();
   });

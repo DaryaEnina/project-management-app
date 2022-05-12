@@ -16,6 +16,7 @@ const Board = () => {
   const dispatch = useAppDispatch();
   const currentBoard = useAppSelector((state) => state.currentBoard);
   const boardsList = useAppSelector((state) => state.boardsList.boards);
+  const columns = useAppSelector((state) => state.currentBoard.columns);
 
   return (
     <div>
@@ -57,12 +58,13 @@ const Board = () => {
               },
             }}
           >
-            {currentBoard.columns?.map((column: ColumnInterface) => (
+            {columns.map((column: ColumnInterface) => (
               <Column
                 key={column.id}
                 title={column.title}
                 order={column.order}
                 id={column.id}
+                tasks={column.tasks}
               ></Column>
             ))}
           </Box>
