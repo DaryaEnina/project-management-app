@@ -8,46 +8,25 @@ interface BoardsListState {
   loading: boolean;
 }
 
-const user = { name: 'Vasya', login: 'developer4', password: 'strong1' };
-
-let token: string;
-
-export const signUp = createAsyncThunk('users/signUp', async () => {
-  try {
-    const response = await api.post(`/signup`, user);
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
-});
-
-const registered = { login: 'developer4', password: 'strong1' };
-
-export const signInD = createAsyncThunk('users/signIn', async () => {
-  try {
-    const response = await api.post(`/signin`, registered);
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
-});
-
 const board = {
   title: 'Homework tasks',
 };
 
-export const createBoard = createAsyncThunk('boards/create', async () => {
-  try {
-    const response = await api.post(`/boards`, board, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    throw err;
+export const createBoard = createAsyncThunk<Board, { token: string }>(
+  'boards/create',
+  async ({ token }) => {
+    try {
+      const response = await api.post(`/boards`, board, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
   }
-});
+);
 //TODO: remove hardcode when modal will be delivered
 const column = {
   title: 'Resolved',
@@ -61,11 +40,27 @@ const task = {
   userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
 };
 
-export const createTask = createAsyncThunk<TaskInterface, { boardId: string; columnId: string }>(
-  'task/create',
-  async ({ boardId, columnId }) => {
+export const createTask = createAsyncThunk<
+  TaskInterface,
+  { boardId: string; columnId: string; token: string }
+>('task/create', async ({ boardId, columnId, token }) => {
+  try {
+    const response = await api.post(`/boards/${boardId}/columns/${columnId}/tasks`, task, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+});
+
+export const createColumn = createAsyncThunk<ColumnInterface, { boardId: string; token: string }>(
+  'column/create',
+  async ({ boardId, token }) => {
     try {
-      const response = await api.post(`/boards/${boardId}/columns/${columnId}/tasks`, task, {
+      const response = await api.post(`/boards/${boardId}/columns`, column, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -77,57 +72,53 @@ export const createTask = createAsyncThunk<TaskInterface, { boardId: string; col
   }
 );
 
-export const createColumn = createAsyncThunk('column/create', async (boardId: string) => {
-  try {
-    const response = await api.post(`/boards/${boardId}/columns`, column, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    throw err;
+export const getColumns = createAsyncThunk<ColumnInterface[], { boardId: string; token: string }>(
+  'column/get',
+  async ({ boardId, token }) => {
+    try {
+      const response = await api.get(`/boards/${boardId}/columns`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
   }
-});
+);
 
-export const getColumns = createAsyncThunk('column/get', async (id: string) => {
-  try {
-    const response = await api.get(`/boards/${id}/columns`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    throw err;
+export const getBoards = createAsyncThunk<Board[], { token: string }>(
+  'boards/get',
+  async ({ token }) => {
+    try {
+      const response = await api.get(`/boards`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
   }
-});
+);
 
-export const getBoards = createAsyncThunk('boards/get', async () => {
-  try {
-    const response = await api.get(`/boards`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    throw err;
+export const getCurrentBoard = createAsyncThunk<Board, { boardId: string; token: string }>(
+  'boards/getCurrent',
+  async ({ boardId, token }) => {
+    try {
+      const response = await api.get(`/boards/${boardId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
   }
-});
-
-export const getCurrentBoard = createAsyncThunk('boards/getCurrent', async (id: string) => {
-  try {
-    const response = await api.get(`/boards/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
-});
+);
 
 //TODO: add update for board
 
@@ -153,18 +144,6 @@ export const boardsListSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(signUp.pending, (state) => {
-      state.loading = false;
-    });
-    builder.addCase(signUp.fulfilled, (state, action) => {
-      console.log(action.payload);
-    });
-    builder.addCase(signInD.pending, (state) => {
-      state.loading = false;
-    });
-    builder.addCase(signInD.fulfilled, (state, action) => {
-      token = action.payload.token;
-    });
     builder.addCase(createBoard.pending, (state) => {
       state.loading = true;
     });

@@ -7,6 +7,7 @@ import './Column.scss';
 const Column = (column: ColumnInterface) => {
   const dispatch = useAppDispatch();
   const currentBoard = useAppSelector((state) => state.currentBoard);
+  const token = useAppSelector((state) => state.signinSignup.token);
 
   let editMode = true;
   const handleInput = () => {
@@ -42,7 +43,9 @@ const Column = (column: ColumnInterface) => {
         <Button
           variant="contained"
           //TODO: fix appearing only after check another board
-          onClick={() => dispatch(createTask({ boardId: currentBoard.id, columnId: column.id }))}
+          onClick={() =>
+            dispatch(createTask({ boardId: currentBoard.id, columnId: column.id, token: token }))
+          }
         >
           Add task
         </Button>

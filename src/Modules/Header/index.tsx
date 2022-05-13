@@ -12,7 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import CustomizedSwitches from './Components/Switch';
 import { createBoard } from '../../store/slices/boardsListSlice';
-import { useAppDispatch } from '../../hooks/storeHooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import { Link } from 'react-router-dom';
 import { Paths } from '../../constants';
@@ -26,6 +26,7 @@ const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const dispatch = useAppDispatch();
+  const token = useAppSelector((state) => state.signinSignup.token);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -115,7 +116,7 @@ const ResponsiveAppBar = () => {
               {pages.map((page) => (
                 <Button
                   key={page}
-                  onClick={() => dispatch(createBoard())}
+                  onClick={() => dispatch(createBoard({ token: token }))}
                   sx={{ color: 'white', display: 'block' }}
                 >
                   {page}
