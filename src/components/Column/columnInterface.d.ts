@@ -1,6 +1,6 @@
-export interface ColumnInterface {
+interface ColumnInterface {
   title: string;
   id: string;
   order: number;
-  tasks?: string[];
+  tasks: TaskInterface[];
 }

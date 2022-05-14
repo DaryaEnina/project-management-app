@@ -1,1 +1,7 @@
-.Task {}
+.task {
+	&__description{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+	}
+}

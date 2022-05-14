@@ -1,34 +1,31 @@
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Column from '../../../components/Column/Column';
-import { ColumnInterface } from '../../../components/Column/columnInterface';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import {
-  getBoards,
-  signIn,
-  signUp,
-  getCurrentBoard,
-  createColumn,
-} from '../../../store/slices/boardsListSlice';
+import { getBoards, getCurrentBoard, createColumn } from '../../../store/slices/boardsListSlice';
 import './board.scss';
 
 const Board = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const token = useAppSelector((state) => state.signinSignup.token);
   const currentBoard = useAppSelector((state) => state.currentBoard);
   const boardsList = useAppSelector((state) => state.boardsList.boards);
+  const columns = useAppSelector((state) => state.currentBoard.columns);
 
   return (
     <div>
       <Button onClick={() => navigate(-1)}>Back to main page </Button>
-      <Button onClick={() => dispatch(getBoards())}>Get boards</Button>
-      <Button onClick={() => dispatch(signUp())}>Sign up</Button>
-      <Button onClick={() => dispatch(signIn())}>Sign in</Button>
+      <Button onClick={() => dispatch(getBoards({ token: token }))}>Get boards</Button>
+      {token}
       <div className="boardContainer">
         {
           <div>
             {boardsList.map((board) => (
-              <span key={board.id} onClick={() => dispatch(getCurrentBoard(board.id))}>
+              <span
+                key={board.id}
+                onClick={() => dispatch(getCurrentBoard({ boardId: board.id, token: token }))}
+              >
                 {board.title}
               </span>
             ))}
@@ -46,7 +43,10 @@ const Board = () => {
           }}
         >
           <Typography variant="h3">{currentBoard.title}</Typography>
-          <Button variant="outlined" onClick={() => dispatch(createColumn(currentBoard.id))}>
+          <Button
+            variant="outlined"
+            onClick={() => dispatch(createColumn({ boardId: currentBoard.id, token: token }))}
+          >
             Create column
           </Button>
           <Box
@@ -58,12 +58,13 @@ const Board = () => {
               },
             }}
           >
-            {currentBoard.columns?.map((column: ColumnInterface) => (
+            {columns.map((column: ColumnInterface) => (
               <Column
                 key={column.id}
                 title={column.title}
                 order={column.order}
                 id={column.id}
+                tasks={column.tasks}
               ></Column>
             ))}
           </Box>

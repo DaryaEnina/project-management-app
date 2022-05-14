@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { Board } from '../../Modules/Pages/board/board';
+import { api } from '../api';
 
 interface BoardsListState {
   currentBoard: Board;
@@ -8,57 +8,44 @@ interface BoardsListState {
   loading: boolean;
 }
 
-const server = 'thawing-tor-58868.herokuapp.com';
-
-const user = { name: 'Vasya', login: 'developer4', password: 'strong1' };
-
-let token: string;
-
-export const signUp = createAsyncThunk('users/signUp', async () => {
-  try {
-    const response = await axios.post(`https://${server}/signup`, user);
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
-});
-
-const registered = { login: 'developer4', password: 'strong1' };
-
-export const signIn = createAsyncThunk('users/signIn', async () => {
-  try {
-    const response = await axios.post(`https://${server}/signin`, registered);
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
-});
-
 const board = {
   title: 'Homework tasks',
 };
 
-export const createBoard = createAsyncThunk('boards/create', async () => {
-  try {
-    const response = await axios.post(`https://${server}/boards`, board, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    throw err;
+export const createBoard = createAsyncThunk<Board, { token: string }>(
+  'boards/create',
+  async ({ token }) => {
+    try {
+      const response = await api.post(`/boards`, board, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
   }
-});
+);
 //TODO: remove hardcode when modal will be delivered
 const column = {
-  title: 'Done',
-  order: 3,
+  title: 'Resolved',
+  order: 4,
 };
 
-export const createColumn = createAsyncThunk('column/create', async (id: string) => {
+const task = {
+  title: 'Task: pet the cat',
+  order: 2,
+  description: 'Domestic cat needs to be stroked gently',
+  userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
+};
+
+export const createTask = createAsyncThunk<
+  TaskInterface,
+  { boardId: string; columnId: string; token: string }
+>('task/create', async ({ boardId, columnId, token }) => {
   try {
-    const response = await axios.post(`https://${server}/boards/${id}/columns`, column, {
+    const response = await api.post(`/boards/${boardId}/columns/${columnId}/tasks`, task, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -69,44 +56,69 @@ export const createColumn = createAsyncThunk('column/create', async (id: string)
   }
 });
 
-export const getColumns = createAsyncThunk('column/get', async (id: string) => {
-  try {
-    const response = await axios.get(`https://${server}/boards/${id}/columns`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    throw err;
+export const createColumn = createAsyncThunk<ColumnInterface, { boardId: string; token: string }>(
+  'column/create',
+  async ({ boardId, token }) => {
+    try {
+      const response = await api.post(`/boards/${boardId}/columns`, column, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
   }
-});
+);
 
-export const getBoards = createAsyncThunk('boards/get', async () => {
-  try {
-    const response = await axios.get(`https://${server}/boards`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    throw err;
+export const getColumns = createAsyncThunk<ColumnInterface[], { boardId: string; token: string }>(
+  'column/get',
+  async ({ boardId, token }) => {
+    try {
+      const response = await api.get(`/boards/${boardId}/columns`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
   }
-});
+);
 
-export const getCurrentBoard = createAsyncThunk('boards/getCurrent', async (id: string) => {
-  try {
-    const response = await axios.get(`https://thawing-tor-58868.herokuapp.com/boards/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    throw err;
+export const getBoards = createAsyncThunk<Board[], { token: string }>(
+  'boards/get',
+  async ({ token }) => {
+    try {
+      const response = await api.get(`/boards`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
   }
-});
+);
+
+export const getCurrentBoard = createAsyncThunk<Board, { boardId: string; token: string }>(
+  'boards/getCurrent',
+  async ({ boardId, token }) => {
+    try {
+      const response = await api.get(`/boards/${boardId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
+  }
+);
 
 //TODO: add update for board
 
@@ -132,18 +144,6 @@ export const boardsListSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(signUp.pending, (state) => {
-      state.loading = false;
-    });
-    builder.addCase(signUp.fulfilled, (state, action) => {
-      console.log(action.payload);
-    });
-    builder.addCase(signIn.pending, (state) => {
-      state.loading = false;
-    });
-    builder.addCase(signIn.fulfilled, (state, action) => {
-      token = action.payload.token;
-    });
     builder.addCase(createBoard.pending, (state) => {
       state.loading = true;
     });
@@ -167,8 +167,10 @@ export const boardsListSlice = createSlice({
       state.currentBoard.columns = action.payload;
     });
     builder.addCase(createColumn.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.currentBoard.columns.push(action.payload);
+    });
+    builder.addCase(createTask.fulfilled, (state, action) => {
+      console.log(action.payload);
     });
   },
 });
