@@ -14,7 +14,8 @@ const Column = (column: ColumnInterface) => {
   const token = useAppSelector((state) => state.signinSignup.token);
 
   const [editMode, setMode] = useState(false);
-  let newTitle = column.title;
+  const [currentTitle, setCurrentTitle] = useState(column.title);
+  const [previousTitle, setPreviousTitle] = useState(column.title);
 
   const onSubmit = (event: React.FormEvent, submitData: ColumnInterface) => {
     event.preventDefault();
@@ -28,11 +29,18 @@ const Column = (column: ColumnInterface) => {
         token: token,
       })
     );
+    setCurrentTitle(submitData.title);
+    setPreviousTitle(submitData.title);
+  };
+
+  const onCancel = () => {
+    setMode(false);
+    setCurrentTitle(previousTitle);
   };
 
   const handleInput = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setMode(true);
-    newTitle = event.target.value;
+    setCurrentTitle(event.target.value);
   };
 
   return (
@@ -41,7 +49,7 @@ const Column = (column: ColumnInterface) => {
       sx={{ width: '272px', order: `${column.order}`, height: '53vh', backgroundColor: '#B3DCFD' }}
     >
       <form
-        onSubmit={(event) => onSubmit(event, { title: newTitle })}
+        onSubmit={(event) => onSubmit(event, { title: currentTitle })}
         className="column__title-container title-container"
       >
         <div className="title-container__buttons" hidden={!editMode}>
@@ -54,13 +62,7 @@ const Column = (column: ColumnInterface) => {
           >
             <DoneIcon />
           </Fab>
-          <Fab
-            variant="extended"
-            size="small"
-            color="error"
-            aria-label="add"
-            onClick={() => setMode(false)}
-          >
+          <Fab variant="extended" size="small" color="error" aria-label="add" onClick={onCancel}>
             <CloseIcon />
           </Fab>
         </div>
@@ -68,9 +70,9 @@ const Column = (column: ColumnInterface) => {
           <input
             className="title-container__title"
             type="text"
-            defaultValue={column.title}
+            value={currentTitle}
             onFocus={() => setMode(true)}
-            onBlur={() => setMode(false)}
+            /* onBlur={() => setMode(false)} */
             onChange={handleInput}
           />
         </div>
