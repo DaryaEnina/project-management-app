@@ -6,6 +6,7 @@ interface BoardsListState {
   currentBoard: Board;
   boards: Board[];
   loading: boolean;
+  editMode: false;
 }
 
 const board = {
@@ -42,7 +43,7 @@ const task = {
 
 export const createTask = createAsyncThunk<
   TaskInterface,
-  { boardId: string; columnId: string; token: string }
+  { boardId: string; columnId?: string; token: string }
 >('task/create', async ({ boardId, columnId, token }) => {
   try {
     const response = await api.post(`/boards/${boardId}/columns/${columnId}/tasks`, task, {
@@ -71,6 +72,32 @@ export const createColumn = createAsyncThunk<ColumnInterface, { boardId: string;
     }
   }
 );
+
+export const updateColumn = createAsyncThunk<
+  ColumnInterface,
+  {
+    boardId: string;
+    columnId?: string;
+    title: string;
+    order?: number;
+    token: string;
+  } & Partial<Board>
+>('column/update', async ({ boardId, columnId, title, order, token }) => {
+  try {
+    const response = await api.put(
+      `/boards/${boardId}/columns/${columnId}`,
+      { title: title, order: order },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+});
 
 export const getColumns = createAsyncThunk<ColumnInterface[], { boardId: string; token: string }>(
   'column/get',
@@ -137,7 +164,12 @@ export const getCurrentBoard = createAsyncThunk<Board, { boardId: string; token:
 
 export const boardsListSlice = createSlice({
   name: 'boardsList',
-  initialState: { boards: [], loading: true, currentBoard: {} as Board } as BoardsListState,
+  initialState: {
+    boards: [],
+    loading: true,
+    currentBoard: {} as Board,
+    editMode: false,
+  } as BoardsListState,
   reducers: {
     complete: (state: BoardsListState) => {
       state.loading = true;

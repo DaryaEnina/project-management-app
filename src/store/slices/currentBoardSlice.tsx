@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Board } from '../../Modules/Pages/board/board';
 
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiYzU4YmM2Yi1mODlkLTQ4NjEtOTc1MC1kMGQ2NDQ4ZTIyMmMiLCJsb2dpbiI6ImRldmVsb3BlcjMiLCJpYXQiOjE2NTIwMDg2MDd9.cznvyztwxvQc3yW2MvHnhc3JxfW4FleRHajDWItfURA';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmYjY3NjZhNS1iMDA0LTQxYTEtOTQ0MS04NWI4YjEwYWI2MWQiLCJsb2dpbiI6ImRldmVsb3BlcjQiLCJpYXQiOjE2NTI1MjU4NTB9.18i4B70ASQyddvBAPAtkAmf2vAd-DjJCqO8Gpui4lfU';
 //TODO: rewrite when wil be available global scope token
 
 export const getCurrentBoardT = createAsyncThunk('boards/getCurrent', async (id) => {

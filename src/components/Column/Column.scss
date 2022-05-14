@@ -2,7 +2,10 @@
 	&__title-container {
 		display: flex;
 		flex-direction: row;
+		align-items: center;
 		height: 8vh;
+		justify-content: space-evenly;
+		padding: 8px;
 	}
 
 	&__tasks-container {
@@ -10,6 +13,7 @@
 	  overflow-y: auto;
 		height: 80%;
 	}
+
 	&__buttons-container{
 		display: flex;
 		flex-direction: row;
@@ -22,11 +26,13 @@ input[type=text]:not(:focus) {
   border: 0;
 }
 
-.column__
-
 .title-container__buttons {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-  padding: 8px;
+  padding: 18px;
+	max-width: 35%;
+}
+
+.title-container__title {
+	font-size: 18px;
+	max-width: 65%;
+	text-transform: uppercase;
 }
