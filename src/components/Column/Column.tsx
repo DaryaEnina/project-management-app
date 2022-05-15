@@ -1,9 +1,9 @@
 import { Button, Fab, Paper, Stack } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-import { createTask } from '../../store/slices/boardsListSlice';
+import { createTask } from '../../store/slices/currentBoardSlice';
 import Task from '../Task/Task';
 import './Column.scss';
-import { updateColumn } from '../../store/slices/boardsListSlice';
+import { updateColumn } from '../../store/slices/currentBoardSlice';
 import { ChangeEvent, useState } from 'react';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
