@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import { getBoards } from '../../../store/slices/currentBoardSlice';
+import { getBoards } from '../../../store/slices/boardListSlice';
 
 export const Main = () => {
   const { token } = useAppSelector((state) => state.signinSignup);
@@ -8,9 +8,10 @@ export const Main = () => {
 
   return (
     <>
-      <button onClick={() => dispatch(getBoards({ token }))}></button>
       <div
         style={{
+          display: 'flex',
+          flexDirection: 'column',
           fontSize: '40px',
           position: 'absolute',
           top: '50%',
@@ -18,7 +19,10 @@ export const Main = () => {
           transform: 'translate(-50%, -50%)',
         }}
       >
-        Main Route
+        <button onClick={() => dispatch(getBoards({ token }))}>Load boards</button>
+        {boardList.map((item, index) => (
+          <p key={index}>{item.title}</p>
+        ))}
       </div>
     </>
   );

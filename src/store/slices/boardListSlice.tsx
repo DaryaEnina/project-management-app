@@ -28,7 +28,7 @@ export const boardListSlice = createSlice({
     [getBoards.pending.type]: (state) => {
       state.loading = true;
     },
-    [getBoards.fulfilled.type]: (state, action: PayloadAction<Board[]>) => {
+    [getBoards.fulfilled.type]: (state, action: PayloadAction<{ title: string; id: string }[]>) => {
       state.loading = false;
       state.boardList = action.payload;
     },

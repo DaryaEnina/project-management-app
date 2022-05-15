@@ -44,6 +44,6 @@ type getUserData = {
 /* boardListSlice */
 
 type BoardListState = {
-  boardList: Board[];
+  boardList: { title: string; id: string }[];
   loading: boolean;
 };
