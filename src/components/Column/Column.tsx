@@ -3,42 +3,80 @@ import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import { createTask } from '../../store/slices/boardsListSlice';
 import Task from '../Task/Task';
 import './Column.scss';
+import { updateColumn } from '../../store/slices/boardsListSlice';
+import { ChangeEvent, useState } from 'react';
+import DoneIcon from '@mui/icons-material/Done';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Column = (column: ColumnInterface) => {
   const dispatch = useAppDispatch();
   const currentBoard = useAppSelector((state) => state.currentBoard);
   const token = useAppSelector((state) => state.signinSignup.token);
 
-  let editMode = true;
-  const handleInput = () => {
-    editMode = true;
+  const [editMode, setMode] = useState(false);
+  const [currentTitle, setCurrentTitle] = useState(column.title);
+  const [previousTitle, setPreviousTitle] = useState(column.title);
+
+  const onSubmit = (event: React.FormEvent, submitData: ColumnInterface) => {
+    event.preventDefault();
+    setMode(false);
+    dispatch(
+      updateColumn({
+        boardId: currentBoard.id,
+        columnId: column.id,
+        title: submitData.title,
+        order: column.order,
+        token: token,
+      })
+    );
+    setCurrentTitle(submitData.title);
+    setPreviousTitle(submitData.title);
   };
+
+  const onCancel = () => {
+    setMode(false);
+    setCurrentTitle(previousTitle);
+  };
+
+  const handleInput = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setMode(true);
+    setCurrentTitle(event.target.value);
+  };
+
   return (
     <Paper
       elevation={12}
       sx={{ width: '272px', order: `${column.order}`, height: '53vh', backgroundColor: '#B3DCFD' }}
     >
-      <div className="column__title-container title-container">
-        <form onSubmit={() => handleInput}>
-          <div className="title-container__buttons" hidden={editMode}>
-            <Fab variant="extended" size="small" color="primary" aria-label="add" hidden={editMode}>
-              Submit
-            </Fab>
-            <Fab variant="extended" size="small" color="primary" aria-label="add">
-              Cancel
-            </Fab>
-          </div>
-          <input
-            type="text"
-            id="filled-size-small"
-            defaultValue={column.title}
-            /* variant="standard"
+      <form
+        onSubmit={(event) => onSubmit(event, { title: currentTitle })}
+        className="column__title-container title-container"
+      >
+        <div className="title-container__buttons" hidden={!editMode}>
+          <Fab
+            variant="extended"
             size="small"
-            sx={{ width: '100%' }} */
-            onChange={() => handleInput}
+            color="success"
+            aria-label="update column's title"
+            type="submit"
+          >
+            <DoneIcon />
+          </Fab>
+          <Fab variant="extended" size="small" color="error" aria-label="add" onClick={onCancel}>
+            <CloseIcon />
+          </Fab>
+        </div>
+        <div>
+          <input
+            className="title-container__title"
+            type="text"
+            value={currentTitle}
+            onFocus={() => setMode(true)}
+            /* onBlur={() => setMode(false)} */
+            onChange={handleInput}
           />
-        </form>
-      </div>
+        </div>
+      </form>
       <div className="column__buttons-container button-container">
         <Button
           variant="contained"
