@@ -12,15 +12,15 @@ const Welcome = () => {
   return (
     <div className="welcome">
       <div>
-        {token ? (
-          <Box
-            className="welcome__login"
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              maxWidth: '1200px',
-            }}
-          >
+        <Box
+          className="welcome__login"
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            maxWidth: '1200px',
+          }}
+        >
+          {token ? (
             <Link
               className="signButton"
               to={Paths.main}
@@ -28,32 +28,25 @@ const Welcome = () => {
             >
               Go to Main Page
             </Link>
-          </Box>
-        ) : (
-          <Box
-            className="welcome__login"
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              maxWidth: '1200px',
-            }}
-          >
-            <Link
-              className="signButton"
-              to={Paths.auth}
-              onClick={() => dispatch(setIsRegistrationMode(false))}
-            >
-              Sign In
-            </Link>
-            <Link
-              className="signButton"
-              to={Paths.auth}
-              onClick={() => dispatch(setIsRegistrationMode(true))}
-            >
-              Sign Up
-            </Link>
-          </Box>
-        )}
+          ) : (
+            <>
+              <Link
+                className="signButton"
+                to={Paths.auth}
+                onClick={() => dispatch(setIsRegistrationMode(false))}
+              >
+                Sign In
+              </Link>
+              <Link
+                className="signButton"
+                to={Paths.auth}
+                onClick={() => dispatch(setIsRegistrationMode(true))}
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
+        </Box>
       </div>
 
       <div className="welcome__wrapper main">
