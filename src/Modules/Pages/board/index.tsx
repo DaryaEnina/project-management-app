@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Column from '../../../components/Column/Column';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { getBoards, getCurrentBoard, createColumn } from '../../../store/slices/currentBoardSlice';
+import { Loader } from '../../Loader';
 import './board.scss';
 
 const Board = () => {
@@ -15,7 +16,7 @@ const Board = () => {
   const loading = useAppSelector((state) => state.currentBoard.loading);
 
   return loading ? (
-    <div>Loading...</div>
+    <Loader />
   ) : (
     <div>
       <Button onClick={() => navigate(-1)}>Back to main page </Button>
