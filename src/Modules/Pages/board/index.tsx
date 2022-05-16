@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Column from '../../../components/Column/Column';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { getBoards, getCurrentBoard, createColumn } from '../../../store/slices/currentBoardSlice';
+import { Loader } from '../../Loader';
 import './board.scss';
 
 const Board = () => {
@@ -12,8 +13,11 @@ const Board = () => {
   const currentBoard = useAppSelector((state) => state.currentBoard);
   const boardsList = useAppSelector((state) => state.boardList.boardList);
   const columns = useAppSelector((state) => state.currentBoard.currentBoard.columns);
+  const loading = useAppSelector((state) => state.currentBoard.loading);
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <div>
       <Button onClick={() => navigate(-1)}>Back to main page </Button>
       <Button onClick={() => dispatch(getBoards({ token: token }))}>Get boards</Button>

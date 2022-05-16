@@ -1,0 +1,31 @@
+@import '../../../index.scss';
+
+.main {
+  &_container {
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-top: 0 !important;
+    padding: 15px;
+
+    @media (max-width: $md) {
+      padding: 10px;
+    }
+  }
+
+  &_item {
+    position: relative;
+
+    &-wrapper {
+      cursor: pointer;
+    }
+
+    &__title {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: #fff;
+      z-index: 10;
+    }
+  }
+}
