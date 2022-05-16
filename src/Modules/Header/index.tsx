@@ -46,7 +46,7 @@ const ResponsiveAppBar = () => {
 
   return (
     <AppBar position="sticky" sx={{ height: '64px' }}>
-      <ModalNewBoard message="HELOLO" isOpen={open} onClose={() => setOpen(false)} />
+      <ModalNewBoard isOpen={open} onClose={() => setOpen(false)} />
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
           <Box sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>

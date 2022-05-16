@@ -62,7 +62,7 @@ const Board = () => {
               },
             }}
           >
-            {columns.map((column: ColumnInterface) => (
+            {columns?.map((column: ColumnInterface) => (
               <Column
                 key={column.id}
                 title={column.title}

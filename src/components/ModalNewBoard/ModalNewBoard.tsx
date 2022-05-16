@@ -10,38 +10,44 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
+import { createBoard } from '../../store/slices/currentBoardSlice';
 
 interface ModalProps {
-  message: string;
   isOpen: boolean;
   onClose: ReactEventHandler;
 }
 
-const ModalNewBoard = ({ message, isOpen, onClose }: ModalProps) => {
+const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
+  const token = useAppSelector((state) => state.signinSignup.token);
+  const dispatch = useAppDispatch();
   if (!isOpen) return null;
   return ReactDOM.createPortal(
     <div className="modal">
       <Dialog open={isOpen} onClose={onClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Create New Board</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here. We will send updates
-            occasionally.
+            To create the new board, please enter the title here.
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Email Address"
-            type="email"
+            label="Boards Title"
+            type="text"
             fullWidth
             variant="standard"
           />
         </DialogContent>
-        {/* <DialogActions>
-          <Button onClick={dispatch(createBoard({ token: token }))} >Cancel</Button>
+        <DialogActions>
+          <Button
+            onClick={() => dispatch(createBoard({ token: token, board: { title: 'NewTitle' } }))}
+          >
+            Cancel
+          </Button>
           <Button onClick={onClose}>Subscribe</Button>
-        </DialogActions> */}
+        </DialogActions>
       </Dialog>
     </div>,
     document.body

@@ -8,7 +8,7 @@ describe('<ModalNewBoard />', () => {
     console.log('handler');
   };
   test('it should mount', () => {
-    render(<ModalNewBoard message="ModalNewBoard" isOpen={true} onClose={func} />);
+    render(<ModalNewBoard isOpen={true} onClose={func} />);
 
     const modalNewBoard = screen.getByTestId('ModalNewBoard');
 
