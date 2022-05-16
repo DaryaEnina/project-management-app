@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 28,
@@ -47,11 +47,24 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 export default function CustomizedSwitches() {
+  const { i18n } = useTranslation();
+
+  const changeLanguage = (switcherPosition: boolean) => {
+    if (switcherPosition) {
+      i18n.changeLanguage('ru');
+    } else {
+      i18n.changeLanguage('en');
+    }
+  };
+
   return (
     <FormGroup>
       <Stack direction="row" spacing={1} alignItems="center">
         <Typography>EN</Typography>
-        <AntSwitch inputProps={{ 'aria-label': 'ant design' }} />
+        <AntSwitch
+          inputProps={{ 'aria-label': 'ant design' }}
+          onChange={(e) => changeLanguage(e.target.checked)}
+        />
         <Typography>RU</Typography>
       </Stack>
     </FormGroup>

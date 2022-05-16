@@ -5,6 +5,7 @@ import { SignInSignUp } from './Modules/Pages/signinSignup';
 import { Paths } from './constants';
 import Board from './Modules/Pages/board';
 import { Main } from './Modules/Pages/main';
+import './i18n';
 
 function App() {
   return (
