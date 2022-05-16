@@ -40,3 +40,10 @@ type getUserData = {
   userId: string;
   token: string;
 };
+
+/* boardListSlice */
+
+type BoardListState = {
+  boardList: { title: string; id: string }[];
+  loading: boolean;
+};

@@ -2,7 +2,7 @@ import { Box, Button, Paper, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Column from '../../../components/Column/Column';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import { getBoards, getCurrentBoard, createColumn } from '../../../store/slices/boardsListSlice';
+import { getBoards, getCurrentBoard, createColumn } from '../../../store/slices/currentBoardSlice';
 import './board.scss';
 
 const Board = () => {
@@ -10,8 +10,8 @@ const Board = () => {
   const dispatch = useAppDispatch();
   const token = useAppSelector((state) => state.signinSignup.token);
   const currentBoard = useAppSelector((state) => state.currentBoard);
-  const boardsList = useAppSelector((state) => state.boardsList.boards);
-  const columns = useAppSelector((state) => state.currentBoard.columns);
+  const boardsList = useAppSelector((state) => state.boardList.boardList);
+  const columns = useAppSelector((state) => state.currentBoard.currentBoard.columns);
 
   return (
     <div>

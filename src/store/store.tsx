@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import boardsListSlice from './slices/boardsListSlice';
 import currentBoardSlice from './slices/currentBoardSlice';
+import boardListSlice from './slices/boardListSlice';
 import signinSignupSlice from './slices/signinSignupSlice';
 
 export const store = configureStore({
   reducer: {
     currentBoard: currentBoardSlice,
-    boardsList: boardsListSlice,
+    boardList: boardListSlice,
     signinSignup: signinSignupSlice,
   },
 });
