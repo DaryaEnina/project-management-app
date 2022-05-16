@@ -104,14 +104,12 @@ const ResponsiveAppBar = () => {
               </Menu>
             </Box>
 
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-            >
-              PMApp
-            </Typography>
+            <Box sx={{ flexGrow: 2, display: { xs: 'flex', md: 'none' } }}>
+              <Link to={Paths.home} className="logo__link">
+                PMApp
+              </Link>
+            </Box>
+
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               {pages.map((page) => (
                 <Button

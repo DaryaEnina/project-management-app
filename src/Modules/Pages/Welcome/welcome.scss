@@ -25,7 +25,10 @@
     margin: 0 auto;
     display: flex;
     padding-top: 80px;
-
+    @media screen and (max-width: 1200px) {
+      flex-direction: column;
+      align-items: center;
+    }
     .welcome__info {
       max-width: 600px;
       width: 100%;
@@ -34,6 +37,7 @@
       text-align: center;
       box-shadow: -5px -3px 22px -5px rgba(34, 60, 80, 0.6);
       padding: 20px;
+      background-color: #fff;
       .welcome__info--title {
         margin-bottom: 60px;
         font-size: 35px;
@@ -54,7 +58,11 @@
       width: 100%;
       background-repeat: no-repeat;
       background-size: contain;
+      background-position: center;
       margin: 0 30px;
+      @media screen and (max-width: 1200px) {
+        display: none;
+      }
     }
   }
   .team {
@@ -71,6 +79,7 @@
       width: 100%;
       text-align: center;
       box-shadow: 11px 11px 25px -5px rgba(34, 60, 80, 0.6);
+
       .welcome__team--title {
         margin-bottom: 20px;
         font-size: 35px;
@@ -120,6 +129,7 @@
       width: 100%;
       text-align: center;
       box-shadow: -5px -3px 22px -5px rgba(34, 60, 80, 0.6);
+
       .welcome__video--title {
         font-size: 25px;
       }

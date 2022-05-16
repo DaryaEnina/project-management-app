@@ -41,9 +41,13 @@ const Welcome = () => {
           </p>
           <h3 className="welcome__info--subtitle">RS School. Курс React.</h3>
           <p className="welcome__info--text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis nihil consequuntur
-            amet repudiandae iusto atque dignissimos? Reprehenderit dolor, placeat tenetur
-            consequuntur, alias laborum odio voluptas hic unde asperiores repudiandae culpa.
+            The Rolling Scopes is an independent international developer community founded in 2013.
+            Now many developers around the world know about us and participate in our projects and
+            events This is a free community school from The Rolling Scopes community. Everyone can
+            study at RS School, regardless of age, professional employment and place of residence.
+            Volunteer developers from various companies and countries participate in the training.
+            We combine online and offline learning in our courses. School mentors - our iron people
+            - teach students in their free time and for free! More about the school
           </p>
         </div>
         <div className="welcome__img info"></div>
@@ -56,37 +60,29 @@ const Welcome = () => {
             <div className="team__member">
               <div className="team__member-img memb-1"></div>
               <div className="team__member-info">
-                <h3 className="team__member-title">Name</h3>
-                <p className="team__member-text">
-                  Description .. ... .... ... ...... .... .... ........ descriotion
-                </p>
+                <h3 className="team__member-title">Dmitry</h3>
+                <p className="team__member-text">Mentor</p>
               </div>
             </div>
             <div className="team__member">
               <div className="team__member-img memb-1"></div>
               <div className="team__member-info">
-                <h3 className="team__member-title">Name</h3>
-                <p className="team__member-text">
-                  Description .. ... .... ... ...... .... .... ........ descriotion
-                </p>
+                <h3 className="team__member-title">Dmitry TeamLead</h3>
+                <p className="team__member-text">Front-end developer</p>
               </div>
             </div>
             <div className="team__member">
               <div className="team__member-img memb-1"></div>
               <div className="team__member-info">
-                <h3 className="team__member-title">Name</h3>
-                <p className="team__member-text">
-                  Description .. ... .... ... ...... .... .... ........ descriotion
-                </p>
+                <h3 className="team__member-title">Elena</h3>
+                <p className="team__member-text">Front-end developer</p>
               </div>
             </div>
             <div className="team__member">
               <div className="team__member-img memb-1"></div>
               <div className="team__member-info">
-                <h3 className="team__member-title">Name</h3>
-                <p className="team__member-text">
-                  Description .. ... .... ... ...... .... .... ........ descriotion
-                </p>
+                <h3 className="team__member-title">Darya</h3>
+                <p className="team__member-text">Front-end developer</p>
               </div>
             </div>
           </div>
