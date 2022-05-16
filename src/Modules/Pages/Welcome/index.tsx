@@ -1,37 +1,54 @@
 import { Box } from '@mui/material';
 import { Paths } from './../../../constants';
 import { setIsRegistrationMode } from '../../../store/slices/signinSignupSlice';
-import { useAppDispatch } from '../../../hooks/storeHooks';
+import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import './welcome.scss';
 import { Link } from 'react-router-dom';
 
 const Welcome = () => {
   const dispatch = useAppDispatch();
+  const { token } = useAppSelector((state) => state.signinSignup);
+
   return (
     <div className="welcome">
-      <Box
-        className="welcome__login"
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          maxWidth: '1200px',
-        }}
-      >
-        <Link
-          className="signButton"
-          to={Paths.auth}
-          onClick={() => dispatch(setIsRegistrationMode(false))}
+      <div>
+        <Box
+          className="welcome__login"
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            maxWidth: '1200px',
+          }}
         >
-          Sign In
-        </Link>
-        <Link
-          className="signButton"
-          to={Paths.auth}
-          onClick={() => dispatch(setIsRegistrationMode(true))}
-        >
-          Sign Up
-        </Link>
-      </Box>
+          {token ? (
+            <Link
+              className="signButton"
+              to={Paths.main}
+              onClick={() => dispatch(setIsRegistrationMode(false))}
+            >
+              Go to Main Page
+            </Link>
+          ) : (
+            <>
+              <Link
+                className="signButton"
+                to={Paths.auth}
+                onClick={() => dispatch(setIsRegistrationMode(false))}
+              >
+                Sign In
+              </Link>
+              <Link
+                className="signButton"
+                to={Paths.auth}
+                onClick={() => dispatch(setIsRegistrationMode(true))}
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
+        </Box>
+      </div>
+
       <div className="welcome__wrapper main">
         <div className="welcome__info">
           <h2 className="welcome__info--title">Project Management App</h2>
