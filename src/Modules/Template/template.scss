@@ -1,4 +1,8 @@
+@import '../../index.scss';
+
 // 64px header height / 96px footer height
 .main-container {
   min-height: calc(100vh - 64px - 96px);
+  max-width: $xl;
+  margin: 0 auto;
 }
