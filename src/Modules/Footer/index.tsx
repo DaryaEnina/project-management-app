@@ -48,7 +48,7 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Дмитрий
+            Dmitry
           </Button>
           <Button
             variant="text"
@@ -58,7 +58,7 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Елена
+            Elena
           </Button>
           <Button
             variant="text"
@@ -68,7 +68,7 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Дария
+            Darya
           </Button>
         </Container>
       </Container>
