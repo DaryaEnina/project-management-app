@@ -167,7 +167,7 @@ export const currentBoardSlice = createSlice({
   name: 'currentBoard',
   initialState: {
     boards: [],
-    loading: true,
+    loading: false,
     currentBoard: {} as Board,
     editMode: false,
     id: 'string',
@@ -196,6 +196,7 @@ export const currentBoardSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(getCurrentBoard.fulfilled, (state, action) => {
+      state.loading = false;
       state.currentBoard = action.payload;
     });
     builder.addCase(getColumns.fulfilled, (state, action) => {

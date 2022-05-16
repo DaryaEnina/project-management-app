@@ -12,8 +12,11 @@ const Board = () => {
   const currentBoard = useAppSelector((state) => state.currentBoard);
   const boardsList = useAppSelector((state) => state.boardList.boardList);
   const columns = useAppSelector((state) => state.currentBoard.currentBoard.columns);
+  const loading = useAppSelector((state) => state.currentBoard.loading);
 
-  return (
+  return loading ? (
+    <div>Loading...</div>
+  ) : (
     <div>
       <Button onClick={() => navigate(-1)}>Back to main page </Button>
       <Button onClick={() => dispatch(getBoards({ token: token }))}>Get boards</Button>

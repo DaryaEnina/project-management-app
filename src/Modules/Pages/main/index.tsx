@@ -19,7 +19,7 @@ export const Main = () => {
   }, [dispatch, token]);
 
   const openBoard = (boardId: string) => {
-    getCurrentBoard({ boardId, token });
+    dispatch(getCurrentBoard({ boardId, token }));
     navigate(Paths.board);
   };
 
