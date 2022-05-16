@@ -20,7 +20,7 @@ import { Paths } from '../../constants';
 import './Header.scss';
 
 const pages = ['Create new board'];
-const settings = ['Profile', 'Edit profile', 'Logout'];
+const settings = ['Profile', 'Edit profile', 'Sign Out'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
