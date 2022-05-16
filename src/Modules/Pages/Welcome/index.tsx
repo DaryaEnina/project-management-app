@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 const Welcome = () => {
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((state) => state.signinSignup);
-  console.log(token);
 
   return (
     <div className="welcome">
