@@ -1,4 +1,4 @@
-import React, { ReactEventHandler } from 'react';
+import React, { ChangeEvent, ReactEventHandler, useState } from 'react';
 import './ModalNewBoard.scss';
 import ReactDOM from 'react-dom';
 import {
@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import { createBoard } from '../../store/slices/currentBoardSlice';
+import { getBoards } from '../../store/slices/boardListSlice';
 
 interface ModalProps {
   isOpen: boolean;
@@ -21,11 +22,26 @@ interface ModalProps {
 const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
   const token = useAppSelector((state) => state.signinSignup.token);
   const dispatch = useAppDispatch();
-  if (!isOpen) return null;
+  const [open, setOpen] = useState(true);
+  const [createdTitle, setCreatedTitle] = useState('');
+
+  const onSubmit = (event: React.FormEvent, submitData: Board) => {
+    event.preventDefault();
+    setOpen(false);
+    dispatch(createBoard({ token: token, board: { title: submitData.title } }));
+    dispatch(getBoards({ token: token }));
+  };
+
+  const handleInput = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setCreatedTitle(event.target.value);
+    setOpen(true);
+  };
+
+  if (!isOpen || !open) return null;
   return ReactDOM.createPortal(
-    <div className="modal">
-      <Dialog open={isOpen} onClose={onClose}>
-        <DialogTitle>Create New Board</DialogTitle>
+    <Dialog open={isOpen} onClose={onClose}>
+      <DialogTitle>Create New Board</DialogTitle>
+      <form className="modal" onSubmit={(event) => onSubmit(event, { title: createdTitle })}>
         <DialogContent>
           <DialogContentText>
             To create the new board, please enter the title here.
@@ -38,18 +54,20 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
             type="text"
             fullWidth
             variant="standard"
+            value={createdTitle}
+            onChange={handleInput}
           />
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => dispatch(createBoard({ token: token, board: { title: 'NewTitle' } }))}
-          >
+          <Button variant="outlined" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={onClose}>Subscribe</Button>
+          <Button variant="outlined" type="submit">
+            Create new board
+          </Button>
         </DialogActions>
-      </Dialog>
-    </div>,
+      </form>
+    </Dialog>,
     document.body
   );
 };
