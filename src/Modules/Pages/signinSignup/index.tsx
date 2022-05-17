@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import './signinSignup.scss';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
@@ -54,6 +55,7 @@ export const SignInSignUp = () => {
   const { error } = useAppSelector((state) => state.signinSignup);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const onSubmit = (data: SignInFormValues | SignUpFormValues) => {
     if (isRegistrationMode) {
@@ -105,7 +107,7 @@ export const SignInSignUp = () => {
             render={({ field, formState }) => (
               <TextField
                 {...field}
-                label="Your name"
+                label={t('your-name')}
                 sx={{ mb: '30px' }}
                 autoComplete="off"
                 error={!!(formState.errors as SignUpErrorObject).name}
