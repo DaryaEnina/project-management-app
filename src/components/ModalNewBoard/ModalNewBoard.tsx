@@ -13,6 +13,7 @@ import {
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import { createBoard } from '../../store/slices/currentBoardSlice';
 import { getBoards } from '../../store/slices/boardListSlice';
+import { useSnackbar } from 'notistack';
 
 interface ModalProps {
   isOpen: boolean;
@@ -24,12 +25,27 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(true);
   const [createdTitle, setCreatedTitle] = useState('');
+  const { enqueueSnackbar } = useSnackbar();
 
   const onSubmit = (event: React.FormEvent, submitData: Board) => {
     event.preventDefault();
     setOpen(false);
-    dispatch(createBoard({ token: token, board: { title: submitData.title } }));
-    dispatch(getBoards({ token: token }));
+    if (submitData.title) {
+      Promise.all([
+        dispatch(createBoard({ token: token, board: { title: submitData.title } })),
+        dispatch(getBoards({ token: token })),
+      ]).then(() => setOpen(true));
+      enqueueSnackbar(`New Board ${submitData.title} was created and added to Main page`, {
+        variant: 'success',
+        autoHideDuration: 3000,
+      });
+    } else {
+      enqueueSnackbar('Boards title should not be empty', {
+        variant: 'warning',
+        autoHideDuration: 3000,
+      });
+      setOpen(true);
+    }
   };
 
   const handleInput = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
