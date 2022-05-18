@@ -17,6 +17,10 @@ export const getBoards = createAsyncThunk<Board[], { token: string }>(
   }
 );
 
+export const deleteBoard = (id: string) => {
+  console.log(id);
+};
+
 export const boardListSlice = createSlice({
   name: 'boardList',
   initialState: {

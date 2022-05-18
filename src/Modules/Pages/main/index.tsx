@@ -6,8 +6,11 @@ import { useEffect } from 'react';
 import { getCurrentBoard } from '../../../store/slices/currentBoardSlice';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../constants';
+import { deleteBoard } from '../../../store/slices/boardListSlice';
+import { setOpen } from '../../../store/slices/confirmationalModalSlice';
 
 import './main.scss';
+import { ConfirmationalModal } from '../../../components/confirmationalModal';
 
 export const Main = () => {
   const { token } = useAppSelector((state) => state.signinSignup);
@@ -42,12 +45,18 @@ export const Main = () => {
                 </Typography>
               </CardContent>
             </Card>
-            <IconButton className="main_delete-btn" aria-label="DeleteForeverIcon" color="error">
+            <IconButton
+              className="main_delete-btn"
+              aria-label="DeleteForeverIcon"
+              color="error"
+              onClick={() => dispatch(setOpen(true))}
+            >
               <DeleteForeverIcon />
             </IconButton>
           </Grid>
         ))}
       </Grid>
+      <ConfirmationalModal />
     </>
   );
 };

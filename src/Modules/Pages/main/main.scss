@@ -15,10 +15,10 @@
 
   &_item {
     position: relative;
+    cursor: pointer;
 
     &-wrapper {
       position: relative;
-      cursor: pointer;
     }
 
     &__title {
@@ -31,7 +31,7 @@
   }
 
   &_delete-btn {
-    position: absolute;
+    position: absolute !important;
     display: block;
     right: 5px;
     bottom: 0;
