@@ -48,6 +48,12 @@ export const boardListSlice = createSlice({
       state.loading = false;
       state.boardList = action.payload;
     },
+    [deleteBoard.pending.type]: (state) => {
+      state.loading = true;
+    },
+    [deleteBoard.fulfilled.type]: (state) => {
+      state.loading = false;
+    },
   },
 });
 
