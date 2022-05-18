@@ -61,8 +61,12 @@ export const Main = () => {
         ))}
       </Grid>
       <ConfirmationalModal
-        action={() => deleteBoard(currentCardId)}
-        text="Would you like to delete this board?"
+        action={() => {
+          dispatch(deleteBoard({ boardId: currentCardId, token })).then(() =>
+            dispatch(getBoards({ token }))
+          );
+        }}
+        text="Do you want to delete this board?"
       />
     </>
   );
