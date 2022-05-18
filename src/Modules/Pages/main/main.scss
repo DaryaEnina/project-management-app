@@ -17,6 +17,7 @@
     position: relative;
 
     &-wrapper {
+      position: relative;
       cursor: pointer;
     }
 
@@ -27,5 +28,13 @@
       color: #fff;
       z-index: 10;
     }
+  }
+
+  &_delete-btn {
+    position: absolute;
+    display: block;
+    right: 5px;
+    bottom: 0;
+    z-index: 10;
   }
 }
