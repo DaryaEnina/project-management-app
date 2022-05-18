@@ -7,7 +7,7 @@ import { getCurrentBoard } from '../../../store/slices/currentBoardSlice';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../constants';
 import { deleteBoard } from '../../../store/slices/boardListSlice';
-import { setOpen } from '../../../store/slices/confirmationalModalSlice';
+import { setOpen, setCurrentCardId } from '../../../store/slices/confirmationalModalSlice';
 
 import './main.scss';
 import { ConfirmationalModal } from '../../../components/confirmationalModal';
@@ -15,6 +15,7 @@ import { ConfirmationalModal } from '../../../components/confirmationalModal';
 export const Main = () => {
   const { token } = useAppSelector((state) => state.signinSignup);
   const { boardList } = useAppSelector((state) => state.boardList);
+  const { currentCardId } = useAppSelector((state) => state.confirmationalModal);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -49,14 +50,20 @@ export const Main = () => {
               className="main_delete-btn"
               aria-label="DeleteForeverIcon"
               color="error"
-              onClick={() => dispatch(setOpen(true))}
+              onClick={() => {
+                dispatch(setCurrentCardId(item.id));
+                dispatch(setOpen(true));
+              }}
             >
               <DeleteForeverIcon />
             </IconButton>
           </Grid>
         ))}
       </Grid>
-      <ConfirmationalModal />
+      <ConfirmationalModal
+        action={() => deleteBoard(currentCardId)}
+        text="Would you like to delete this board?"
+      />
     </>
   );
 };

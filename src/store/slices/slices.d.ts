@@ -52,4 +52,5 @@ type BoardListState = {
 
 type ConfirmationalModalSliceState = {
   isOpen: boolean;
+  currentCardId: string;
 };

@@ -6,34 +6,44 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
+import ReactDOM from 'react-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import { setOpen } from '../../store/slices/confirmationalModalSlice';
 
-export const ConfirmationalModal = () => {
-  const { token } = useAppSelector((state) => state.signinSignup);
+type ConfirmationalModalProps = {
+  action: () => void;
+  text: string;
+};
+
+export const ConfirmationalModal = ({ action, text }: ConfirmationalModalProps) => {
   const { isOpen } = useAppSelector((state) => state.confirmationalModal);
   const dispatch = useAppDispatch();
 
-  return (
+  return ReactDOM.createPortal(
     <Dialog
       open={isOpen}
       onClose={() => dispatch(setOpen(false))}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{'Are you sure?'}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          Let Google help apps determine location. This means sending anonymous location data to
-          Google, even when no apps are running.
-        </DialogContentText>
+        <DialogContentText id="alert-dialog-description">{text}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => dispatch(setOpen(false))}>Disagree</Button>
+        <Button
+          onClick={() => {
+            action();
+            dispatch(setOpen(false));
+          }}
+        >
+          Yes
+        </Button>
         <Button onClick={() => dispatch(setOpen(false))} autoFocus>
-          Agree
+          Cancel
         </Button>
       </DialogActions>
-    </Dialog>
+    </Dialog>,
+    document.body
   );
 };
