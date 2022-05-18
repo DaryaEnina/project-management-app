@@ -10,13 +10,9 @@ interface CurrentBoardState {
   title: string;
 }
 
-const board = {
-  title: 'Homework tasks',
-};
-
-export const createBoard = createAsyncThunk<Board, { token: string }>(
+export const createBoard = createAsyncThunk<Board, { token: string; board: Board }>(
   'boards/create',
-  async ({ token }) => {
+  async ({ token, board }) => {
     try {
       const response = await api.post(`/boards`, board, {
         headers: {
@@ -203,7 +199,7 @@ export const currentBoardSlice = createSlice({
       state.currentBoard.columns = action.payload;
     });
     builder.addCase(createColumn.fulfilled, (state, action) => {
-      state.currentBoard.columns.push(action.payload);
+      state.currentBoard.columns?.push(action.payload);
     });
     builder.addCase(createTask.fulfilled, (state, action) => {
       console.log(action.payload);

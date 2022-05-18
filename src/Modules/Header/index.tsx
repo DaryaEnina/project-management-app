@@ -11,13 +11,14 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import CustomizedSwitches from './Components/Switch';
-import { createBoard } from '../../store/slices/currentBoardSlice';
-import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
+import { useAppSelector } from '../../hooks/storeHooks';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import { Link } from 'react-router-dom';
 import { Paths } from '../../constants';
+import { useState } from 'react';
 
 import './Header.scss';
+import ModalNewBoard from '../../components/ModalNewBoard/ModalNewBoard';
 
 const pages = ['Create new board'];
 const settings = ['Profile', 'Edit profile', 'Sign Out'];
@@ -25,8 +26,8 @@ const settings = ['Profile', 'Edit profile', 'Sign Out'];
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
-  const dispatch = useAppDispatch();
   const token = useAppSelector((state) => state.signinSignup.token);
+  const [open, setOpen] = useState(false);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -45,6 +46,7 @@ const ResponsiveAppBar = () => {
 
   return (
     <AppBar position="sticky" sx={{ height: '64px' }}>
+      <ModalNewBoard isOpen={open} onClose={() => setOpen(false)} />
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
           <Box sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
@@ -97,7 +99,13 @@ const ResponsiveAppBar = () => {
                 }}
               >
                 {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <MenuItem
+                    key={page}
+                    onClick={() => {
+                      setOpen(true);
+                      handleCloseNavMenu();
+                    }}
+                  >
                     <Typography textAlign="center">{page}</Typography>
                   </MenuItem>
                 ))}
@@ -114,7 +122,7 @@ const ResponsiveAppBar = () => {
               {pages.map((page) => (
                 <Button
                   key={page}
-                  onClick={() => dispatch(createBoard({ token: token }))}
+                  onClick={() => setOpen(true)}
                   sx={{ color: 'white', display: 'block' }}
                 >
                   {page}

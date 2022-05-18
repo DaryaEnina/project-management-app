@@ -72,7 +72,6 @@ const Column = (column: ColumnInterface) => {
             type="text"
             value={currentTitle}
             onFocus={() => setMode(true)}
-            /* onBlur={() => setMode(false)} */
             onChange={handleInput}
           />
         </div>

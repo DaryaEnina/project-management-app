@@ -1,5 +1,5 @@
 interface Board {
   title: string;
-  id: string;
-  columns: ColumnInterface[];
+  id?: string;
+  columns?: ColumnInterface[];
 }
