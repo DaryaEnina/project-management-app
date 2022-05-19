@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../constants';
 import './404.scss';
 
+/* Author: Genaro Colusso
+March 31, 2020
+https://codepen.io/genarocolusso/pen/XWbGMLp */
+
 export const NotFoundPage = () => {
   const navigate = useNavigate();
   const { t: translate } = useTranslation();
@@ -123,7 +127,7 @@ export const NotFoundPage = () => {
       </div>
       <div className="not-found_title">{translate('page-not-found')}</div>
       <Button className="not-found_btn" variant="contained" onClick={() => navigate(Paths.home)}>
-        {translate('go-to-welcom-page')}
+        {translate('go-to-welcome-page')}
       </Button>
     </div>
   );
