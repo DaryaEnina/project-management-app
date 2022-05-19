@@ -6,6 +6,7 @@ import { Paths } from './constants';
 import Board from './Modules/Pages/board';
 import { Main } from './Modules/Pages/main';
 import './i18n';
+import { NotFoundPage } from './Modules/Pages/404';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path={Paths.auth} element={<SignInSignUp />} />
           <Route path={Paths.main} element={<Main />} />
           <Route path={Paths.board} element={<Board />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </Router>
