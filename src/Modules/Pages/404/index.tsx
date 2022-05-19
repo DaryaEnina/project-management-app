@@ -1,9 +1,13 @@
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Paths } from '../../../constants';
 import './404.scss';
 
 export const NotFoundPage = () => {
+  const navigate = useNavigate();
   return (
-    <>
-      <div className="main">
+    <div className="not-found_wrapper">
+      <div className="not-found_main">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -114,6 +118,10 @@ export const NotFoundPage = () => {
           </g>
         </svg>
       </div>
-    </>
+      <div className="not-found_title">Page not found</div>
+      <Button className="not-found_btn" variant="contained" onClick={() => navigate(Paths.home)}>
+        Go to welcom page
+      </Button>
+    </div>
   );
 };
