@@ -97,6 +97,10 @@ export const SignInSignUp = () => {
     });
   }, [login, reset, unregister]);
 
+  useEffect(() => {
+    localStorage.setItem('token', token);
+  }, [token]);
+
   return (
     <Container maxWidth="xl">
       <form className="signin-form" onSubmit={handleSubmit(onSubmit)}>

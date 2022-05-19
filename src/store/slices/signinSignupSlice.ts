@@ -51,8 +51,9 @@ export const getUser = createAsyncThunk('users/getUser', async (data: getUserDat
 export const signinSignupSlice = createSlice({
   name: 'signinSignup',
   initialState: {
-    token:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4MTg1YjY3ZS0xZGM5LTQ0N2QtODc4Yy02N2E5MjcwODNmYTEiLCJsb2dpbiI6IjFAZ21haWwuY29tIiwiaWF0IjoxNjUyNzA3NTE1fQ.Qfb78v0EmqvmNHs08GRQfqUZ4aRiB5JVjvf2L0LP3WY',
+    token: localStorage.getItem('token') || '',
+    // token:
+    //   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4MTg1YjY3ZS0xZGM5LTQ0N2QtODc4Yy02N2E5MjcwODNmYTEiLCJsb2dpbiI6IjFAZ21haWwuY29tIiwiaWF0IjoxNjUyNzA3NTE1fQ.Qfb78v0EmqvmNHs08GRQfqUZ4aRiB5JVjvf2L0LP3WY',
     userId: '',
     name: '',
     login: '',
