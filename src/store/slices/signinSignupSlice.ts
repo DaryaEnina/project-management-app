@@ -51,8 +51,7 @@ export const getUser = createAsyncThunk('users/getUser', async (data: getUserDat
 export const signinSignupSlice = createSlice({
   name: 'signinSignup',
   initialState: {
-    token:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4MTg1YjY3ZS0xZGM5LTQ0N2QtODc4Yy02N2E5MjcwODNmYTEiLCJsb2dpbiI6IjFAZ21haWwuY29tIiwiaWF0IjoxNjUyNzA3NTE1fQ.Qfb78v0EmqvmNHs08GRQfqUZ4aRiB5JVjvf2L0LP3WY',
+    token: localStorage.getItem('token') || '',
     userId: '',
     name: '',
     login: '',
@@ -61,7 +60,7 @@ export const signinSignupSlice = createSlice({
     isRegistrationMode: false,
   } as SigninSignupState,
   reducers: {
-    signOut: (state: SigninSignupState) => {
+    clearStorage: (state: SigninSignupState) => {
       state.token = '';
       state.userId = '';
       state.name = '';
@@ -112,5 +111,5 @@ export const signinSignupSlice = createSlice({
   },
 });
 
-export const { signOut, setIsRegistrationMode, setIdLogin } = signinSignupSlice.actions;
+export const { clearStorage, setIsRegistrationMode, setIdLogin } = signinSignupSlice.actions;
 export default signinSignupSlice.reducer;

@@ -55,7 +55,7 @@ export const SignInSignUp = () => {
   const { error } = useAppSelector((state) => state.signinSignup);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
 
   const onSubmit = (data: SignInFormValues | SignUpFormValues) => {
     if (isRegistrationMode) {
@@ -97,6 +97,10 @@ export const SignInSignUp = () => {
     });
   }, [login, reset, unregister]);
 
+  useEffect(() => {
+    localStorage.setItem('token', token);
+  }, [token]);
+
   return (
     <Container maxWidth="xl">
       <form className="signin-form" onSubmit={handleSubmit(onSubmit)}>
@@ -107,7 +111,7 @@ export const SignInSignUp = () => {
             render={({ field, formState }) => (
               <TextField
                 {...field}
-                label={t('your-name')}
+                label={translate('your-name')}
                 sx={{ mb: '30px' }}
                 autoComplete="off"
                 error={!!(formState.errors as SignUpErrorObject).name}
