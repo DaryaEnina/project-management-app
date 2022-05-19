@@ -11,11 +11,12 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import CustomizedSwitches from './Components/Switch';
-import { useAppSelector } from '../../hooks/storeHooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Paths } from '../../constants';
 import { useState } from 'react';
+import { clearStorage } from '../../store/slices/signinSignupSlice';
 
 import './Header.scss';
 import ModalNewBoard from '../../components/ModalNewBoard/ModalNewBoard';
@@ -28,6 +29,8 @@ const ResponsiveAppBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const token = useAppSelector((state) => state.signinSignup.token);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -42,6 +45,13 @@ const ResponsiveAppBar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const signOut = () => {
+    handleCloseUserMenu();
+    navigate(Paths.home);
+    dispatch(clearStorage());
+    localStorage.removeItem('token');
   };
 
   return (
@@ -153,8 +163,8 @@ const ResponsiveAppBar = () => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  {settings.map((setting, index) => (
+                    <MenuItem key={setting} onClick={index === 2 ? signOut : handleCloseUserMenu}>
                       <Typography textAlign="center">{setting}</Typography>
                     </MenuItem>
                   ))}
