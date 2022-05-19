@@ -1,10 +1,13 @@
 import { Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../constants';
 import './404.scss';
 
 export const NotFoundPage = () => {
   const navigate = useNavigate();
+  const { t: translate } = useTranslation();
+
   return (
     <div className="not-found_wrapper">
       <div className="not-found_main">
@@ -118,9 +121,9 @@ export const NotFoundPage = () => {
           </g>
         </svg>
       </div>
-      <div className="not-found_title">Page not found</div>
+      <div className="not-found_title">{translate('page-not-found')}</div>
       <Button className="not-found_btn" variant="contained" onClick={() => navigate(Paths.home)}>
-        Go to welcom page
+        {translate('go-to-welcom-page')}
       </Button>
     </div>
   );
