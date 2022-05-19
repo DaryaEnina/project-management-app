@@ -47,3 +47,10 @@ type BoardListState = {
   boardList: { title: string; id: string }[];
   loading: boolean;
 };
+
+/* confirmationalModalSlice */
+
+type ConfirmationalModalSliceState = {
+  isOpen: boolean;
+  currentCardId: string;
+};

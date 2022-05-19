@@ -1,16 +1,30 @@
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { getBoards } from '../../../store/slices/boardListSlice';
-import { Card, CardMedia, CardContent, Typography, Grid } from '@mui/material';
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Grid,
+  IconButton,
+  Backdrop,
+  CircularProgress,
+} from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useEffect } from 'react';
 import { getCurrentBoard } from '../../../store/slices/currentBoardSlice';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../constants';
+import { deleteBoard } from '../../../store/slices/boardListSlice';
+import { setOpen, setCurrentCardId } from '../../../store/slices/confirmationalModalSlice';
 
 import './main.scss';
+import { ConfirmationalModal } from '../../../components/confirmationalModal';
 
 export const Main = () => {
   const { token } = useAppSelector((state) => state.signinSignup);
-  const { boardList } = useAppSelector((state) => state.boardList);
+  const { boardList, loading } = useAppSelector((state) => state.boardList);
+  const { currentCardId } = useAppSelector((state) => state.confirmationalModal);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -26,19 +40,12 @@ export const Main = () => {
   return (
     <>
       <Grid className="main_container" container spacing={2}>
+        <Backdrop sx={{ zIndex: '100' }} open={loading} invisible>
+          <CircularProgress size={60} />
+        </Backdrop>
         {boardList.map((item, index) => (
-          <Grid
-            className="main_item-wrapper"
-            item
-            key={index}
-            xl={3}
-            lg={3}
-            md={4}
-            sm={6}
-            xs={12}
-            onClick={() => openBoard(item.id)}
-          >
-            <Card className="main_item">
+          <Grid className="main_item-wrapper" item key={index} xl={3} lg={3} md={4} sm={6} xs={12}>
+            <Card className="main_item" onClick={() => openBoard(item.id)}>
               <CardMedia
                 className="main_item__image"
                 component="img"
@@ -51,9 +58,28 @@ export const Main = () => {
                 </Typography>
               </CardContent>
             </Card>
+            <IconButton
+              className="main_delete-btn"
+              aria-label="DeleteForeverIcon"
+              color="error"
+              onClick={() => {
+                dispatch(setCurrentCardId(item.id));
+                dispatch(setOpen(true));
+              }}
+            >
+              <DeleteForeverIcon />
+            </IconButton>
           </Grid>
         ))}
       </Grid>
+      <ConfirmationalModal
+        action={() => {
+          dispatch(deleteBoard({ boardId: currentCardId, token })).then(() =>
+            dispatch(getBoards({ token }))
+          );
+        }}
+        text="Do you want to delete this board?"
+      />
     </>
   );
 };

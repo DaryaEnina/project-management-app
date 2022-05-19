@@ -15,9 +15,10 @@
 
   &_item {
     position: relative;
+    cursor: pointer;
 
     &-wrapper {
-      cursor: pointer;
+      position: relative;
     }
 
     &__title {
@@ -27,5 +28,13 @@
       color: #fff;
       z-index: 10;
     }
+  }
+
+  &_delete-btn {
+    position: absolute !important;
+    display: block;
+    right: 5px;
+    bottom: 0;
+    z-index: 10;
   }
 }
