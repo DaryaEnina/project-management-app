@@ -129,6 +129,26 @@ export const updateColumn = createAsyncThunk<
   }
 });
 
+export const deleteColumn = createAsyncThunk<
+  ColumnInterface,
+  {
+    boardId: string;
+    columnId?: string;
+    token: string;
+  } & Partial<Board>
+>('column/delete', async ({ boardId, columnId, token }) => {
+  try {
+    const response = await api.delete(`/boards/${boardId}/columns/${columnId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+});
+
 export const getColumns = createAsyncThunk<ColumnInterface[], { boardId: string; token: string }>(
   'columns/get',
   async ({ boardId, token }) => {

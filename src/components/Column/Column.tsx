@@ -5,12 +5,14 @@ import './Column.scss';
 import {
   updateColumn,
   createTask,
-  getColumn,
+  deleteColumn,
   getCurrentBoard,
 } from '../../store/slices/currentBoardSlice';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
+import { ConfirmationalModal } from '../confirmationalModal';
+import { setOpen, setCurrentCardId } from '../../../src/store/slices/confirmationalModalSlice';
 
 const Column = (columns: ColumnInterface) => {
   const dispatch = useAppDispatch();
@@ -21,10 +23,6 @@ const Column = (columns: ColumnInterface) => {
   const [editMode, setMode] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(column?.title);
   const [previousTitle, setPreviousTitle] = useState(column?.title);
-
-  /* useEffect(() => {
-    currentBoard.id && dispatch(getCurrentBoard({ boardId: currentBoard.id, token }));
-  }, [currentBoard]); */
 
   const onSubmit = (event: React.FormEvent, submitData: ColumnInterface) => {
     event.preventDefault();
@@ -89,7 +87,6 @@ const Column = (columns: ColumnInterface) => {
       <div className="column__buttons-container button-container">
         <Button
           variant="contained"
-          //TODO: fix appearing only after check another board
           onClick={() => {
             currentBoard.id &&
               column?.id &&
@@ -100,7 +97,13 @@ const Column = (columns: ColumnInterface) => {
         >
           Add task
         </Button>
-        <Button variant="contained" /* onClick={() => console.log(column.id)} */>
+        <Button
+          variant="contained"
+          onClick={() => {
+            column?.id && dispatch(setCurrentCardId(column?.id));
+            dispatch(setOpen(true));
+          }}
+        >
           Delete column
         </Button>
       </div>
@@ -111,6 +114,16 @@ const Column = (columns: ColumnInterface) => {
           ))}
         </Stack>
       </div>
+      <ConfirmationalModal
+        action={() => {
+          currentBoard.id &&
+            column?.id &&
+            dispatch(
+              deleteColumn({ boardId: currentBoard.id, columnId: column?.id, token: token })
+            ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
+        }}
+        text="Do you want to delete this column?"
+      />
     </Paper>
   );
 };
