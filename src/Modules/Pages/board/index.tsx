@@ -10,7 +10,7 @@ const Board = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((state) => state.signinSignup);
-  const currentBoard = useAppSelector((state) => state.currentBoard);
+  const { currentBoard } = useAppSelector((state) => state.currentBoard);
   const columns = useAppSelector((state) => state.currentBoard.currentBoard.columns);
   const loading = useAppSelector((state) => state.currentBoard.loading);
 
@@ -33,7 +33,9 @@ const Board = () => {
           <Typography variant="h3">{currentBoard.title}</Typography>
           <Button
             variant="outlined"
-            onClick={() => dispatch(createColumn({ boardId: currentBoard.id, token: token }))}
+            onClick={() =>
+              currentBoard.id && dispatch(createColumn({ boardId: currentBoard.id, token: token }))
+            }
           >
             Create column
           </Button>
