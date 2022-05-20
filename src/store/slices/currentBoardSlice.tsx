@@ -3,6 +3,7 @@ import { api } from '../api';
 
 interface CurrentBoardState {
   currentBoard: Board;
+  currentColumn: ColumnInterface;
   boards: Board[];
   loading: boolean;
   editMode: false;
@@ -54,6 +55,22 @@ export const createTask = createAsyncThunk<
   }
 });
 
+export const getTasks = createAsyncThunk<
+  TaskInterface,
+  { boardId: string; columnId?: string; token: string }
+>('task/create', async ({ boardId, columnId, token }) => {
+  try {
+    const response = await api.get(`/boards/${boardId}/columns/${columnId}/tasks`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+});
+
 export const createColumn = createAsyncThunk<ColumnInterface, { boardId: string; token: string }>(
   'column/create',
   async ({ boardId, token }) => {
@@ -69,6 +86,22 @@ export const createColumn = createAsyncThunk<ColumnInterface, { boardId: string;
     }
   }
 );
+
+export const getColumn = createAsyncThunk<
+  ColumnInterface,
+  { boardId: string; columnId: string; token: string }
+>('column/get', async ({ boardId, columnId, token }) => {
+  try {
+    const response = await api.get(`/boards/${boardId}/columns/${columnId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+});
 
 export const updateColumn = createAsyncThunk<
   ColumnInterface,
@@ -97,7 +130,7 @@ export const updateColumn = createAsyncThunk<
 });
 
 export const getColumns = createAsyncThunk<ColumnInterface[], { boardId: string; token: string }>(
-  'column/get',
+  'columns/get',
   async ({ boardId, token }) => {
     try {
       const response = await api.get(`/boards/${boardId}/columns`, {
@@ -165,6 +198,7 @@ export const currentBoardSlice = createSlice({
     boards: [],
     loading: false,
     currentBoard: {} as Board,
+    currentColumn: {} as ColumnInterface,
     editMode: false,
     id: 'string',
     title: 'Mock title',
@@ -201,8 +235,13 @@ export const currentBoardSlice = createSlice({
     builder.addCase(createColumn.fulfilled, (state, action) => {
       state.currentBoard.columns?.push(action.payload);
     });
+    builder.addCase(getColumn.fulfilled, (state, action) => {
+      state.currentColumn = action.payload;
+    });
     builder.addCase(createTask.fulfilled, (state, action) => {
-      console.log(action.payload);
+      state.currentBoard.columns
+        ?.filter((column) => action.payload.columnId === column.id)[0]
+        .tasks?.push(action.payload);
     });
   },
 });

@@ -11,7 +11,7 @@ const Board = () => {
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((state) => state.signinSignup);
   const { currentBoard } = useAppSelector((state) => state.currentBoard);
-  const columns = useAppSelector((state) => state.currentBoard.currentBoard.columns);
+  const { columns } = useAppSelector((state) => state.currentBoard.currentBoard);
   const loading = useAppSelector((state) => state.currentBoard.loading);
 
   return loading ? (
