@@ -13,11 +13,12 @@ import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import { ConfirmationalModal } from '../confirmationalModal';
 import { setOpen, setCurrentCardId } from '../../../src/store/slices/confirmationalModalSlice';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 const Column = (columns: ColumnInterface) => {
   const dispatch = useAppDispatch();
   const { currentBoard } = useAppSelector((state) => state.currentBoard);
-  const { token } = useAppSelector((state) => state.signinSignup);
+  const { token, userId } = useAppSelector((state) => state.signinSignup);
   const column = currentBoard?.columns?.filter((column) => column.id === columns.id)[0];
 
   const [editMode, setMode] = useState(false);
@@ -91,7 +92,12 @@ const Column = (columns: ColumnInterface) => {
             currentBoard.id &&
               column?.id &&
               dispatch(
-                createTask({ boardId: currentBoard.id, columnId: column?.id, token: token })
+                createTask({
+                  boardId: currentBoard.id,
+                  columnId: column?.id,
+                  token: token,
+                  userId: userId,
+                })
               );
           }}
         >
@@ -108,11 +114,39 @@ const Column = (columns: ColumnInterface) => {
         </Button>
       </div>
       <div className="column__tasks-container" data-testid="Column">
-        <Stack direction={{ xs: 'column', sm: 'column' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
-          {column?.tasks?.map((task: TaskInterface) => (
-            <Task key={task.id} title={task.title} order={task.order} id={task.id} />
-          ))}
-        </Stack>
+        {column?.id && (
+          <Droppable droppableId={column?.id} key={column?.id}>
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef} style={{ display: 'flex' }}>
+                <Stack direction={{ xs: 'column', sm: 'column' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
+                  {column?.tasks?.map((task: TaskInterface, index) => {
+                    return (
+                      <Draggable key={task.id} draggableId={task.id} index={index}>
+                        {(provided) => {
+                          return (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <Task
+                                key={task.id}
+                                title={task.title}
+                                order={task.order}
+                                id={task.id}
+                              />
+                            </div>
+                          );
+                        }}
+                      </Draggable>
+                    );
+                  })}
+                </Stack>
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        )}
       </div>
       <ConfirmationalModal
         action={() => {

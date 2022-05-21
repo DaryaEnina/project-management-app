@@ -57,7 +57,10 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
   return ReactDOM.createPortal(
     <Dialog open={isOpen} onClose={onClose}>
       <DialogTitle>Create New Board</DialogTitle>
-      <form className="modal" onSubmit={(event) => onSubmit(event, { title: createdTitle })}>
+      <form
+        className="modal"
+        onSubmit={(event) => onSubmit(event, { title: createdTitle, columns: [] })}
+      >
         <DialogContent>
           <DialogContentText>
             To create the new board, please enter the title here.

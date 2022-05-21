@@ -25,6 +25,7 @@
     "jwt-decode": "^3.1.2",
     "notistack": "^2.0.4",
     "react": "^18.1.0",
+    "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.30.0",
     "react-i18next": "^11.16.9",
@@ -75,6 +76,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-beautiful-dnd": "^13.1.2",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "eslint": "^8.14.0",

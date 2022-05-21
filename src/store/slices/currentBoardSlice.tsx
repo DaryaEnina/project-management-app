@@ -28,27 +28,71 @@ export const createBoard = createAsyncThunk<Board, { token: string; board: Board
 );
 //TODO: remove hardcode when modal will be delivered
 const column = {
-  title: 'Resolved',
-  order: 4,
+  title: 'To Do ',
+  order: 1,
 };
 
 const task = {
   title: 'Task: pet the cat',
-  order: 2,
+  order: 1,
   description: 'Domestic cat needs to be stroked gently',
   userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
 };
 
 export const createTask = createAsyncThunk<
   TaskInterface,
-  { boardId: string; columnId?: string; token: string }
->('task/create', async ({ boardId, columnId, token }) => {
+  { boardId: string; columnId?: string; token: string; userId: string }
+>('task/create', async ({ boardId, columnId, token, userId }) => {
   try {
-    const response = await api.post(`/boards/${boardId}/columns/${columnId}/tasks`, task, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await api.post(
+      `/boards/${boardId}/columns/${columnId}/tasks`,
+      {
+        title: 'Task: pet the cat',
+        order: 1,
+        description: 'Domestic cat needs to be stroked gently',
+        userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
       },
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+});
+
+export const updateTask = createAsyncThunk<
+  TaskInterface,
+  {
+    boardId: string;
+    columnId?: string;
+    taskId: string;
+    newColumnId: string;
+    newOrder: number;
+    token: string;
+    userId: string;
+  }
+>('task/update', async ({ boardId, columnId, taskId, newColumnId, newOrder, token, userId }) => {
+  try {
+    const response = await api.put(
+      `/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
+      {
+        title: 'Task: pet the cat',
+        order: newOrder,
+        description: 'Domestic cat needs to be stroked gently',
+        userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
+        boardId: boardId,
+        columnId: newColumnId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return response.data;
   } catch (err) {
     throw err;
@@ -262,6 +306,14 @@ export const currentBoardSlice = createSlice({
       state.currentBoard.columns
         ?.filter((column) => action.payload.columnId === column.id)[0]
         .tasks?.push(action.payload);
+    });
+    builder.addCase(updateTask.fulfilled, (state, action) => {
+      state.currentBoard.columns
+        ?.filter((column) => action.payload.columnId === column.id)[0]
+        .tasks?.push(action.payload);
+      state.currentBoard.columns?.filter((column) =>
+        column.tasks?.filter((task) => task.id !== action.payload.id)
+      );
     });
   },
 });
