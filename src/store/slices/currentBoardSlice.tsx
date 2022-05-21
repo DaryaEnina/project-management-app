@@ -32,17 +32,10 @@ const column = {
   order: 1,
 };
 
-const task = {
-  title: 'Task: pet the cat',
-  order: 1,
-  description: 'Domestic cat needs to be stroked gently',
-  userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
-};
-
 export const createTask = createAsyncThunk<
   TaskInterface,
   { boardId: string; columnId?: string; token: string; userId: string }
->('task/create', async ({ boardId, columnId, token, userId }) => {
+>('task/create', async ({ boardId, columnId, token /* userId */ }) => {
   try {
     const response = await api.post(
       `/boards/${boardId}/columns/${columnId}/tasks`,
@@ -75,29 +68,32 @@ export const updateTask = createAsyncThunk<
     token: string;
     userId: string;
   }
->('task/update', async ({ boardId, columnId, taskId, newColumnId, newOrder, token, userId }) => {
-  try {
-    const response = await api.put(
-      `/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
-      {
-        title: 'Task: pet the cat',
-        order: newOrder,
-        description: 'Domestic cat needs to be stroked gently',
-        userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
-        boardId: boardId,
-        columnId: newColumnId,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+>(
+  'task/update',
+  async ({ boardId, columnId, taskId, newColumnId, newOrder, token /* userId */ }) => {
+    try {
+      const response = await api.put(
+        `/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
+        {
+          title: 'Task: pet the cat',
+          order: newOrder,
+          description: 'Domestic cat needs to be stroked gently',
+          userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
+          boardId: boardId,
+          columnId: newColumnId,
         },
-      }
-    );
-    return response.data;
-  } catch (err) {
-    throw err;
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
   }
-});
+);
 
 export const getTasks = createAsyncThunk<
   TaskInterface,
@@ -240,21 +236,6 @@ export const getCurrentBoard = createAsyncThunk<Board, { boardId: string; token:
     }
   }
 );
-
-//TODO: add update for board
-
-/* export const updateCurrentBoard = createAsyncThunk('boards/update', async (id: string) => {
-  try {
-    const response = await axios.put(`https://thawing-tor-58868.herokuapp.com/boards/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (err) {
-    throw err;
-  }
-}); */
 
 export const currentBoardSlice = createSlice({
   name: 'currentBoard',
