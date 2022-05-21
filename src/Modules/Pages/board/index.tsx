@@ -111,10 +111,7 @@ const Board = () => {
           >
             Create column
           </Button>
-          <DragDropContext
-            onDragEnd={(result) => columns && onDragEnd(result, columns)}
-            onDragStart={onDragStart}
-          >
+          <DragDropContext onDragEnd={(result) => columns && onDragEnd(result, columns)}>
             <Box
               sx={{
                 display: 'flex',
