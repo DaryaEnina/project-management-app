@@ -2,17 +2,16 @@ import { Box, Button, Paper, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Column from '../../../components/Column/Column';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import { getBoards, getCurrentBoard, createColumn } from '../../../store/slices/currentBoardSlice';
+import { createColumn } from '../../../store/slices/currentBoardSlice';
 import { Loader } from '../../Loader';
 import './board.scss';
 
 const Board = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const token = useAppSelector((state) => state.signinSignup.token);
-  const currentBoard = useAppSelector((state) => state.currentBoard);
-  const boardsList = useAppSelector((state) => state.boardList.boardList);
-  const columns = useAppSelector((state) => state.currentBoard.currentBoard.columns);
+  const { token } = useAppSelector((state) => state.signinSignup);
+  const { currentBoard } = useAppSelector((state) => state.currentBoard);
+  const { columns } = useAppSelector((state) => state.currentBoard.currentBoard);
   const loading = useAppSelector((state) => state.currentBoard.loading);
 
   return loading ? (
@@ -20,22 +19,7 @@ const Board = () => {
   ) : (
     <div>
       <Button onClick={() => navigate(-1)}>Back to main page </Button>
-      <Button onClick={() => dispatch(getBoards({ token: token }))}>Get boards</Button>
-      {token}
       <div className="boardContainer">
-        {
-          <div>
-            {boardsList.map((board) => (
-              <span
-                key={board.id}
-                onClick={() => dispatch(getCurrentBoard({ boardId: board.id, token: token }))}
-              >
-                {board.title}
-              </span>
-            ))}
-          </div>
-        }
-
         <Paper
           elevation={12}
           sx={{
@@ -49,7 +33,9 @@ const Board = () => {
           <Typography variant="h3">{currentBoard.title}</Typography>
           <Button
             variant="outlined"
-            onClick={() => dispatch(createColumn({ boardId: currentBoard.id, token: token }))}
+            onClick={() =>
+              currentBoard.id && dispatch(createColumn({ boardId: currentBoard.id, token: token }))
+            }
           >
             Create column
           </Button>

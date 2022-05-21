@@ -1,34 +1,42 @@
 import { Button, Fab, Paper, Stack } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-import { createTask } from '../../store/slices/currentBoardSlice';
 import Task from '../Task/Task';
 import './Column.scss';
-import { updateColumn } from '../../store/slices/currentBoardSlice';
+import {
+  updateColumn,
+  createTask,
+  deleteColumn,
+  getCurrentBoard,
+} from '../../store/slices/currentBoardSlice';
 import { ChangeEvent, useState } from 'react';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
+import { ConfirmationalModal } from '../confirmationalModal';
+import { setOpen, setCurrentCardId } from '../../../src/store/slices/confirmationalModalSlice';
 
-const Column = (column: ColumnInterface) => {
+const Column = (columns: ColumnInterface) => {
   const dispatch = useAppDispatch();
-  const currentBoard = useAppSelector((state) => state.currentBoard);
-  const token = useAppSelector((state) => state.signinSignup.token);
+  const { currentBoard } = useAppSelector((state) => state.currentBoard);
+  const { token } = useAppSelector((state) => state.signinSignup);
+  const column = currentBoard?.columns?.filter((column) => column.id === columns.id)[0];
 
   const [editMode, setMode] = useState(false);
-  const [currentTitle, setCurrentTitle] = useState(column.title);
-  const [previousTitle, setPreviousTitle] = useState(column.title);
+  const [currentTitle, setCurrentTitle] = useState(column?.title);
+  const [previousTitle, setPreviousTitle] = useState(column?.title);
 
   const onSubmit = (event: React.FormEvent, submitData: ColumnInterface) => {
     event.preventDefault();
     setMode(false);
-    dispatch(
-      updateColumn({
-        boardId: currentBoard.id,
-        columnId: column.id,
-        title: submitData.title,
-        order: column.order,
-        token: token,
-      })
-    );
+    currentBoard.id &&
+      dispatch(
+        updateColumn({
+          boardId: currentBoard.id,
+          columnId: column?.id,
+          title: submitData.title,
+          order: column?.order,
+          token: token,
+        })
+      );
     setCurrentTitle(submitData.title);
     setPreviousTitle(submitData.title);
   };
@@ -46,10 +54,10 @@ const Column = (column: ColumnInterface) => {
   return (
     <Paper
       elevation={12}
-      sx={{ width: '272px', order: `${column.order}`, height: '53vh', backgroundColor: '#B3DCFD' }}
+      sx={{ width: '272px', order: `${column?.order}`, height: '53vh', backgroundColor: '#B3DCFD' }}
     >
       <form
-        onSubmit={(event) => onSubmit(event, { title: currentTitle })}
+        onSubmit={(event) => onSubmit(event, { title: currentTitle || '' })}
         className="column__title-container title-container"
       >
         <div className="title-container__buttons" hidden={!editMode}>
@@ -79,24 +87,43 @@ const Column = (column: ColumnInterface) => {
       <div className="column__buttons-container button-container">
         <Button
           variant="contained"
-          //TODO: fix appearing only after check another board
-          onClick={() =>
-            dispatch(createTask({ boardId: currentBoard.id, columnId: column.id, token: token }))
-          }
+          onClick={() => {
+            currentBoard.id &&
+              column?.id &&
+              dispatch(
+                createTask({ boardId: currentBoard.id, columnId: column?.id, token: token })
+              );
+          }}
         >
           Add task
         </Button>
-        <Button variant="contained" /* onClick={() => console.log(column.id)} */>
+        <Button
+          variant="contained"
+          onClick={() => {
+            column?.id && dispatch(setCurrentCardId(column?.id));
+            dispatch(setOpen(true));
+          }}
+        >
           Delete column
         </Button>
       </div>
       <div className="column__tasks-container" data-testid="Column">
         <Stack direction={{ xs: 'column', sm: 'column' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
-          {column.tasks?.map((task: TaskInterface) => (
+          {column?.tasks?.map((task: TaskInterface) => (
             <Task key={task.id} title={task.title} order={task.order} id={task.id} />
           ))}
         </Stack>
       </div>
+      <ConfirmationalModal
+        action={() => {
+          currentBoard.id &&
+            column?.id &&
+            dispatch(
+              deleteColumn({ boardId: currentBoard.id, columnId: column?.id, token: token })
+            ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
+        }}
+        text="Do you want to delete this column?"
+      />
     </Paper>
   );
 };
