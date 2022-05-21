@@ -35,9 +35,6 @@ const Board = () => {
   const loading = useAppSelector((state) => state.currentBoard.loading);
 
   //with part from https://codesandbox.io/s/brave-jepsen-ff99rl?file=/src/App.js:4789-4813
-  const onDragStart = () => {
-    console.log(columns);
-  };
 
   const onDragEnd = (result: DragResult, columns: ColumnInterface[]) => {
     if (!result.destination) {
