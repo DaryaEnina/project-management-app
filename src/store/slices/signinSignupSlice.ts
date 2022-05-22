@@ -52,9 +52,9 @@ export const signinSignupSlice = createSlice({
   name: 'signinSignup',
   initialState: {
     token: localStorage.getItem('token') || '',
-    userId: '',
-    name: '',
-    login: '',
+    userId: localStorage.getItem('userId') || '',
+    name: localStorage.getItem('userName') || '',
+    login: localStorage.getItem('userLogin') || '',
     loading: false,
     error: '',
     isRegistrationMode: false,
@@ -66,6 +66,7 @@ export const signinSignupSlice = createSlice({
       state.name = '';
       state.login = '';
       state.error = '';
+      localStorage.clear();
     },
     setIsRegistrationMode: (state: SigninSignupState, action: PayloadAction<boolean>) => {
       state.isRegistrationMode = action.payload;
@@ -104,6 +105,9 @@ export const signinSignupSlice = createSlice({
     },
     [getUser.fulfilled.type]: (state, action: PayloadAction<getUserResponse>) => {
       state.name = action.payload.name;
+      localStorage.setItem('userName', action.payload.name);
+      localStorage.setItem('userId', action.payload.id);
+      localStorage.setItem('userLogin', action.payload.login);
     },
     [getUser.rejected.type]: (state, action: PayloadAction<string>) => {
       state.error = action.payload;

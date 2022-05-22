@@ -29,6 +29,12 @@ export const Main = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!token) {
+      navigate(Paths.home);
+    }
+  }, []);
+
+  useEffect(() => {
     dispatch(getBoards({ token }));
   }, [dispatch, token]);
 
