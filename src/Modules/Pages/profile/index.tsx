@@ -1,12 +1,14 @@
 import { Button, Container, TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import { Controller, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../hooks/storeHooks';
 import './profile.scss';
 
 const Profile = () => {
   const { login, name } = useAppSelector((state) => state.signinSignup);
   const { control } = useForm();
+  const { t: translate } = useTranslation();
 
   return (
     <Container maxWidth="xl">
@@ -18,7 +20,7 @@ const Profile = () => {
             <TextField
               {...field}
               id="outlined-multiline-flexible"
-              label="Name"
+              label={translate('your-name')}
               defaultValue={name}
               variant="standard"
             />
@@ -28,7 +30,12 @@ const Profile = () => {
           name="email"
           control={control}
           render={({ field }) => (
-            <TextField {...field} label="Email" variant="standard" defaultValue={login} />
+            <TextField
+              {...field}
+              label={translate('your-email')}
+              variant="standard"
+              defaultValue={login}
+            />
           )}
         />
         <Controller
@@ -39,7 +46,7 @@ const Profile = () => {
               sx={{ mb: 5 }}
               {...field}
               id="standard-password-input"
-              label="Password"
+              label={translate('your-password')}
               type="password"
               autoComplete="current-password"
               variant="standard"
@@ -47,11 +54,11 @@ const Profile = () => {
           )}
         />
         <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-          <Button variant="contained" type="submit" sx={{ minWidth: '85px' }}>
-            Save
+          <Button variant="contained" type="submit" sx={{ minWidth: '85px', maxWidth: '125px' }}>
+            {translate('save-user')}
           </Button>
-          <Button variant="contained" type="submit" sx={{ minWidth: '85px' }}>
-            Delete
+          <Button variant="contained" type="submit" sx={{ minWidth: '85px', maxWidth: '125px' }}>
+            {translate('delete-user')}
           </Button>
         </Box>
       </form>

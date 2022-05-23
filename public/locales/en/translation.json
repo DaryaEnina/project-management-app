@@ -1,5 +1,9 @@
 {
   "your-name": "Your name",
   "page-not-found": "Page not found",
-  "go-to-welcome-page": "Go to welcome page"
+  "go-to-welcome-page": "Go to welcome page",
+  "your-email": "Your Email",
+  "your-password": "Your password",
+  "save-user": "Save",
+  "delete-user": "Delete User"
 }
