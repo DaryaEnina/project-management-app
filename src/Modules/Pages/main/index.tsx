@@ -11,12 +11,13 @@ import {
   CircularProgress,
 } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getCurrentBoard } from '../../../store/slices/currentBoardSlice';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../constants';
 import { deleteBoard } from '../../../store/slices/boardListSlice';
 import { setOpen, setCurrentCardId } from '../../../store/slices/confirmationalModalSlice';
+import { ShuffleArray } from '../../../utils/shuffle-array';
 
 import './main.scss';
 import { ConfirmationalModal } from '../../../components/confirmationalModal';
@@ -27,6 +28,23 @@ export const Main = () => {
   const { currentCardId } = useAppSelector((state) => state.confirmationalModal);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [images, setImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!token) {
+      navigate(Paths.home);
+    }
+  }, [token, navigate]);
+
+  useEffect(() => {
+    setImages(
+      ShuffleArray(
+        Array(20)
+          .fill('1')
+          .map((_, index) => `./assets/image/main-page/${index + 1}.jpg`)
+      )
+    );
+  }, []);
 
   useEffect(() => {
     dispatch(getBoards({ token }));
@@ -49,7 +67,7 @@ export const Main = () => {
               <CardMedia
                 className="main_item__image"
                 component="img"
-                image="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1776&q=80"
+                image={images[index]}
                 alt="card photo"
               />
               <CardContent className="main_item__title">
@@ -57,18 +75,19 @@ export const Main = () => {
                   {item.title}
                 </Typography>
               </CardContent>
+              <IconButton
+                className="main_delete-btn"
+                aria-label="DeleteForeverIcon"
+                color="error"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  dispatch(setCurrentCardId(item.id));
+                  dispatch(setOpen(true));
+                }}
+              >
+                <DeleteForeverIcon />
+              </IconButton>
             </Card>
-            <IconButton
-              className="main_delete-btn"
-              aria-label="DeleteForeverIcon"
-              color="error"
-              onClick={() => {
-                dispatch(setCurrentCardId(item.id));
-                dispatch(setOpen(true));
-              }}
-            >
-              <DeleteForeverIcon />
-            </IconButton>
           </Grid>
         ))}
       </Grid>
