@@ -16,7 +16,11 @@
   &_item {
     position: relative;
     cursor: pointer;
-    min-height: 243px;
+    height: 243px;
+
+    &__image {
+      height: 100%;
+    }
 
     &-wrapper {
       position: relative;
