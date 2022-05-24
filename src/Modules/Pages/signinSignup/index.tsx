@@ -72,11 +72,6 @@ export const SignInSignUp = () => {
     [enqueueSnackbar]
   );
 
-  // test throwing error
-  useEffect(() => {
-    throw new Error('MyCustomError');
-  }, []);
-
   useEffect(() => {
     if (error) {
       showErrorMessage(error);

@@ -20,46 +20,33 @@ export class ErrorBoundary extends Component<errorBoundaryProps, State> {
   }
 
   render() {
+    const { translate } = this.props;
+    const { error } = this.state;
+
     if (this.state.hasError) {
       return (
         <Box className="error-boundary">
-          <h3>Что-то пошло не так</h3>
-          <h3>Но всё поправимо!</h3>
-          <h3>Следуйте инструкциям:</h3>
+          <h3>{translate('something-went-wrong')}</h3>
+          <h3>{translate('but-everything-is-fixable')}</h3>
+          <h3>{translate('follow-the-instructions')}</h3>
           <ol className="error-boundary_list">
+            <li>{translate('error-boundary-list-item-1')}</li>
             <li>
-              Для начала нажмите клавишу F5 на своей клавиатуре. В случае, если ошибка не серьезна,
-              это поможет.
-            </li>
-            <li>
-              Если ошибка повторяется и нажатие F5 не помогает, попробуйте открыть другие страницы
-              сайта и нажмите клавишу F5: например,{' '}
+              {translate('error-boundary-list-item-2')}{' '}
               <Button
                 className="error-boundary_btn"
                 variant="text"
                 onClick={() => this.props.navigate(Paths.home)}
               >
-                {'Страница приветствия'}
+                {translate('welcome-page')}
               </Button>
               .
             </li>
-            <li>
-              Если другие страницы сайта открываются, а недоступна лишь текущая, попробуйте
-              вернуться к ней через некоторое время. Возможно, на сайте ведутся профилактические
-              работы.
-            </li>
-            <li>
-              Если же ошибка на данной странице повторяется постоянно, напишите нам о ней с
-              подробным описанием: в каком случае проявляется, какой url страницы, какой текст
-              ошибки ({this.state.error}), на какую почту вы зарегистрированы на нашем сайте — на
-              адрес support@pma.by.
-            </li>
-            <li>
-              Если работа сайта нестабильна, недоступно большинство страниц, — значит, проблема
-              серьезная и с ней уже разбираются. Пожалуйста, запаситесь терпением.
-            </li>
+            <li>{translate('error-boundary-list-item-3')}</li>
+            <li>{translate('error-boundary-list-item-4', { error: error })}</li>
+            <li>{translate('error-boundary-list-item-5')}</li>
           </ol>
-          <div>Спасибо, что выбираете нас!</div>
+          <div>{translate('error-boundary-thank-you')}</div>
         </Box>
       );
     }
