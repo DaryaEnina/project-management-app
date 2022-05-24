@@ -7,19 +7,22 @@ import Board from './Modules/Pages/board';
 import { Main } from './Modules/Pages/main';
 import './i18n';
 import { NotFoundPage } from './Modules/Pages/404';
+import ErrorBoundary from './Modules/Pages/errorBoundary/errorBoundaryWrapper';
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path={Paths.home} element={<Template />}>
-          <Route index element={<Welcome />} />
-          <Route path={Paths.auth} element={<SignInSignUp />} />
-          <Route path={Paths.main} element={<Main />} />
-          <Route path={Paths.board} element={<Board />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
+      <ErrorBoundary>
+        <Routes>
+          <Route path={Paths.home} element={<Template />}>
+            <Route index element={<Welcome />} />
+            <Route path={Paths.auth} element={<SignInSignUp />} />
+            <Route path={Paths.main} element={<Main />} />
+            <Route path={Paths.board} element={<Board />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </ErrorBoundary>
     </Router>
   );
 }

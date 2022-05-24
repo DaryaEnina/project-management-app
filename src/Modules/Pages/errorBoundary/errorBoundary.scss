@@ -7,5 +7,16 @@
   align-items: center;
   max-width: $xl;
   margin: 0 auto;
+  padding: 25px;
   transform: translateY(10vh);
+
+  &_list {
+    margin-top: 15px;
+  }
+
+  &_btn {
+    font-size: inherit !important;
+    text-transform: lowercase !important;
+    padding: 0 !important;
+  }
 }
