@@ -1,5 +1,9 @@
 {
   "your-name": "Ваше имя",
   "page-not-found": "Страница не найдена",
-  "go-to-welcome-page": "Перейти на начальную страницу"
+  "go-to-welcome-page": "Перейти на начальную страницу",
+  "your-email": "Ваша почта",
+  "your-password": "Ваш пароль",
+  "save-user": "Сохранить",
+  "delete-user": "Удалить пользователя"
 }
