@@ -6,12 +6,15 @@ import App from './App';
 import './index.scss';
 import { store } from './store/store';
 import { SnackbarProvider } from 'notistack';
+import { ErrorBoundary } from './Modules/Pages/errorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <Provider store={store}>
-    <SnackbarProvider maxSnack={3}>
-      <App />
-    </SnackbarProvider>
-  </Provider>
+  <ErrorBoundary>
+    <Provider store={store}>
+      <SnackbarProvider maxSnack={3}>
+        <App />
+      </SnackbarProvider>
+    </Provider>
+  </ErrorBoundary>
 );

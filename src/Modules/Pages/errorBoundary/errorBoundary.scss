@@ -1,0 +1,11 @@
+@import '../../../index.scss';
+
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: $xl;
+  margin: 0 auto;
+  transform: translateY(10vh);
+}
