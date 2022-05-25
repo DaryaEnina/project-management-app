@@ -28,7 +28,7 @@ const Welcome = () => {
               to={Paths.main}
               onClick={() => dispatch(setIsRegistrationMode(false))}
             >
-              {translate('Go to Main Page')}
+              {translate('go-to-main-page')}
             </Link>
           ) : (
             <>
