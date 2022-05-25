@@ -2,6 +2,7 @@
   "your-name": "Your name",
   "page-not-found": "Page not found",
   "go-to-welcome-page": "Go to welcome page",
+
   "something-went-wrong": "Something went wrong",
   "but-everything-is-fixable": "But everything is fixable!",
   "follow-the-instructions": "Follow the instructions:",
@@ -11,5 +12,9 @@
   "error-boundary-list-item-3": "If other pages of the site available, but only the current one is unavailable, try to return to it after a while. It is possible that preventive maintenance is being carried out on the site.",
   "error-boundary-list-item-4": "If the error on this page is repeated constantly, write to us about it with a detailed description: in which case it appears, which page url, which error text ({{error}}), which mail you are registered on our site — to the address support@pma.by.",
   "error-boundary-list-item-5": "If the site is unstable, most of the pages are unavailable, it means that the problem is serious and it is already being dealt with. Please be patient.",
-  "error-boundary-thank-you": "Thank you for choosing us!"
+  "error-boundary-thank-you": "Thank you for choosing us!",
+  "your-email": "Your Email",
+  "your-password": "Your password",
+  "save-user": "Save",
+  "delete-user": "Delete User"
 }

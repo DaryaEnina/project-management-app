@@ -22,7 +22,7 @@ import './Header.scss';
 import ModalNewBoard from '../../components/ModalNewBoard/ModalNewBoard';
 
 const pages = ['Create new board'];
-const settings = ['Profile', 'Edit profile', 'Sign Out'];
+const settings = ['Edit profile', 'Sign Out'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -53,7 +53,9 @@ const ResponsiveAppBar = () => {
     dispatch(clearStorage());
     localStorage.removeItem('token');
   };
-
+  const toProfile = () => {
+    navigate(Paths.profile);
+  };
   return (
     <AppBar position="sticky" sx={{ height: '64px' }}>
       <ModalNewBoard isOpen={open} onClose={() => setOpen(false)} />
@@ -164,7 +166,7 @@ const ResponsiveAppBar = () => {
                   onClose={handleCloseUserMenu}
                 >
                   {settings.map((setting, index) => (
-                    <MenuItem key={setting} onClick={index === 2 ? signOut : handleCloseUserMenu}>
+                    <MenuItem key={setting} onClick={index === 1 ? signOut : toProfile}>
                       <Typography textAlign="center">{setting}</Typography>
                     </MenuItem>
                   ))}
