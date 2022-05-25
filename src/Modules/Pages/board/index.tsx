@@ -1,8 +1,10 @@
 import { Box, Button, Paper, Typography } from '@mui/material';
+import { useState } from 'react';
 import { DragDropContext, DraggableId } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Column from '../../../components/Column/Column';
+import ModalNewBoard from '../../../components/ModalNewBoard/ModalNewBoard';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { createColumn, updateTask } from '../../../store/slices/currentBoardSlice';
 import { Loader } from '../../Loader';
@@ -35,6 +37,7 @@ const Board = () => {
   const { columns } = useAppSelector((state) => state.currentBoard.currentBoard);
   const loading = useAppSelector((state) => state.currentBoard.loading);
   const { t: translate } = useTranslation();
+  const [open, setOpen] = useState(false);
 
   //with part from https://codesandbox.io/s/brave-jepsen-ff99rl?file=/src/App.js:4789-4813
 
@@ -93,6 +96,7 @@ const Board = () => {
   ) : (
     <div>
       <Button onClick={() => navigate(-1)}>{translate('Back to main page')} </Button>
+      <ModalNewBoard isOpen={open} onClose={() => setOpen(false)} item="column" />
       <div className="boardContainer">
         <Paper
           elevation={12}
@@ -105,12 +109,7 @@ const Board = () => {
           }}
         >
           <Typography variant="h3">{currentBoard.title}</Typography>
-          <Button
-            variant="outlined"
-            onClick={() =>
-              currentBoard.id && dispatch(createColumn({ boardId: currentBoard.id, token: token }))
-            }
-          >
+          <Button variant="outlined" onClick={() => setOpen(true)}>
             {translate('Create column')}
           </Button>
           <DragDropContext onDragEnd={(result) => columns && onDragEnd(result, columns)}>
@@ -145,7 +144,7 @@ const Board = () => {
           textAlign: 'center',
         }}
       >
-        Get things done!
+        {translate('Get things done!')}
       </Typography>
     </div>
   );

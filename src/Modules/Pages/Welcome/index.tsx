@@ -4,10 +4,12 @@ import { setIsRegistrationMode } from '../../../store/slices/signinSignupSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import './welcome.scss';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Welcome = () => {
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((state) => state.signinSignup);
+  const { t: translate } = useTranslation();
 
   return (
     <div className="welcome">
@@ -26,7 +28,7 @@ const Welcome = () => {
               to={Paths.main}
               onClick={() => dispatch(setIsRegistrationMode(false))}
             >
-              Go to Main Page
+              {translate('Go to Main Page')}
             </Link>
           ) : (
             <>

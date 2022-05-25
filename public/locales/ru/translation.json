@@ -20,11 +20,14 @@
   "yes": "Да",
   "cancel": "Отмена",
   "confirmation": "Подтверждение",
-  "To create the new board, please enter the title here.": "Чтобы создать новую доску задач, пожалуйста, введите заголовок",
+  "To create the new item, please enter the title here.": "Чтобы создать новый объект, пожалуйста, введите заголовок",
   "Create New Board": "Создать новую доску",
   "Board's Title": "Заголовок доски",
   "Board's Description": "Описание доски",
   "PMApp": "ПМПриложение",
   "Back to main page": "Назад на главную",
-  "Create column": "Создать колонку"
+  "Create column": "Создать колонку",
+  "Get things done!": "Добивайтесь поставленых целей!",
+  "Go to Main Page": "На главную",
+  "Create": "Создать"
 }

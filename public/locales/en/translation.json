@@ -21,12 +21,14 @@
   "yes": "Yes",
   "cancel": "Cancel",
   "confirmation": "Confirmation",
-  "To create the new board, please enter the title here.": "To create the new board, please enter the title here.",
+  "To create the new item, please enter the title here.": "To create the new item, please enter the title here.",
   "Create New Board": "Create new board",
   "Boards Title": "Boards Title",
   "Boards Description": "Boards Description",
   "PMApp": "PMApp",
   "Back to main page": "Back to main page",
-  "Create column": "Create column"
-
+  "Create column": "Create column",
+  "Get things done!": "Get things done!",
+  "Go to Main Page": "Go to Main Page",
+  "Create": "Create"
 }

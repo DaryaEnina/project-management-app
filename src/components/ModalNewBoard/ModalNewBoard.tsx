@@ -11,7 +11,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-import { createBoard } from '../../store/slices/currentBoardSlice';
+import { createBoard, createColumn } from '../../store/slices/currentBoardSlice';
 import { getBoards } from '../../store/slices/boardListSlice';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
@@ -19,9 +19,10 @@ import { useTranslation } from 'react-i18next';
 interface ModalProps {
   isOpen: boolean;
   onClose: ReactEventHandler;
+  item: 'column' | 'task' | 'board';
 }
 
-const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
+const ModalNewBoard = ({ isOpen, onClose, item }: ModalProps) => {
   const token = useAppSelector((state) => state.signinSignup.token);
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(true);
@@ -29,30 +30,46 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
   const [createdDescription, setCreatedDescription] = useState('');
   const { enqueueSnackbar } = useSnackbar();
   const { t: translate } = useTranslation();
+  const { currentBoard } = useAppSelector((state) => state.currentBoard);
 
   const onSubmit = (event: React.FormEvent, submitData: Board) => {
     event.preventDefault();
     setOpen(false);
-    if (submitData.title) {
-      Promise.all([
-        dispatch(
-          createBoard({
-            token: token,
-            board: { title: submitData.title, description: submitData.description },
-          })
-        ),
-        dispatch(getBoards({ token: token })),
-      ]).then(() => setOpen(true));
-      enqueueSnackbar(`New Board ${submitData.title} was created and added to Main page`, {
-        variant: 'success',
-        autoHideDuration: 3000,
-      });
-    } else {
-      enqueueSnackbar('Boards title should not be empty', {
-        variant: 'warning',
-        autoHideDuration: 3000,
-      });
-      setOpen(true);
+    switch (item) {
+      case 'board':
+        if (submitData.title) {
+          Promise.all([
+            dispatch(
+              createBoard({
+                token: token,
+                board: { title: submitData.title, description: submitData.description },
+              })
+            ),
+            dispatch(getBoards({ token: token })),
+          ]).then(() => setOpen(true));
+          enqueueSnackbar(`New Board ${submitData.title} was created and added to Main page`, {
+            variant: 'success',
+            autoHideDuration: 3000,
+          });
+        } else {
+          enqueueSnackbar('Boards title should not be empty', {
+            variant: 'warning',
+            autoHideDuration: 3000,
+          });
+          setOpen(true);
+        }
+        break;
+      case 'column':
+        currentBoard.id &&
+          dispatch(
+            createColumn({
+              token: token,
+              boardId: currentBoard.id,
+              column: { title: submitData.title },
+            })
+          );
+        setOpen(true);
+        break;
     }
   };
 
@@ -69,7 +86,7 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
   return ReactDOM.createPortal(
     <Dialog open={isOpen} onClose={onClose}>
       <DialogTitle>
-        <span>{translate('Create New Board')}</span>
+        <span>{translate('Create')}</span>
       </DialogTitle>
       <form
         className="modal"
@@ -79,13 +96,13 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
       >
         <DialogContent>
           <DialogContentText>
-            {translate('To create the new board, please enter the title here.')}
+            {translate('To create the new item, please enter the title here.')}
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label={translate(`Board's Title`)}
+            label={translate(`Title`)}
             type="text"
             fullWidth
             variant="standard"
@@ -93,25 +110,27 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
             value={createdTitle}
             onChange={handleInput}
           />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label={translate(`Board's Description`)}
-            type="text"
-            fullWidth
-            required
-            variant="standard"
-            value={createdDescription}
-            onChange={handleDescriptionInput}
-          />
+          {item === 'board' && (
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label={translate(`Description`)}
+              type="text"
+              fullWidth
+              required
+              variant="standard"
+              value={createdDescription}
+              onChange={handleDescriptionInput}
+            />
+          )}
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={onClose}>
             {translate('cancel')}
           </Button>
           <Button variant="outlined" type="submit">
-            {translate('Create New Board')}
+            {translate('Create')}
           </Button>
         </DialogActions>
       </form>
