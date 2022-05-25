@@ -16,5 +16,9 @@
   "your-email": "Your Email",
   "your-password": "Your password",
   "save-user": "Save",
-  "delete-user": "Delete User"
+  "delete-user": "Delete User",
+  "confirmational-message": "Do you want to delete this board?",
+  "yes": "Yes",
+  "cancel": "Cancel",
+  "confirmation": "Confirmation"
 }
