@@ -1,0 +1,30 @@
+@import '../../../index.scss';
+
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 800px;
+  margin: 0 auto;
+  transform: translateY(10vh);
+  line-height: 1.4;
+
+  @media (max-width: $md) {
+    width: 550px;
+  }
+
+  @media (max-width: $sm) {
+    width: 280px;
+  }
+
+  &_list {
+    margin: 15px 0;
+  }
+
+  &_btn {
+    font-size: inherit !important;
+    text-transform: lowercase !important;
+    padding: 0 !important;
+  }
+}
