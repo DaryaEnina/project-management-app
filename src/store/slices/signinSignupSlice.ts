@@ -54,7 +54,7 @@ export const signinSignupSlice = createSlice({
     login: localStorage.getItem('userLogin') || '',
     loading: false,
     error: '',
-    isRegistrationMode: false,
+    mode: 'login',
   } as SigninSignupState,
   reducers: {
     clearStorage: (state: SigninSignupState) => {
@@ -65,8 +65,8 @@ export const signinSignupSlice = createSlice({
       state.error = '';
       localStorage.clear();
     },
-    setIsRegistrationMode: (state: SigninSignupState, action: PayloadAction<boolean>) => {
-      state.isRegistrationMode = action.payload;
+    setMode: (state: SigninSignupState, action: PayloadAction<Mode>) => {
+      state.mode = action.payload;
     },
     setIdLogin: (state: SigninSignupState, action: PayloadAction<JwtParseResponse>) => {
       state.userId = action.payload.userId;
@@ -94,7 +94,6 @@ export const signinSignupSlice = createSlice({
     [signUp.fulfilled.type]: (state, action: PayloadAction<SignUpResponse>) => {
       state.loading = false;
       state.login = action.payload.login;
-      state.isRegistrationMode = false;
     },
     [signUp.rejected.type]: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -112,5 +111,5 @@ export const signinSignupSlice = createSlice({
   },
 });
 
-export const { clearStorage, setIsRegistrationMode, setIdLogin } = signinSignupSlice.actions;
+export const { clearStorage, setMode, setIdLogin } = signinSignupSlice.actions;
 export default signinSignupSlice.reducer;

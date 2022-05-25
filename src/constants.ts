@@ -5,3 +5,9 @@ export const Paths = {
   board: '/board',
   profile: '/profile',
 };
+
+export const Mode = {
+  login: 'login',
+  register: 'register',
+  edit: 'edit',
+};

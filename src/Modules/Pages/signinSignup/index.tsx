@@ -6,41 +6,40 @@ import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-import './signinSignup.scss';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { signIn, signUp, setIdLogin, getUser } from '../../../store/slices/signinSignupSlice';
 import { Paths } from '../../../constants';
-
+import './signinSignup.scss';
 import jwt_decode from 'jwt-decode';
 import { mainTheme } from '../../../mui';
+import { Mode } from '../../../constants';
 
 export const SignInSignUp = () => {
-  const { isRegistrationMode, token, userId, login } = useAppSelector(
-    (state) => state.signinSignup
-  );
+  const { mode, token, userId, login } = useAppSelector((state) => state.signinSignup);
 
-  const schema = isRegistrationMode
-    ? yup.object().shape({
-        name: yup.string().min(2).max(15).required(),
-        login: yup.string().email().required(),
-        password: yup.string().min(8).max(15).required(),
-      })
-    : yup.object().shape({
-        login: yup.string().email().required(),
-        password: yup.string().min(8).max(15).required(),
-      });
+  const schema =
+    mode === Mode.login
+      ? yup.object().shape({
+          login: yup.string().email().required(),
+          password: yup.string().min(8).max(15).required(),
+        })
+      : yup.object().shape({
+          name: yup.string().min(2).max(15).required(),
+          login: yup.string().email().required(),
+          password: yup.string().min(8).max(15).required(),
+        });
 
-  const defaultValues = isRegistrationMode
-    ? {
-        name: '',
-        login: '',
-        password: '',
-      }
-    : {
-        login: login || '',
-        password: '',
-      };
+  const defaultValues =
+    mode === Mode.login
+      ? {
+          login: login || '',
+          password: '',
+        }
+      : {
+          name: '',
+          login: '',
+          password: '',
+        };
 
   const {
     handleSubmit,
@@ -59,9 +58,9 @@ export const SignInSignUp = () => {
   const { t: translate } = useTranslation();
 
   const onSubmit = (data: SignInFormValues | SignUpFormValues) => {
-    if (isRegistrationMode) {
+    if (mode === Mode.register) {
       dispatch(signUp(data as SignUpFormValues));
-    } else {
+    } else if (mode === Mode.login) {
       dispatch(signIn(data));
     }
   };
@@ -106,7 +105,7 @@ export const SignInSignUp = () => {
     <ThemeProvider theme={mainTheme}>
       <Container maxWidth="xl">
         <form className="signin-form" onSubmit={handleSubmit(onSubmit)}>
-          {isRegistrationMode && (
+          {mode !== Mode.login && (
             <Controller
               name="name"
               control={control}
@@ -148,8 +147,8 @@ export const SignInSignUp = () => {
               />
             )}
           />
-          <Button variant="contained" type="submit" color="primary">
-            Sign {isRegistrationMode ? 'Up' : 'In'}
+          <Button variant="contained" type="submit">
+            Sign {mode === Mode.register ? 'Up' : 'In'}
           </Button>
         </form>
       </Container>

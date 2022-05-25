@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { Paths } from './../../../constants';
-import { setIsRegistrationMode } from '../../../store/slices/signinSignupSlice';
+import { setMode } from '../../../store/slices/signinSignupSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import './welcome.scss';
 import { Link } from 'react-router-dom';
@@ -26,7 +26,7 @@ const Welcome = () => {
             <Link
               className="signButton"
               to={Paths.main}
-              onClick={() => dispatch(setIsRegistrationMode(false))}
+              // onClick={() => dispatch(setIsRegistrationMode(false))}
             >
               {translate('go-to-main-page')}
             </Link>
@@ -35,14 +35,14 @@ const Welcome = () => {
               <Link
                 className="signButton"
                 to={Paths.auth}
-                onClick={() => dispatch(setIsRegistrationMode(false))}
+                onClick={() => dispatch(setMode('login'))}
               >
                 {translate('Sign in')}
               </Link>
               <Link
                 className="signButton"
                 to={Paths.auth}
-                onClick={() => dispatch(setIsRegistrationMode(true))}
+                onClick={() => dispatch(setMode('register'))}
               >
                 {translate('Sign up')}
               </Link>
