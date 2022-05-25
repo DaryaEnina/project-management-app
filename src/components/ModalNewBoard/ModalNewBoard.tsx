@@ -25,6 +25,7 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(true);
   const [createdTitle, setCreatedTitle] = useState('');
+  const [createdDescription, setCreatedDescription] = useState('');
   const { enqueueSnackbar } = useSnackbar();
 
   const onSubmit = (event: React.FormEvent, submitData: Board) => {
@@ -32,7 +33,12 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
     setOpen(false);
     if (submitData.title) {
       Promise.all([
-        dispatch(createBoard({ token: token, board: { title: submitData.title } })),
+        dispatch(
+          createBoard({
+            token: token,
+            board: { title: submitData.title, description: submitData.description },
+          })
+        ),
         dispatch(getBoards({ token: token })),
       ]).then(() => setOpen(true));
       enqueueSnackbar(`New Board ${submitData.title} was created and added to Main page`, {
@@ -53,13 +59,19 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
     setOpen(true);
   };
 
+  const handleDescriptionInput = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setCreatedDescription(event.target.value);
+  };
+
   if (!isOpen || !open) return null;
   return ReactDOM.createPortal(
     <Dialog open={isOpen} onClose={onClose}>
       <DialogTitle>Create New Board</DialogTitle>
       <form
         className="modal"
-        onSubmit={(event) => onSubmit(event, { title: createdTitle, columns: [] })}
+        onSubmit={(event) =>
+          onSubmit(event, { title: createdTitle, columns: [], description: createdDescription })
+        }
       >
         <DialogContent>
           <DialogContentText>
@@ -75,6 +87,17 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
             variant="standard"
             value={createdTitle}
             onChange={handleInput}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Boards Title"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={createdDescription}
+            onChange={handleDescriptionInput}
           />
         </DialogContent>
         <DialogActions>
