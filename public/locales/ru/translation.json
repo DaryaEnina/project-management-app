@@ -5,5 +5,9 @@
   "your-email": "Ваша почта",
   "your-password": "Ваш пароль",
   "save-user": "Сохранить",
-  "delete-user": "Удалить пользователя"
+  "delete-user": "Удалить пользователя",
+  "confirmational-message": "Вы хотите удалить эту доску?",
+  "yes": "Да",
+  "cancel": "Отмена",
+  "confirmation": "Подтверждение"
 }

@@ -1,26 +1,16 @@
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { getBoards } from '../../../store/slices/boardListSlice';
-import {
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  Grid,
-  IconButton,
-  Backdrop,
-  CircularProgress,
-} from '@mui/material';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Grid, Backdrop, CircularProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { getCurrentBoard } from '../../../store/slices/currentBoardSlice';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../constants';
 import { deleteBoard } from '../../../store/slices/boardListSlice';
-import { setOpen, setCurrentCardId } from '../../../store/slices/confirmationalModalSlice';
 import { ShuffleArray } from '../../../utils/shuffle-array';
+import { MainCardItem } from './components/mainCardItem';
+import { ConfirmationalModal } from '../../../components/confirmationalModal';
+import { useTranslation } from 'react-i18next';
 
 import './main.scss';
-import { ConfirmationalModal } from '../../../components/confirmationalModal';
 
 export const Main = () => {
   const { token } = useAppSelector((state) => state.signinSignup);
@@ -29,6 +19,7 @@ export const Main = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [images, setImages] = useState<string[]>([]);
+  const { t: translate } = useTranslation();
 
   useEffect(() => {
     if (!token) {
@@ -50,11 +41,6 @@ export const Main = () => {
     dispatch(getBoards({ token }));
   }, [dispatch, token]);
 
-  const openBoard = (boardId: string) => {
-    dispatch(getCurrentBoard({ boardId, token }));
-    navigate(Paths.board);
-  };
-
   return (
     <>
       <Grid className="main_container" container spacing={2}>
@@ -62,33 +48,7 @@ export const Main = () => {
           <CircularProgress size={60} />
         </Backdrop>
         {boardList.map((item, index) => (
-          <Grid className="main_item-wrapper" item key={index} xl={3} lg={3} md={4} sm={6} xs={12}>
-            <Card className="main_item" onClick={() => openBoard(item.id)}>
-              <CardMedia
-                className="main_item__image"
-                component="img"
-                image={images[index]}
-                alt="card photo"
-              />
-              <CardContent className="main_item__title">
-                <Typography component="div" variant="h5">
-                  {item.title}
-                </Typography>
-              </CardContent>
-              <IconButton
-                className="main_delete-btn"
-                aria-label="DeleteForeverIcon"
-                color="error"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  dispatch(setCurrentCardId(item.id));
-                  dispatch(setOpen(true));
-                }}
-              >
-                <DeleteForeverIcon />
-              </IconButton>
-            </Card>
-          </Grid>
+          <MainCardItem item={item} imageUrl={images[index]} key={index} />
         ))}
       </Grid>
       <ConfirmationalModal
@@ -97,7 +57,7 @@ export const Main = () => {
             dispatch(getBoards({ token }))
           );
         }}
-        text="Do you want to delete this board?"
+        text={translate('confirmational-message')}
       />
     </>
   );

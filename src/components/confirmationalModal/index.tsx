@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import ReactDOM from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import { setOpen } from '../../store/slices/confirmationalModalSlice';
 
@@ -18,6 +19,7 @@ type ConfirmationalModalProps = {
 export const ConfirmationalModal = ({ action, text }: ConfirmationalModalProps) => {
   const { isOpen } = useAppSelector((state) => state.confirmationalModal);
   const dispatch = useAppDispatch();
+  const { t: translate } = useTranslation();
 
   return ReactDOM.createPortal(
     <Dialog
@@ -26,7 +28,7 @@ export const ConfirmationalModal = ({ action, text }: ConfirmationalModalProps) 
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{'Confirmation'}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{translate('confirmation')}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">{text}</DialogContentText>
       </DialogContent>
@@ -37,10 +39,10 @@ export const ConfirmationalModal = ({ action, text }: ConfirmationalModalProps) 
             dispatch(setOpen(false));
           }}
         >
-          Yes
+          {translate('yes')}
         </Button>
         <Button onClick={() => dispatch(setOpen(false))} autoFocus>
-          Cancel
+          {translate('cancel')}
         </Button>
       </DialogActions>
     </Dialog>,
