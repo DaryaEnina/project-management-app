@@ -6,6 +6,7 @@ import {
   Typography,
   IconButton,
   Skeleton,
+  Tooltip,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../../constants';
@@ -50,9 +51,11 @@ export const MainCardItem = ({ item, imageUrl }: MainCardItemProps) => {
         />
 
         <CardContent className="main_item__title">
-          <Typography component="div" variant="h5">
-            {item.title}
-          </Typography>
+          <Tooltip title={item.title} arrow>
+            <Typography component="div" variant="h5">
+              {item.title.length > 20 ? `${item.title.slice(0, 20)}...` : item.title}
+            </Typography>
+          </Tooltip>
         </CardContent>
         <IconButton
           className="main_delete-btn"
