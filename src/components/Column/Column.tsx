@@ -14,12 +14,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import { ConfirmationalModal } from '../confirmationalModal';
 import { setOpen, setCurrentCardId } from '../../../src/store/slices/confirmationalModalSlice';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { useTranslation } from 'react-i18next';
 
 const Column = (columns: ColumnInterface) => {
   const dispatch = useAppDispatch();
   const { currentBoard } = useAppSelector((state) => state.currentBoard);
   const { token, userId } = useAppSelector((state) => state.signinSignup);
   const column = currentBoard?.columns?.filter((column) => column.id === columns.id)[0];
+  const { t: translate } = useTranslation();
 
   const [editMode, setMode] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(column?.title);
@@ -101,7 +103,7 @@ const Column = (columns: ColumnInterface) => {
               );
           }}
         >
-          Add task
+          {translate('Add task')}
         </Button>
         <Button
           variant="contained"
@@ -110,7 +112,7 @@ const Column = (columns: ColumnInterface) => {
             dispatch(setOpen(true));
           }}
         >
-          Delete column
+          {translate('Delete column')}
         </Button>
       </div>
       <div className="column__tasks-container" data-testid="Column">

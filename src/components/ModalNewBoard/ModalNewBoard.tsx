@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import { createBoard } from '../../store/slices/currentBoardSlice';
 import { getBoards } from '../../store/slices/boardListSlice';
 import { useSnackbar } from 'notistack';
+import { useTranslation } from 'react-i18next';
 
 interface ModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
   const [createdTitle, setCreatedTitle] = useState('');
   const [createdDescription, setCreatedDescription] = useState('');
   const { enqueueSnackbar } = useSnackbar();
+  const { t: translate } = useTranslation();
 
   const onSubmit = (event: React.FormEvent, submitData: Board) => {
     event.preventDefault();
@@ -66,7 +68,9 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
   if (!isOpen || !open) return null;
   return ReactDOM.createPortal(
     <Dialog open={isOpen} onClose={onClose}>
-      <DialogTitle>Create New Board</DialogTitle>
+      <DialogTitle>
+        <span>{translate('Create New Board')}</span>
+      </DialogTitle>
       <form
         className="modal"
         onSubmit={(event) =>
@@ -75,16 +79,17 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
       >
         <DialogContent>
           <DialogContentText>
-            To create the new board, please enter the title here.
+            {translate('To create the new board, please enter the title here.')}
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Boards Title"
+            label={translate(`Board's Title`)}
             type="text"
             fullWidth
             variant="standard"
+            required
             value={createdTitle}
             onChange={handleInput}
           />
@@ -92,9 +97,10 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
             autoFocus
             margin="dense"
             id="name"
-            label="Boards Title"
+            label={translate(`Board's Description`)}
             type="text"
             fullWidth
+            required
             variant="standard"
             value={createdDescription}
             onChange={handleDescriptionInput}
@@ -102,10 +108,10 @@ const ModalNewBoard = ({ isOpen, onClose }: ModalProps) => {
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={onClose}>
-            Cancel
+            {translate('cancel')}
           </Button>
           <Button variant="outlined" type="submit">
-            Create new board
+            {translate('Create New Board')}
           </Button>
         </DialogActions>
       </form>

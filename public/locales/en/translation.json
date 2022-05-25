@@ -20,5 +20,13 @@
   "confirmational-message": "Do you want to delete this board?",
   "yes": "Yes",
   "cancel": "Cancel",
-  "confirmation": "Confirmation"
+  "confirmation": "Confirmation",
+  "To create the new board, please enter the title here.": "To create the new board, please enter the title here.",
+  "Create New Board": "Create new board",
+  "Boards Title": "Boards Title",
+  "Boards Description": "Boards Description",
+  "PMApp": "PMApp",
+  "Back to main page": "Back to main page",
+  "Create column": "Create column"
+
 }

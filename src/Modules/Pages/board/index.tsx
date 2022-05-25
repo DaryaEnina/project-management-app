@@ -1,5 +1,6 @@
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { DragDropContext, DraggableId } from 'react-beautiful-dnd';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Column from '../../../components/Column/Column';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
@@ -33,6 +34,7 @@ const Board = () => {
   const { currentBoard } = useAppSelector((state) => state.currentBoard);
   const { columns } = useAppSelector((state) => state.currentBoard.currentBoard);
   const loading = useAppSelector((state) => state.currentBoard.loading);
+  const { t: translate } = useTranslation();
 
   //with part from https://codesandbox.io/s/brave-jepsen-ff99rl?file=/src/App.js:4789-4813
 
@@ -90,7 +92,7 @@ const Board = () => {
     <Loader />
   ) : (
     <div>
-      <Button onClick={() => navigate(-1)}>Back to main page </Button>
+      <Button onClick={() => navigate(-1)}>{translate('Back to main page')} </Button>
       <div className="boardContainer">
         <Paper
           elevation={12}
@@ -109,7 +111,7 @@ const Board = () => {
               currentBoard.id && dispatch(createColumn({ boardId: currentBoard.id, token: token }))
             }
           >
-            Create column
+            {translate('Create column')}
           </Button>
           <DragDropContext onDragEnd={(result) => columns && onDragEnd(result, columns)}>
             <Box
