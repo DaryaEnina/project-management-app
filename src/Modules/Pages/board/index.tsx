@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Column from '../../../components/Column/Column';
 import ModalNewBoard from '../../../components/ModalNewBoard/ModalNewBoard';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import { createColumn, updateTask } from '../../../store/slices/currentBoardSlice';
+import { updateTask } from '../../../store/slices/currentBoardSlice';
 import { Loader } from '../../Loader';
 import './board.scss';
 
