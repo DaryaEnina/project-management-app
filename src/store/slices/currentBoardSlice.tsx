@@ -26,11 +26,6 @@ export const createBoard = createAsyncThunk<Board, { token: string; board: Board
     }
   }
 );
-//TODO: remove hardcode when modal will be delivered
-const column = {
-  title: 'To Do ',
-  order: 1,
-};
 
 export const createTask = createAsyncThunk<
   TaskInterface,
@@ -111,21 +106,21 @@ export const getTasks = createAsyncThunk<
   }
 });
 
-export const createColumn = createAsyncThunk<ColumnInterface, { boardId: string; token: string }>(
-  'column/create',
-  async ({ boardId, token }) => {
-    try {
-      const response = await api.post(`/boards/${boardId}/columns`, column, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (err) {
-      throw err;
-    }
+export const createColumn = createAsyncThunk<
+  ColumnInterface,
+  { boardId: string; token: string; column: ColumnInterface }
+>('column/create', async ({ boardId, token, column }) => {
+  try {
+    const response = await api.post(`/boards/${boardId}/columns`, column, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
   }
-);
+});
 
 export const getColumn = createAsyncThunk<
   ColumnInterface,
@@ -278,6 +273,7 @@ export const currentBoardSlice = createSlice({
       state.currentBoard.columns = action.payload;
     });
     builder.addCase(createColumn.fulfilled, (state, action) => {
+      console.log(action.payload);
       state.currentBoard.columns?.push(action.payload);
     });
     builder.addCase(getColumn.fulfilled, (state, action) => {

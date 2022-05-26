@@ -20,8 +20,8 @@ import { clearStorage } from '../../store/slices/signinSignupSlice';
 
 import './Header.scss';
 import ModalNewBoard from '../../components/ModalNewBoard/ModalNewBoard';
+import { useTranslation } from 'react-i18next';
 
-const pages = ['Create new board'];
 const settings = ['Edit profile', 'Sign Out'];
 
 const ResponsiveAppBar = () => {
@@ -31,6 +31,9 @@ const ResponsiveAppBar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { t: translate } = useTranslation();
+
+  const pages = ['Create New Board'];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -58,12 +61,12 @@ const ResponsiveAppBar = () => {
   };
   return (
     <AppBar position="sticky" sx={{ height: '64px' }}>
-      <ModalNewBoard isOpen={open} onClose={() => setOpen(false)} />
+      <ModalNewBoard isOpen={open} onClose={() => setOpen(false)} item="board" />
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
           <Box sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
             <Link to={Paths.home} className="logo__link">
-              PMApp
+              {translate('PMApp')}
             </Link>
           </Box>
 
@@ -118,7 +121,7 @@ const ResponsiveAppBar = () => {
                       handleCloseNavMenu();
                     }}
                   >
-                    <Typography textAlign="center">{page}</Typography>
+                    <Typography textAlign="center">{translate('Create New Board')}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -137,7 +140,7 @@ const ResponsiveAppBar = () => {
                   onClick={() => setOpen(true)}
                   sx={{ color: 'white', display: 'block' }}
                 >
-                  {page}
+                  {translate('Create New Board')}
                 </Button>
               ))}
             </Box>

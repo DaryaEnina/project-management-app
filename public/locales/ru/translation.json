@@ -19,5 +19,15 @@
   "confirmational-message": "Вы хотите удалить эту доску?",
   "yes": "Да",
   "cancel": "Отмена",
-  "confirmation": "Подтверждение"
+  "confirmation": "Подтверждение",
+  "To create the new item, please enter the title here.": "Чтобы создать новый объект, пожалуйста, введите заголовок",
+  "Create New Board": "Создать новую доску",
+  "Board's Title": "Заголовок доски",
+  "Board's Description": "Описание доски",
+  "PMApp": "ПМПриложение",
+  "Back to main page": "Назад на главную",
+  "Create column": "Создать колонку",
+  "Get things done!": "Добивайтесь поставленых целей!",
+  "Go to Main Page": "На главную",
+  "Create": "Создать"
 }
