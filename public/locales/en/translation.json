@@ -52,5 +52,8 @@
   "create-new-board": "Create new board",
   "edit-profile": "Edit profile",
   "sign-out": "Sign Out",
+  "sign-in": "Sign In",
+  "sign-up": "Sign Up",
+  "save": "Save",
   "go-to-main-page": "Go to main page"
 }

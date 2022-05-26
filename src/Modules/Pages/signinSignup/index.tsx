@@ -79,7 +79,7 @@ export const SignInSignUp = () => {
   }, [error, showErrorMessage]);
 
   useEffect(() => {
-    if (token) {
+    if (token && mode !== Mode.edit) {
       const jwtObject = jwt_decode<JwtParseResponse>(token);
       dispatch(setIdLogin(jwtObject));
       if (userId) {
@@ -87,7 +87,7 @@ export const SignInSignUp = () => {
       }
       navigate(Paths.main);
     }
-  }, [token, navigate, dispatch, userId]);
+  }, [token, navigate, dispatch, userId, mode]);
 
   useEffect(() => {
     unregister('name');
@@ -133,6 +133,7 @@ export const SignInSignUp = () => {
               />
             )}
           />
+
           <Controller
             name="password"
             control={control}
@@ -148,7 +149,11 @@ export const SignInSignUp = () => {
             )}
           />
           <Button variant="contained" type="submit">
-            Sign {mode === Mode.register ? 'Up' : 'In'}
+            {mode === Mode.register
+              ? translate('sign-up')
+              : mode === Mode.login
+              ? translate('sign-in')
+              : translate('save')}
           </Button>
         </form>
       </Container>

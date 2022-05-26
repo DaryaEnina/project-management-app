@@ -22,6 +22,7 @@ import { ThemeProvider } from '@mui/material';
 import { mainTheme } from '../../mui';
 import ModalNewBoard from '../../components/ModalNewBoard/ModalNewBoard';
 import './Header.scss';
+import { setMode } from '../../store/slices/signinSignupSlice';
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -56,6 +57,7 @@ const ResponsiveAppBar = () => {
     localStorage.removeItem('token');
   };
   const toProfile = () => {
+    setMode('edit');
     navigate(Paths.auth);
   };
   const [header, setHeader] = useState(false);

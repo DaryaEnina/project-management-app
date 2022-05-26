@@ -23,11 +23,7 @@ const Welcome = () => {
           }}
         >
           {token ? (
-            <Link
-              className="signButton"
-              to={Paths.main}
-              // onClick={() => dispatch(setIsRegistrationMode(false))}
-            >
+            <Link className="signButton" to={Paths.main}>
               {translate('go-to-main-page')}
             </Link>
           ) : (
