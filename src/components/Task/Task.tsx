@@ -22,7 +22,7 @@ const Task = (task: TaskInterface) => {
     <div className="task" data-testid="Task">
       <ModalNewBoard
         isOpen={open}
-        onClose={() => console.log(task)}
+        onClose={() => setModalOpen(false)}
         item="task"
         columnId={columnId}
         taskId={task.id}
@@ -38,13 +38,8 @@ const Task = (task: TaskInterface) => {
               </Typography>
             </div>
             <div className="task__description">
-              <Typography component="span" variant="h6">
-                {task.description}
-              </Typography>
-            </div>
-            <div className="task__description">
               <Typography variant="subtitle1" color="text.secondary" component="span">
-                Assignee: User
+                {task.description}
               </Typography>
             </div>
           </CardContent>

@@ -160,21 +160,20 @@ const ModalNewBoard = ({
             value={createdTitle}
             onChange={handleInput}
           />
-          {item === 'board' ||
-            (item === 'task' && (
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label={translate(`Description`)}
-                type="text"
-                fullWidth
-                required
-                variant="standard"
-                value={createdDescription}
-                onChange={handleDescriptionInput}
-              />
-            ))}
+          {(item === 'board' || item === 'task') && (
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label={translate(`Description`)}
+              type="text"
+              fullWidth
+              required
+              variant="standard"
+              value={createdDescription}
+              onChange={handleDescriptionInput}
+            />
+          )}
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={onClose}>

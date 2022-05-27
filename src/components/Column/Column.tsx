@@ -124,6 +124,7 @@ const Column = (columns: ColumnInterface) => {
                                 key={task.id}
                                 title={task.title}
                                 order={task.order}
+                                description={task.description}
                                 id={task.id}
                               />
                             </div>
