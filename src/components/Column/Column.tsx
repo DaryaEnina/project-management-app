@@ -2,12 +2,7 @@ import { Button, Fab, Paper, Stack } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import Task from '../Task/Task';
 import './Column.scss';
-import {
-  updateColumn,
-  createTask,
-  deleteColumn,
-  getCurrentBoard,
-} from '../../store/slices/currentBoardSlice';
+import { updateColumn, deleteColumn, getCurrentBoard } from '../../store/slices/currentBoardSlice';
 import { ChangeEvent, useState } from 'react';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
@@ -15,17 +10,19 @@ import { ConfirmationalModal } from '../confirmationalModal';
 import { setOpen, setCurrentCardId } from '../../../src/store/slices/confirmationalModalSlice';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
+import ModalNewBoard from '../ModalNewBoard/ModalNewBoard';
 
 const Column = (columns: ColumnInterface) => {
   const dispatch = useAppDispatch();
   const { currentBoard } = useAppSelector((state) => state.currentBoard);
-  const { token, userId } = useAppSelector((state) => state.signinSignup);
+  const { token } = useAppSelector((state) => state.signinSignup);
   const column = currentBoard?.columns?.filter((column) => column.id === columns.id)[0];
   const { t: translate } = useTranslation();
 
   const [editMode, setMode] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(column?.title);
   const [previousTitle, setPreviousTitle] = useState(column?.title);
+  const [open, setModalOpen] = useState(false);
 
   const onSubmit = (event: React.FormEvent, submitData: ColumnInterface) => {
     event.preventDefault();
@@ -59,6 +56,12 @@ const Column = (columns: ColumnInterface) => {
       elevation={12}
       sx={{ width: '272px', order: `${column?.order}`, height: '53vh', backgroundColor: '#B3DCFD' }}
     >
+      <ModalNewBoard
+        isOpen={open}
+        onClose={() => setModalOpen(false)}
+        item="task"
+        columnId={column?.id}
+      />
       <form
         onSubmit={(event) => onSubmit(event, { title: currentTitle || '' })}
         className="column__title-container title-container"
@@ -88,21 +91,7 @@ const Column = (columns: ColumnInterface) => {
         </div>
       </form>
       <div className="column__buttons-container button-container">
-        <Button
-          variant="contained"
-          onClick={() => {
-            currentBoard.id &&
-              column?.id &&
-              dispatch(
-                createTask({
-                  boardId: currentBoard.id,
-                  columnId: column?.id,
-                  token: token,
-                  userId: userId,
-                })
-              );
-          }}
-        >
+        <Button variant="contained" onClick={() => setModalOpen(true)}>
           {translate('Add task')}
         </Button>
         <Button

@@ -11,7 +11,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-import { createBoard, createColumn } from '../../store/slices/currentBoardSlice';
+import { createBoard, createColumn, createTask } from '../../store/slices/currentBoardSlice';
 import { getBoards } from '../../store/slices/boardListSlice';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
@@ -20,10 +20,11 @@ interface ModalProps {
   isOpen: boolean;
   onClose: ReactEventHandler;
   item: 'column' | 'task' | 'board';
+  columnId?: string;
 }
 
-const ModalNewBoard = ({ isOpen, onClose, item }: ModalProps) => {
-  const token = useAppSelector((state) => state.signinSignup.token);
+const ModalNewBoard = ({ isOpen, onClose, item, columnId }: ModalProps) => {
+  const { token } = useAppSelector((state) => state.signinSignup);
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(true);
   const [createdTitle, setCreatedTitle] = useState('');
@@ -70,6 +71,21 @@ const ModalNewBoard = ({ isOpen, onClose, item }: ModalProps) => {
           );
         setOpen(true);
         break;
+      case 'task':
+        currentBoard.id &&
+          columnId &&
+          dispatch(
+            createTask({
+              boardId: currentBoard.id,
+              columnId: columnId,
+              token: token,
+              userId: localStorage.getItem('userId') || '',
+              title: submitData.title,
+              description: submitData.description,
+            })
+          );
+        setOpen(true);
+        break;
     }
   };
 
@@ -110,20 +126,21 @@ const ModalNewBoard = ({ isOpen, onClose, item }: ModalProps) => {
             value={createdTitle}
             onChange={handleInput}
           />
-          {item === 'board' && (
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label={translate(`Description`)}
-              type="text"
-              fullWidth
-              required
-              variant="standard"
-              value={createdDescription}
-              onChange={handleDescriptionInput}
-            />
-          )}
+          {item === 'board' ||
+            (item === 'task' && (
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label={translate(`Description`)}
+                type="text"
+                fullWidth
+                required
+                variant="standard"
+                value={createdDescription}
+                onChange={handleDescriptionInput}
+              />
+            ))}
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={onClose}>

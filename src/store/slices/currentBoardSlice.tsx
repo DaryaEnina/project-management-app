@@ -29,16 +29,22 @@ export const createBoard = createAsyncThunk<Board, { token: string; board: Board
 
 export const createTask = createAsyncThunk<
   TaskInterface,
-  { boardId: string; columnId?: string; token: string; userId: string }
->('task/create', async ({ boardId, columnId, token /* userId */ }) => {
+  {
+    boardId: string;
+    columnId?: string;
+    token: string;
+    userId: string;
+    title: string;
+    description: string;
+  }
+>('task/create', async ({ boardId, columnId, token, userId, title, description }) => {
   try {
     const response = await api.post(
       `/boards/${boardId}/columns/${columnId}/tasks`,
       {
-        title: 'Task: pet the cat',
-        order: 1,
-        description: 'Domestic cat needs to be stroked gently',
-        userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
+        title: title,
+        description: description,
+        userId: userId,
       },
       {
         headers: {
@@ -273,7 +279,6 @@ export const currentBoardSlice = createSlice({
       state.currentBoard.columns = action.payload;
     });
     builder.addCase(createColumn.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.currentBoard.columns?.push(action.payload);
     });
     builder.addCase(getColumn.fulfilled, (state, action) => {
