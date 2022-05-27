@@ -133,17 +133,19 @@ const ResponsiveAppBar = () => {
               </Link>
             </Box>
 
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={() => setOpen(true)}
-                  sx={{ color: 'white', display: 'block' }}
-                >
-                  {translate('Create New Board')}
-                </Button>
-              ))}
-            </Box>
+            {token && (
+              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                {pages.map((page) => (
+                  <Button
+                    key={page}
+                    onClick={() => setOpen(true)}
+                    sx={{ color: 'white', display: 'block' }}
+                  >
+                    {translate('Create New Board')}
+                  </Button>
+                ))}
+              </Box>
+            )}
             <CustomizedSwitches />
             {token ? (
               <Box sx={{ flexGrow: 0 }}>

@@ -1,10 +1,11 @@
 import { Box, Button, Paper, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DragDropContext, DraggableId } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Column from '../../../components/Column/Column';
 import ModalNewBoard from '../../../components/ModalNewBoard/ModalNewBoard';
+import { Paths } from '../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { updateTask } from '../../../store/slices/currentBoardSlice';
 import { Loader } from '../../Loader';
@@ -38,6 +39,12 @@ const Board = () => {
   const loading = useAppSelector((state) => state.currentBoard.loading);
   const { t: translate } = useTranslation();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!token) {
+      navigate(Paths.home);
+    }
+  }, [token, navigate]);
 
   //with part from https://codesandbox.io/s/brave-jepsen-ff99rl?file=/src/App.js:4789-4813
 
@@ -101,6 +108,7 @@ const Board = () => {
         <Paper
           elevation={12}
           sx={{
+            padding: '8px',
             margin: '32px 32px ',
             minWidth: '1100px',
             maxWidth: '95vw',

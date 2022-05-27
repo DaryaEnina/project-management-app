@@ -8,7 +8,6 @@ export const signIn = createAsyncThunk('auth/signIn', async (data: SignInData, t
     return response.data;
   } catch (err) {
     if (axios.isAxiosError(err)) {
-      console.log(err);
       return thunkAPI.rejectWithValue(((err as AxiosError).response as AxiosResponse).data.message);
     } else {
       throw err;
@@ -22,7 +21,6 @@ export const signUp = createAsyncThunk('auth/signUp', async (data: SignUpData, t
     return response.data;
   } catch (err) {
     if (axios.isAxiosError(err)) {
-      console.log(err);
       return thunkAPI.rejectWithValue(((err as AxiosError).response as AxiosResponse).data.message);
     } else {
       throw err;
@@ -40,7 +38,6 @@ export const getUser = createAsyncThunk('users/getUser', async (data: getUserDat
     return response.data;
   } catch (err) {
     if (axios.isAxiosError(err)) {
-      console.log(err);
       return thunkAPI.rejectWithValue(((err as AxiosError).response as AxiosResponse).data.message);
     } else {
       throw err;

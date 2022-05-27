@@ -11,7 +11,13 @@ import {
   TextField,
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-import { createBoard, createColumn } from '../../store/slices/currentBoardSlice';
+import {
+  createBoard,
+  createColumn,
+  createTask,
+  getCurrentBoard,
+  updateTask,
+} from '../../store/slices/currentBoardSlice';
 import { getBoards } from '../../store/slices/boardListSlice';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
@@ -20,10 +26,22 @@ interface ModalProps {
   isOpen: boolean;
   onClose: ReactEventHandler;
   item: 'column' | 'task' | 'board';
+  columnId?: string;
+  editMode?: boolean;
+  taskOrder?: number;
+  taskId?: string;
 }
 
-const ModalNewBoard = ({ isOpen, onClose, item }: ModalProps) => {
-  const token = useAppSelector((state) => state.signinSignup.token);
+const ModalNewBoard = ({
+  isOpen,
+  onClose,
+  item,
+  columnId,
+  editMode,
+  taskOrder,
+  taskId,
+}: ModalProps) => {
+  const { token } = useAppSelector((state) => state.signinSignup);
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(true);
   const [createdTitle, setCreatedTitle] = useState('');
@@ -70,6 +88,37 @@ const ModalNewBoard = ({ isOpen, onClose, item }: ModalProps) => {
           );
         setOpen(true);
         break;
+      case 'task':
+        {
+          currentBoard.id && taskId && editMode
+            ? taskId &&
+              dispatch(
+                updateTask({
+                  boardId: currentBoard.id,
+                  columnId: columnId,
+                  token: token,
+                  userId: localStorage.getItem('userId') || '',
+                  title: submitData.title,
+                  description: submitData.description,
+                  order: taskOrder,
+                  taskId: taskId,
+                })
+              ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })))
+            : currentBoard.id &&
+              columnId &&
+              dispatch(
+                createTask({
+                  boardId: currentBoard.id,
+                  columnId: columnId,
+                  token: token,
+                  userId: localStorage.getItem('userId') || '',
+                  title: submitData.title,
+                  description: submitData.description,
+                })
+              ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
+        }
+        setOpen(true);
+        break;
     }
   };
 
@@ -96,7 +145,7 @@ const ModalNewBoard = ({ isOpen, onClose, item }: ModalProps) => {
       >
         <DialogContent>
           <DialogContentText>
-            {translate('To create the new item, please enter the title here.')}
+            {translate('To create or update the item, please enter the title here.')}
           </DialogContentText>
           <TextField
             autoFocus
@@ -110,7 +159,7 @@ const ModalNewBoard = ({ isOpen, onClose, item }: ModalProps) => {
             value={createdTitle}
             onChange={handleInput}
           />
-          {item === 'board' && (
+          {(item === 'board' || item === 'task') && (
             <TextField
               autoFocus
               margin="dense"
@@ -130,7 +179,7 @@ const ModalNewBoard = ({ isOpen, onClose, item }: ModalProps) => {
             {translate('cancel')}
           </Button>
           <Button variant="outlined" type="submit">
-            {translate('Create')}
+            {editMode ? translate('Update') : translate('Create')}
           </Button>
         </DialogActions>
       </form>
