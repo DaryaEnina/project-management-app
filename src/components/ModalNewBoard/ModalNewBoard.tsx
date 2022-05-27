@@ -89,7 +89,6 @@ const ModalNewBoard = ({
         setOpen(true);
         break;
       case 'task':
-        console.log(columnId);
         {
           currentBoard.id && taskId && editMode
             ? taskId &&
@@ -116,7 +115,7 @@ const ModalNewBoard = ({
                   title: submitData.title,
                   description: submitData.description,
                 })
-              );
+              ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
         }
         setOpen(true);
         break;
