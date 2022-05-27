@@ -64,24 +64,24 @@ export const updateTask = createAsyncThunk<
     boardId: string;
     columnId?: string;
     taskId: string;
-    newColumnId: string;
-    newOrder: number;
+    newColumnId?: string;
+    newOrder?: number;
     token: string;
     userId: string;
-  }
+  } & Partial<TaskInterface>
 >(
   'task/update',
-  async ({ boardId, columnId, taskId, newColumnId, newOrder, token /* userId */ }) => {
+  async ({ boardId, columnId, taskId, token, userId, title, order, description }) => {
     try {
       const response = await api.put(
         `/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
         {
-          title: 'Task: pet the cat',
-          order: newOrder,
-          description: 'Domestic cat needs to be stroked gently',
-          userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
+          title: title,
+          order: order,
+          description: description,
+          userId: userId,
           boardId: boardId,
-          columnId: newColumnId,
+          columnId: columnId,
         },
         {
           headers: {
@@ -95,6 +95,27 @@ export const updateTask = createAsyncThunk<
     }
   }
 );
+
+export const deleteTask = createAsyncThunk<
+  ColumnInterface,
+  {
+    boardId: string;
+    columnId?: string;
+    token: string;
+    taskId: string;
+  } & Partial<TaskInterface>
+>('task/delete', async ({ boardId, columnId, token, taskId }) => {
+  try {
+    const response = await api.delete(`/boards/${boardId}/columns/${columnId}/tasks/${taskId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+});
 
 export const getTasks = createAsyncThunk<
   TaskInterface,
@@ -292,10 +313,7 @@ export const currentBoardSlice = createSlice({
     builder.addCase(updateTask.fulfilled, (state, action) => {
       state.currentBoard.columns
         ?.filter((column) => action.payload.columnId === column.id)[0]
-        .tasks?.push(action.payload);
-      state.currentBoard.columns?.filter((column) =>
-        column.tasks?.filter((task) => task.id !== action.payload.id)
-      );
+        .tasks?.splice(action.payload.order - 1, 1, action.payload);
     });
   },
 });

@@ -20,7 +20,7 @@
   "yes": "Да",
   "cancel": "Отмена",
   "confirmation": "Подтверждение",
-  "To create the new item, please enter the title here.": "Чтобы создать новый объект, пожалуйста, введите заголовок",
+  "To create or update the item, please enter the title here.": "Чтобы создать или обновить объект, пожалуйста, введите заголовок",
   "Create New Board": "Создать новую доску",
   "Board's Title": "Заголовок доски",
   "Board's Description": "Описание доски",
@@ -29,5 +29,7 @@
   "Create column": "Создать колонку",
   "Get things done!": "Добивайтесь поставленых целей!",
   "Go to Main Page": "На главную",
-  "Create": "Создать"
+  "Create": "Создать",
+  "Add task": "Создать задачу",
+  "Delete column": "Удалить колонку"
 }
