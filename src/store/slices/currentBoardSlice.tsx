@@ -81,7 +81,7 @@ export const updateTask = createAsyncThunk<
           description: description,
           userId: userId,
           boardId: boardId,
-          columnId: newColumnId,
+          columnId: newColumnId ? newColumnId : columnId,
         },
         {
           headers: {

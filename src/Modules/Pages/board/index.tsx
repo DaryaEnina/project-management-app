@@ -49,28 +49,23 @@ const Board = () => {
   //with part from https://codesandbox.io/s/brave-jepsen-ff99rl?file=/src/App.js:4789-4813
 
   const onDragEnd = (result: DragResult, columns: ColumnInterface[]) => {
-    console.log(result);
     if (!result.destination) {
-      console.log('!result.destination');
       return;
     }
 
     if (result.destination.index === result.source.index) {
-      console.log('the same');
       return;
     }
 
     const { source, destination } = result;
-
+    const sourceColumn = columns.filter(
+      (column) => column?.id && column?.id === source.droppableId
+    )[0];
+    const destColumn = columns.filter(
+      (column) => column?.id && column?.id === destination.droppableId
+    )[0];
+    const sourceItems = sourceColumn?.tasks && [...sourceColumn.tasks];
     if (source.droppableId !== destination.droppableId) {
-      console.log(source.droppableId);
-      const sourceColumn = columns.filter(
-        (column) => column?.id && column?.id === source.droppableId
-      )[0];
-      const destColumn = columns.filter(
-        (column) => column?.id && column?.id === destination.droppableId
-      )[0];
-      const sourceItems = sourceColumn?.tasks && [...sourceColumn.tasks];
       if (sourceItems) {
         currentBoard.id &&
           sourceColumn.id &&
@@ -87,18 +82,34 @@ const Board = () => {
                 .description,
               taskId: result.draggableId,
               userId: localStorage.getItem('userId') || '',
-              order: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0].order,
+              order: destColumn?.tasks?.length,
             })
           ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
       }
     } else {
-      //TODO: add replacing inside the column
       const column = columns[/* source.droppableId */ 0];
       const copiedItems = column?.tasks && [...column?.tasks];
       if (copiedItems) {
         const [removed] = copiedItems?.splice(source.index, 1);
         copiedItems?.splice(destination.index, 0, removed);
       }
+      currentBoard.id &&
+        sourceColumn.id &&
+        destColumn?.id &&
+        destColumn.tasks &&
+        dispatch(
+          updateTask({
+            boardId: currentBoard.id,
+            columnId: sourceColumn?.id,
+            token: token,
+            title: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0].title,
+            description: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0]
+              .description,
+            taskId: result.draggableId,
+            userId: localStorage.getItem('userId') || '',
+            order: 1,
+          })
+        ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
     }
   };
 
