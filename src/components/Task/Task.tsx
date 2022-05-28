@@ -30,15 +30,20 @@ const Task = (task: TaskInterface) => {
         editMode={true}
       />
       <Card sx={{ display: 'flex' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '150px' }}>
           <CardContent sx={{ flex: '1 0 auto' }}>
-            <div className="task__description">
-              <Typography component="span" variant="h5">
+            <div>
+              <Typography component="span" variant="h5" className="task__description">
                 {task.title}
               </Typography>
             </div>
-            <div className="task__description">
-              <Typography variant="subtitle1" color="text.secondary" component="span">
+            <div>
+              <Typography
+                variant="subtitle1"
+                color="text.secondary"
+                component="span"
+                className="task__description"
+              >
                 {task.description}
               </Typography>
             </div>

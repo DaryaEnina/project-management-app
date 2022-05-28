@@ -7,7 +7,7 @@ import Column from '../../../components/Column/Column';
 import ModalNewBoard from '../../../components/ModalNewBoard/ModalNewBoard';
 import { Paths } from '../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import { updateTask } from '../../../store/slices/currentBoardSlice';
+import { getCurrentBoard, updateTask } from '../../../store/slices/currentBoardSlice';
 import { Loader } from '../../Loader';
 import './board.scss';
 
@@ -58,19 +58,15 @@ const Board = () => {
     }
 
     const { source, destination } = result;
-
+    const sourceColumn = columns.filter(
+      (column) => column?.id && column?.id === source.droppableId
+    )[0];
+    const destColumn = columns.filter(
+      (column) => column?.id && column?.id === destination.droppableId
+    )[0];
+    const sourceItems = sourceColumn?.tasks && [...sourceColumn.tasks];
     if (source.droppableId !== destination.droppableId) {
-      const sourceColumn = columns.filter(
-        (column) => column?.id && column?.id === source.droppableId
-      )[0];
-      const destColumn = columns.filter(
-        (column) => column?.id && column?.id === destination.droppableId
-      )[0];
-      const sourceItems = sourceColumn?.tasks && [...sourceColumn.tasks];
-      const destItems = destColumn.tasks && [...destColumn.tasks];
       if (sourceItems) {
-        const [removed] = sourceItems.splice(source.index, 1);
-        destItems?.splice(destination.index, 0, removed);
         currentBoard.id &&
           sourceColumn.id &&
           destColumn?.id &&
@@ -81,20 +77,39 @@ const Board = () => {
               columnId: sourceColumn?.id,
               token: token,
               newColumnId: destColumn?.id,
-              newOrder: destColumn.tasks?.length - 1,
+              title: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0].title,
+              description: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0]
+                .description,
               taskId: result.draggableId,
-              userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
+              userId: localStorage.getItem('userId') || '',
+              order: destColumn?.tasks?.length,
             })
-          );
+          ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
       }
     } else {
-      //TODO: add replacing inside the column
       const column = columns[/* source.droppableId */ 0];
       const copiedItems = column?.tasks && [...column?.tasks];
       if (copiedItems) {
         const [removed] = copiedItems?.splice(source.index, 1);
         copiedItems?.splice(destination.index, 0, removed);
       }
+      currentBoard.id &&
+        sourceColumn.id &&
+        destColumn?.id &&
+        destColumn.tasks &&
+        dispatch(
+          updateTask({
+            boardId: currentBoard.id,
+            columnId: sourceColumn?.id,
+            token: token,
+            title: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0].title,
+            description: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0]
+              .description,
+            taskId: result.draggableId,
+            userId: localStorage.getItem('userId') || '',
+            order: sourceColumn?.tasks?.length ? sourceColumn?.tasks?.length - 1 : 0,
+          })
+        ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
     }
   };
 
