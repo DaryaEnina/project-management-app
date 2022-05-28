@@ -107,7 +107,7 @@ const Board = () => {
               .description,
             taskId: result.draggableId,
             userId: localStorage.getItem('userId') || '',
-            order: 1,
+            order: sourceColumn?.tasks?.length ? sourceColumn?.tasks?.length - 1 : 0,
           })
         ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
     }
