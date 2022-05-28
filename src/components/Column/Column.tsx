@@ -54,7 +54,7 @@ const Column = (columns: ColumnInterface) => {
   return (
     <Paper
       elevation={12}
-      sx={{ width: '272px', order: `${column?.order}`, height: '53vh', backgroundColor: '#B3DCFD' }}
+      sx={{ width: '272px', order: `${column?.order}`, height: '51vh', backgroundColor: '#B3DCFD' }}
     >
       <ModalNewBoard
         isOpen={open}

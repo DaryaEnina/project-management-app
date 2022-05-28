@@ -71,7 +71,7 @@ export const updateTask = createAsyncThunk<
   } & Partial<TaskInterface>
 >(
   'task/update',
-  async ({ boardId, columnId, taskId, token, userId, title, order, description }) => {
+  async ({ boardId, columnId, taskId, token, userId, title, order, description, newColumnId }) => {
     try {
       const response = await api.put(
         `/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
@@ -81,7 +81,7 @@ export const updateTask = createAsyncThunk<
           description: description,
           userId: userId,
           boardId: boardId,
-          columnId: columnId,
+          columnId: newColumnId,
         },
         {
           headers: {

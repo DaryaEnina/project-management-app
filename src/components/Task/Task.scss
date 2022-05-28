@@ -1,7 +1,12 @@
 .task {
+    width: 236px;
 	&__description{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+        width: 140px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
 	}
 }

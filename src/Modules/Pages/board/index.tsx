@@ -7,7 +7,7 @@ import Column from '../../../components/Column/Column';
 import ModalNewBoard from '../../../components/ModalNewBoard/ModalNewBoard';
 import { Paths } from '../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import { updateTask } from '../../../store/slices/currentBoardSlice';
+import { getCurrentBoard, updateTask } from '../../../store/slices/currentBoardSlice';
 import { Loader } from '../../Loader';
 import './board.scss';
 
@@ -49,17 +49,21 @@ const Board = () => {
   //with part from https://codesandbox.io/s/brave-jepsen-ff99rl?file=/src/App.js:4789-4813
 
   const onDragEnd = (result: DragResult, columns: ColumnInterface[]) => {
+    console.log(result);
     if (!result.destination) {
+      console.log('!result.destination');
       return;
     }
 
     if (result.destination.index === result.source.index) {
+      console.log('the same');
       return;
     }
 
     const { source, destination } = result;
 
     if (source.droppableId !== destination.droppableId) {
+      console.log(source.droppableId);
       const sourceColumn = columns.filter(
         (column) => column?.id && column?.id === source.droppableId
       )[0];
@@ -67,10 +71,7 @@ const Board = () => {
         (column) => column?.id && column?.id === destination.droppableId
       )[0];
       const sourceItems = sourceColumn?.tasks && [...sourceColumn.tasks];
-      const destItems = destColumn.tasks && [...destColumn.tasks];
       if (sourceItems) {
-        const [removed] = sourceItems.splice(source.index, 1);
-        destItems?.splice(destination.index, 0, removed);
         currentBoard.id &&
           sourceColumn.id &&
           destColumn?.id &&
@@ -81,11 +82,14 @@ const Board = () => {
               columnId: sourceColumn?.id,
               token: token,
               newColumnId: destColumn?.id,
-              newOrder: destColumn.tasks?.length - 1,
+              title: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0].title,
+              description: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0]
+                .description,
               taskId: result.draggableId,
-              userId: '527176c4-ff92-4525-9c38-d327eaed7c01',
+              userId: localStorage.getItem('userId') || '',
+              order: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0].order,
             })
-          );
+          ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
       }
     } else {
       //TODO: add replacing inside the column
