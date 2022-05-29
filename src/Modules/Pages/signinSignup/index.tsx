@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { Container, TextField, Button } from '@mui/material';
+import { Container, TextField, Button, ThemeProvider } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -13,6 +13,7 @@ import { signIn, signUp, setIdLogin, getUser } from '../../../store/slices/signi
 import { Paths } from '../../../constants';
 
 import jwt_decode from 'jwt-decode';
+import { mainTheme } from '../../../mui';
 
 export const SignInSignUp = () => {
   const { isRegistrationMode, token, userId, login } = useAppSelector(
@@ -102,54 +103,56 @@ export const SignInSignUp = () => {
   }, [token]);
 
   return (
-    <Container maxWidth="xl">
-      <form className="signin-form" onSubmit={handleSubmit(onSubmit)}>
-        {isRegistrationMode && (
+    <ThemeProvider theme={mainTheme}>
+      <Container maxWidth="xl">
+        <form className="signin-form" onSubmit={handleSubmit(onSubmit)}>
+          {isRegistrationMode && (
+            <Controller
+              name="name"
+              control={control}
+              render={({ field, formState }) => (
+                <TextField
+                  {...field}
+                  label={translate('your-name')}
+                  sx={{ mb: '30px' }}
+                  autoComplete="off"
+                  error={!!(formState.errors as SignUpErrorObject).name}
+                  helperText={(errors as SignUpErrorObject).name?.message ?? ''}
+                />
+              )}
+            />
+          )}
           <Controller
-            name="name"
+            name="login"
             control={control}
             render={({ field, formState }) => (
               <TextField
                 {...field}
-                label={translate('your-name')}
-                sx={{ mb: '30px' }}
-                autoComplete="off"
-                error={!!(formState.errors as SignUpErrorObject).name}
-                helperText={(errors as SignUpErrorObject).name?.message ?? ''}
+                label="Email address"
+                error={!!formState.errors.login}
+                helperText={errors.login?.message ?? ''}
               />
             )}
           />
-        )}
-        <Controller
-          name="login"
-          control={control}
-          render={({ field, formState }) => (
-            <TextField
-              {...field}
-              label="Email address"
-              error={!!formState.errors.login}
-              helperText={errors.login?.message ?? ''}
-            />
-          )}
-        />
-        <Controller
-          name="password"
-          control={control}
-          render={({ field, formState }) => (
-            <TextField
-              {...field}
-              label="Password"
-              type="password"
-              sx={{ m: '30px 0' }}
-              error={!!formState.errors.password}
-              helperText={errors.password?.message ?? ''}
-            />
-          )}
-        />
-        <Button variant="contained" type="submit">
-          Sign {isRegistrationMode ? 'Up' : 'In'}
-        </Button>
-      </form>
-    </Container>
+          <Controller
+            name="password"
+            control={control}
+            render={({ field, formState }) => (
+              <TextField
+                {...field}
+                label="Password"
+                type="password"
+                sx={{ m: '30px 0' }}
+                error={!!formState.errors.password}
+                helperText={errors.password?.message ?? ''}
+              />
+            )}
+          />
+          <Button variant="contained" type="submit" color="primary">
+            Sign {isRegistrationMode ? 'Up' : 'In'}
+          </Button>
+        </form>
+      </Container>
+    </ThemeProvider>
   );
 };
