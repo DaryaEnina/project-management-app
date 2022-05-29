@@ -302,6 +302,9 @@ export const currentBoardSlice = createSlice({
     builder.addCase(createColumn.fulfilled, (state, action) => {
       state.currentBoard.columns?.push(action.payload);
     });
+    builder.addCase(updateColumn.fulfilled, (state) => {
+      state.currentBoard.columns?.map((column) => column.order);
+    });
     builder.addCase(getColumn.fulfilled, (state, action) => {
       state.currentColumn = action.payload;
     });

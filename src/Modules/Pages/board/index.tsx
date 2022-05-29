@@ -1,13 +1,13 @@
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { DragDropContext, DraggableId } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, DraggableId, Droppable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Column from '../../../components/Column/Column';
 import ModalNewBoard from '../../../components/ModalNewBoard/ModalNewBoard';
 import { Paths } from '../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import { getCurrentBoard, updateTask } from '../../../store/slices/currentBoardSlice';
+import { getCurrentBoard, updateColumn, updateTask } from '../../../store/slices/currentBoardSlice';
 import { Loader } from '../../Loader';
 import './board.scss';
 
@@ -87,29 +87,45 @@ const Board = () => {
           ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
       }
     } else {
-      const column = columns[/* source.droppableId */ 0];
-      const copiedItems = column?.tasks && [...column?.tasks];
-      if (copiedItems) {
-        const [removed] = copiedItems?.splice(source.index, 1);
-        copiedItems?.splice(destination.index, 0, removed);
+      const draggableColumn = currentBoard?.columns?.filter(
+        (column) => column.id === result.draggableId
+      )[0];
+      if (draggableColumn) {
+        currentBoard.id &&
+          dispatch(
+            updateColumn({
+              boardId: currentBoard.id,
+              columnId: draggableColumn?.id,
+              title: draggableColumn.title,
+              order: result.destination.index + 1,
+              token: token,
+            })
+          ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
+      } else {
+        const column = columns[/* source.droppableId */ 0];
+        const copiedItems = column?.tasks && [...column?.tasks];
+        if (copiedItems) {
+          const [removed] = copiedItems?.splice(source.index, 1);
+          copiedItems?.splice(destination.index, 0, removed);
+        }
+        currentBoard.id &&
+          sourceColumn.id &&
+          destColumn?.id &&
+          destColumn.tasks &&
+          dispatch(
+            updateTask({
+              boardId: currentBoard.id,
+              columnId: sourceColumn?.id,
+              token: token,
+              title: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0].title,
+              description: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0]
+                .description,
+              taskId: result.draggableId,
+              userId: localStorage.getItem('userId') || '',
+              order: sourceColumn?.tasks?.length ? sourceColumn?.tasks?.length - 1 : 0,
+            })
+          ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
       }
-      currentBoard.id &&
-        sourceColumn.id &&
-        destColumn?.id &&
-        destColumn.tasks &&
-        dispatch(
-          updateTask({
-            boardId: currentBoard.id,
-            columnId: sourceColumn?.id,
-            token: token,
-            title: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0].title,
-            description: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0]
-              .description,
-            taskId: result.draggableId,
-            userId: localStorage.getItem('userId') || '',
-            order: sourceColumn?.tasks?.length ? sourceColumn?.tasks?.length - 1 : 0,
-          })
-        ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
     }
   };
 
@@ -136,28 +152,58 @@ const Board = () => {
             {translate('Create column')}
           </Button>
           <DragDropContext onDragEnd={(result) => columns && onDragEnd(result, columns)}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                '& > :not(style)': {
-                  m: 1,
-                },
-              }}
-            >
-              {columns?.map(
-                (column: ColumnInterface) =>
-                  column?.id && (
-                    <Column
-                      key={column.id}
-                      title={column.title}
-                      order={column.order}
-                      id={column.id}
-                      tasks={column.tasks}
-                    ></Column>
-                  )
-              )}
-            </Box>
+            {currentBoard.id && (
+              <Droppable droppableId={currentBoard.id} key={currentBoard.id}>
+                {(provided) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    style={{ display: 'flex', maxHeight: '400px' }}
+                  >
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexWrap: 'nowrap',
+                        '& > :not(style)': {
+                          m: 1,
+                        },
+                      }}
+                    >
+                      {columns?.map((column: ColumnInterface, index) => {
+                        return (
+                          <Draggable
+                            key={column.id}
+                            draggableId={column?.id || index.toString()}
+                            index={index}
+                          >
+                            {(provided) => {
+                              return (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                >
+                                  {column?.id && (
+                                    <Column
+                                      key={column.id}
+                                      title={column.title}
+                                      order={column.order}
+                                      id={column.id}
+                                      tasks={column.tasks}
+                                    ></Column>
+                                  )}
+                                </div>
+                              );
+                            }}
+                          </Draggable>
+                        );
+                      })}
+                    </Box>
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            )}
           </DragDropContext>
         </Paper>
       </div>
