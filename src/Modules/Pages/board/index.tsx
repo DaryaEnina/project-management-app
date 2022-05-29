@@ -103,27 +103,27 @@ const Board = () => {
             })
           ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
       } else {
-        const column = columns[/* source.droppableId */ 0];
-        const copiedItems = column?.tasks && [...column?.tasks];
-        if (copiedItems) {
-          const [removed] = copiedItems?.splice(source.index, 1);
-          copiedItems?.splice(destination.index, 0, removed);
-        }
-        currentBoard.id &&
-          sourceColumn.id &&
-          destColumn?.id &&
-          destColumn.tasks &&
+        currentBoard?.id &&
           dispatch(
             updateTask({
               boardId: currentBoard.id,
-              columnId: sourceColumn?.id,
+              columnId: currentBoard.columns?.filter((column) =>
+                column.tasks?.filter((task) => task.id === result.draggableId)
+              )[0].id,
               token: token,
-              title: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0].title,
-              description: sourceColumn?.tasks?.filter((task) => task.id === result.draggableId)[0]
-                .description,
+              title: currentBoard.columns
+                ?.filter((column) =>
+                  column.tasks?.filter((task) => task.id === result.draggableId)
+                )[0]
+                .tasks?.filter((task) => task.id === result.draggableId)[0]?.title,
+              description: currentBoard.columns
+                ?.filter((column) =>
+                  column.tasks?.filter((task) => task.id === result.draggableId)
+                )[0]
+                .tasks?.filter((task) => task.id === result.draggableId)[0]?.description,
               taskId: result.draggableId,
               userId: localStorage.getItem('userId') || '',
-              order: sourceColumn?.tasks?.length ? sourceColumn?.tasks?.length - 1 : 0,
+              order: result.destination.index + 1,
             })
           ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
       }
@@ -155,7 +155,7 @@ const Board = () => {
             </Button>
             <DragDropContext onDragEnd={(result) => columns && onDragEnd(result, columns)}>
               {currentBoard.id && (
-                <Droppable droppableId={currentBoard.id} key={currentBoard.id}>
+                <Droppable droppableId="board" type="columns" direction="horizontal">
                   {(provided) => (
                     <div
                       {...provided.droppableProps}

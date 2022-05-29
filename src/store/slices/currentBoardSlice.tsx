@@ -316,7 +316,7 @@ export const currentBoardSlice = createSlice({
     builder.addCase(updateTask.fulfilled, (state, action) => {
       state.currentBoard.columns
         ?.filter((column) => action.payload.columnId === column.id)[0]
-        .tasks?.splice(action.payload.order - 1, 1, action.payload);
+        .tasks?.sort((task) => task.order);
     });
   },
 });
