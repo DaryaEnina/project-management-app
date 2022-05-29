@@ -30,6 +30,8 @@ interface ModalProps {
   editMode?: boolean;
   taskOrder?: number;
   taskId?: string;
+  placeholderTitle?: string;
+  placeholderDescription?: string;
 }
 
 const ModalNewBoard = ({
@@ -40,6 +42,8 @@ const ModalNewBoard = ({
   editMode,
   taskOrder,
   taskId,
+  placeholderTitle,
+  placeholderDescription,
 }: ModalProps) => {
   const { token } = useAppSelector((state) => state.signinSignup);
   const dispatch = useAppDispatch();
@@ -154,7 +158,7 @@ const ModalNewBoard = ({
             label={translate(`Title`)}
             type="text"
             fullWidth
-            variant="standard"
+            placeholder={placeholderTitle}
             required
             value={createdTitle}
             onChange={handleInput}
@@ -163,12 +167,12 @@ const ModalNewBoard = ({
             <TextField
               autoFocus
               margin="dense"
-              id="name"
+              id="description"
               label={translate(`Description`)}
               type="text"
               fullWidth
+              placeholder={placeholderDescription}
               required
-              variant="standard"
               value={createdDescription}
               onChange={handleDescriptionInput}
             />
