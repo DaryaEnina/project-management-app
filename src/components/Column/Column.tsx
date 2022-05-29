@@ -2,7 +2,12 @@ import { Button, Fab, Paper, Stack } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import Task from '../Task/Task';
 import './Column.scss';
-import { updateColumn, deleteColumn, getCurrentBoard } from '../../store/slices/currentBoardSlice';
+import {
+  updateColumn,
+  deleteColumn,
+  getCurrentBoard,
+  complete,
+} from '../../store/slices/currentBoardSlice';
 import { ChangeEvent, useState } from 'react';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
@@ -36,7 +41,9 @@ const Column = (columns: ColumnInterface) => {
           order: column?.order,
           token: token,
         })
-      ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
+      )
+        .then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })))
+        .then(() => dispatch(complete()));
     setCurrentTitle(submitData.title);
     setPreviousTitle(submitData.title);
   };
@@ -145,9 +152,9 @@ const Column = (columns: ColumnInterface) => {
         action={() => {
           currentBoard.id &&
             column?.id &&
-            dispatch(
-              deleteColumn({ boardId: currentBoard.id, columnId: column?.id, token: token })
-            ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
+            dispatch(deleteColumn({ boardId: currentBoard.id, columnId: column?.id, token: token }))
+              .then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })))
+              .then(() => dispatch(complete()));
         }}
         text="Do you want to delete this column?"
       />

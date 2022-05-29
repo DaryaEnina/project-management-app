@@ -7,7 +7,7 @@ import ModalNewBoard from '../ModalNewBoard/ModalNewBoard';
 import { ConfirmationalModal } from '../confirmationalModal';
 import { setCurrentCardId, setOpen } from '../../../src/store/slices/confirmationalModalSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
-import { deleteTask, getCurrentBoard } from '../../store/slices/currentBoardSlice';
+import { complete, deleteTask, getCurrentBoard } from '../../store/slices/currentBoardSlice';
 
 const Task = (task: TaskInterface) => {
   const [open, setModalOpen] = useState(false);
@@ -77,7 +77,9 @@ const Task = (task: TaskInterface) => {
                 token: token,
                 taskId: task.id,
               })
-            ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
+            )
+              .then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })))
+              .then(() => dispatch(complete()));
         }}
         text="Do you want to delete this task?"
       />

@@ -272,7 +272,13 @@ export const currentBoardSlice = createSlice({
   } as CurrentBoardState,
   reducers: {
     complete: (state: CurrentBoardState) => {
-      state.loading = true;
+      state.loading = false;
+      state.currentBoard.columns = state.currentBoard.columns?.sort(
+        (column1, column2) => (column1?.order || 0) - (column2?.order || 0)
+      );
+      state.currentBoard.columns?.map((column) =>
+        column.tasks?.sort((task1, task2) => task1.order - task2.order)
+      );
     },
   },
   extraReducers(builder) {

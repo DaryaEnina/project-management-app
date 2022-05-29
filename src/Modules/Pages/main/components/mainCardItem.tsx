@@ -11,7 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { Paths } from '../../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../../hooks/storeHooks';
-import { getCurrentBoard } from '../../../../store/slices/currentBoardSlice';
+import { complete, getCurrentBoard } from '../../../../store/slices/currentBoardSlice';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { setOpen, setCurrentCardId } from '../../../../store/slices/confirmationalModalSlice';
 import { useState } from 'react';
@@ -34,7 +34,7 @@ export const MainCardItem = ({ item, imageUrl }: MainCardItemProps) => {
   const [imgLoading, setImgLoading] = useState<boolean>(true);
 
   const openBoard = (boardId: string) => {
-    dispatch(getCurrentBoard({ boardId, token }));
+    dispatch(getCurrentBoard({ boardId, token })).then(() => dispatch(complete()));
     navigate(Paths.board);
   };
 

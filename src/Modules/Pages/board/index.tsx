@@ -8,7 +8,12 @@ import ModalNewBoard from '../../../components/ModalNewBoard/ModalNewBoard';
 import { Paths } from '../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import { mainTheme } from '../../../mui';
-import { getCurrentBoard, updateColumn, updateTask } from '../../../store/slices/currentBoardSlice';
+import {
+  complete,
+  getCurrentBoard,
+  updateColumn,
+  updateTask,
+} from '../../../store/slices/currentBoardSlice';
 import { Loader } from '../../Loader';
 import './board.scss';
 
@@ -67,11 +72,11 @@ const Board = () => {
     )[0];
     const sourceItems = sourceColumn?.tasks && [...sourceColumn.tasks];
     if (source.droppableId !== destination.droppableId) {
+      //move tasks between column
       if (sourceItems) {
         currentBoard.id &&
           sourceColumn.id &&
           destColumn?.id &&
-          destColumn.tasks &&
           dispatch(
             updateTask({
               boardId: currentBoard.id,
@@ -83,15 +88,18 @@ const Board = () => {
                 .description,
               taskId: result.draggableId,
               userId: localStorage.getItem('userId') || '',
-              order: destColumn?.tasks?.length,
+              order: destColumn?.tasks?.length || 1,
             })
-          ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
+          )
+            .then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })))
+            .then(() => dispatch(complete()));
       }
     } else {
       const draggableColumn = currentBoard?.columns?.filter(
         (column) => column.id === result.draggableId
       )[0];
       if (draggableColumn) {
+        //move column
         currentBoard.id &&
           dispatch(
             updateColumn({
@@ -101,8 +109,11 @@ const Board = () => {
               order: result.destination.index + 1,
               token: token,
             })
-          ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
+          )
+            .then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })))
+            .then(() => dispatch(complete()));
       } else {
+        //move tasks
         currentBoard?.id &&
           dispatch(
             updateTask({
@@ -125,7 +136,11 @@ const Board = () => {
               userId: localStorage.getItem('userId') || '',
               order: result.destination.index + 1,
             })
-          ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
+          )
+            .then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })))
+            .then(() => {
+              dispatch(complete());
+            });
       }
     }
   };
