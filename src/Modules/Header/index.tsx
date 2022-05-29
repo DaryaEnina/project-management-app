@@ -17,14 +17,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Paths } from '../../constants';
 import { useState } from 'react';
 import { clearStorage } from '../../store/slices/signinSignupSlice';
-
-import './Header.scss';
-import ModalNewBoard from '../../components/ModalNewBoard/ModalNewBoard';
 import { useTranslation } from 'react-i18next';
 import { ThemeProvider } from '@mui/material';
 import { mainTheme } from '../../mui';
-
-const settings = ['Edit profile', 'Sign Out'];
+import ModalNewBoard from '../../components/ModalNewBoard/ModalNewBoard';
+import './Header.scss';
+import { setMode } from '../../store/slices/signinSignupSlice';
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -34,8 +32,8 @@ const ResponsiveAppBar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t: translate } = useTranslation();
-
-  const pages = ['Create New Board'];
+  const pages = [translate('create-new-board')];
+  const settings = [translate('edit-profile'), translate('sign-out')];
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -59,7 +57,8 @@ const ResponsiveAppBar = () => {
     localStorage.removeItem('token');
   };
   const toProfile = () => {
-    navigate(Paths.profile);
+    dispatch(setMode('edit'));
+    navigate(Paths.auth);
   };
   const [header, setHeader] = useState(false);
   const changeBackground = () => {

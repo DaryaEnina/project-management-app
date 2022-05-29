@@ -9,6 +9,14 @@ interface SignUpData extends SignInData {
   name: string;
 }
 
+type UpdateData = {
+  userData: SignUpData;
+  userId: string;
+  token: string;
+};
+
+type Mode = 'login' | 'register' | 'edit';
+
 type SigninSignupState = {
   token: string;
   userId: string;
@@ -16,7 +24,7 @@ type SigninSignupState = {
   login: string;
   loading: boolean;
   error: string;
-  isRegistrationMode: boolean;
+  mode: Mode;
 };
 
 type SignUpResponse = {

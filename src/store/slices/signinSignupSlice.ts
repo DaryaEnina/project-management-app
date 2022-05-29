@@ -45,6 +45,34 @@ export const getUser = createAsyncThunk('users/getUser', async (data: getUserDat
   }
 });
 
+export const updateUser = createAsyncThunk(
+  'users/updateUser',
+  async (data: UpdateData, thunkAPI) => {
+    try {
+      const response = await api.put(
+        `/users/${data.userId}`,
+        {
+          ...data.userData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        return thunkAPI.rejectWithValue(
+          ((err as AxiosError).response as AxiosResponse).data.message
+        );
+      } else {
+        throw err;
+      }
+    }
+  }
+);
+
 export const signinSignupSlice = createSlice({
   name: 'signinSignup',
   initialState: {
@@ -54,7 +82,7 @@ export const signinSignupSlice = createSlice({
     login: localStorage.getItem('userLogin') || '',
     loading: false,
     error: '',
-    isRegistrationMode: false,
+    mode: 'login',
   } as SigninSignupState,
   reducers: {
     clearStorage: (state: SigninSignupState) => {
@@ -65,8 +93,8 @@ export const signinSignupSlice = createSlice({
       state.error = '';
       localStorage.clear();
     },
-    setIsRegistrationMode: (state: SigninSignupState, action: PayloadAction<boolean>) => {
-      state.isRegistrationMode = action.payload;
+    setMode: (state: SigninSignupState, action: PayloadAction<Mode>) => {
+      state.mode = action.payload;
     },
     setIdLogin: (state: SigninSignupState, action: PayloadAction<JwtParseResponse>) => {
       state.userId = action.payload.userId;
@@ -94,7 +122,9 @@ export const signinSignupSlice = createSlice({
     [signUp.fulfilled.type]: (state, action: PayloadAction<SignUpResponse>) => {
       state.loading = false;
       state.login = action.payload.login;
-      state.isRegistrationMode = false;
+      state.name = action.payload.name;
+      state.userId = action.payload.id;
+      state.error = '';
     },
     [signUp.rejected.type]: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -109,8 +139,23 @@ export const signinSignupSlice = createSlice({
     [getUser.rejected.type]: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
     },
+    [updateUser.pending.type]: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    [signUp.fulfilled.type]: (state, action: PayloadAction<SignUpResponse>) => {
+      state.loading = false;
+      state.login = action.payload.login;
+      state.name = action.payload.name;
+      state.userId = action.payload.id;
+      state.error = '';
+    },
+    [signUp.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
-export const { clearStorage, setIsRegistrationMode, setIdLogin } = signinSignupSlice.actions;
+export const { clearStorage, setMode, setIdLogin } = signinSignupSlice.actions;
 export default signinSignupSlice.reducer;

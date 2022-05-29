@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { Paths } from './../../../constants';
-import { setIsRegistrationMode } from '../../../store/slices/signinSignupSlice';
+import { setMode } from '../../../store/slices/signinSignupSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
 import './welcome.scss';
 import { Link } from 'react-router-dom';
@@ -23,26 +23,22 @@ const Welcome = () => {
           }}
         >
           {token ? (
-            <Link
-              className="signButton"
-              to={Paths.main}
-              onClick={() => dispatch(setIsRegistrationMode(false))}
-            >
-              {translate('Go to Main Page')}
+            <Link className="signButton" to={Paths.main}>
+              {translate('go-to-main-page')}
             </Link>
           ) : (
             <>
               <Link
                 className="signButton"
                 to={Paths.auth}
-                onClick={() => dispatch(setIsRegistrationMode(false))}
+                onClick={() => dispatch(setMode('login'))}
               >
                 {translate('Sign in')}
               </Link>
               <Link
                 className="signButton"
                 to={Paths.auth}
-                onClick={() => dispatch(setIsRegistrationMode(true))}
+                onClick={() => dispatch(setMode('register'))}
               >
                 {translate('Sign up')}
               </Link>

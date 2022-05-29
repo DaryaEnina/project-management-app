@@ -6,48 +6,52 @@ import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-import './signinSignup.scss';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import { signIn, signUp, setIdLogin, getUser } from '../../../store/slices/signinSignupSlice';
+import {
+  signIn,
+  signUp,
+  setIdLogin,
+  getUser,
+  updateUser,
+} from '../../../store/slices/signinSignupSlice';
 import { Paths } from '../../../constants';
-
+import './signinSignup.scss';
 import jwt_decode from 'jwt-decode';
 import { mainTheme } from '../../../mui';
+import { Mode } from '../../../constants';
 
 export const SignInSignUp = () => {
-  const { isRegistrationMode, token, userId, login } = useAppSelector(
-    (state) => state.signinSignup
-  );
+  const { mode, token, userId, login, name } = useAppSelector((state) => state.signinSignup);
 
-  const schema = isRegistrationMode
-    ? yup.object().shape({
-        name: yup.string().min(2).max(15).required(),
-        login: yup.string().email().required(),
-        password: yup.string().min(8).max(15).required(),
-      })
-    : yup.object().shape({
-        login: yup.string().email().required(),
-        password: yup.string().min(8).max(15).required(),
-      });
+  const schema =
+    mode === Mode.login
+      ? yup.object().shape({
+          login: yup.string().email().required(),
+          password: yup.string().min(8).max(15).required(),
+        })
+      : yup.object().shape({
+          name: yup.string().min(2).max(15).required(),
+          login: yup.string().email().required(),
+          password: yup.string().min(8).max(15).required(),
+        });
 
-  const defaultValues = isRegistrationMode
-    ? {
-        name: '',
-        login: '',
-        password: '',
-      }
-    : {
-        login: login || '',
-        password: '',
-      };
+  const defaultValues =
+    mode === Mode.login
+      ? {
+          login: login || '',
+          password: '',
+        }
+      : {
+          name: name || '',
+          login: login || '',
+          password: '',
+        };
 
   const {
     handleSubmit,
     control,
     formState: { errors },
     reset,
-    unregister,
   } = useForm<SignInFormValues | SignUpFormValues>({
     defaultValues,
     resolver: yupResolver(schema),
@@ -59,11 +63,24 @@ export const SignInSignUp = () => {
   const { t: translate } = useTranslation();
 
   const onSubmit = (data: SignInFormValues | SignUpFormValues) => {
-    if (isRegistrationMode) {
+    if (mode === Mode.register) {
       dispatch(signUp(data as SignUpFormValues));
-    } else {
-      dispatch(signIn(data));
+    } else if (mode === Mode.login) {
+      dispatch(signIn(data as SignInFormValues));
+      reset({
+        login: '',
+        password: '',
+      });
+      return;
+    } else if (mode === Mode.edit) {
+      dispatch(updateUser({ userData: data as SignUpFormValues, userId, token }));
+      navigate(Paths.home);
     }
+    reset({
+      name: '',
+      login: '',
+      password: '',
+    });
   };
 
   const showErrorMessage = useCallback(
@@ -80,7 +97,7 @@ export const SignInSignUp = () => {
   }, [error, showErrorMessage]);
 
   useEffect(() => {
-    if (token) {
+    if (token && mode !== Mode.edit) {
       const jwtObject = jwt_decode<JwtParseResponse>(token);
       dispatch(setIdLogin(jwtObject));
       if (userId) {
@@ -88,15 +105,15 @@ export const SignInSignUp = () => {
       }
       navigate(Paths.main);
     }
-  }, [token, navigate, dispatch, userId]);
+  }, [token, navigate, dispatch, userId, mode]);
 
-  useEffect(() => {
-    unregister('name');
-    reset({
-      login,
-      password: '',
-    });
-  }, [login, reset, unregister]);
+  // useEffect(() => {
+  //   unregister('name');
+  //   reset({
+  //     login,
+  //     password: '',
+  //   });
+  // }, [login, reset, unregister]);
 
   useEffect(() => {
     localStorage.setItem('token', token);
@@ -106,7 +123,7 @@ export const SignInSignUp = () => {
     <ThemeProvider theme={mainTheme}>
       <Container maxWidth="xl">
         <form className="signin-form" onSubmit={handleSubmit(onSubmit)}>
-          {isRegistrationMode && (
+          {mode !== Mode.login && (
             <Controller
               name="name"
               control={control}
@@ -134,6 +151,7 @@ export const SignInSignUp = () => {
               />
             )}
           />
+
           <Controller
             name="password"
             control={control}
@@ -148,8 +166,12 @@ export const SignInSignUp = () => {
               />
             )}
           />
-          <Button variant="contained" type="submit" color="primary">
-            Sign {isRegistrationMode ? 'Up' : 'In'}
+          <Button variant="contained" type="submit">
+            {mode === Mode.register
+              ? translate('sign-up')
+              : mode === Mode.login
+              ? translate('sign-in')
+              : translate('save')}
           </Button>
         </form>
       </Container>
