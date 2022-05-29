@@ -7,7 +7,13 @@ import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
-import { signIn, signUp, setIdLogin, getUser } from '../../../store/slices/signinSignupSlice';
+import {
+  signIn,
+  signUp,
+  setIdLogin,
+  getUser,
+  updateUser,
+} from '../../../store/slices/signinSignupSlice';
 import { Paths } from '../../../constants';
 import './signinSignup.scss';
 import jwt_decode from 'jwt-decode';
@@ -15,7 +21,7 @@ import { mainTheme } from '../../../mui';
 import { Mode } from '../../../constants';
 
 export const SignInSignUp = () => {
-  const { mode, token, userId, login } = useAppSelector((state) => state.signinSignup);
+  const { mode, token, userId, login, name } = useAppSelector((state) => state.signinSignup);
 
   const schema =
     mode === Mode.login
@@ -36,8 +42,8 @@ export const SignInSignUp = () => {
           password: '',
         }
       : {
-          name: '',
-          login: '',
+          name: name || '',
+          login: login || '',
           password: '',
         };
 
@@ -46,29 +52,35 @@ export const SignInSignUp = () => {
     control,
     formState: { errors },
     reset,
-    unregister,
   } = useForm<SignInFormValues | SignUpFormValues>({
     defaultValues,
     resolver: yupResolver(schema),
   });
   const { enqueueSnackbar } = useSnackbar();
-  const { error, loading } = useAppSelector((state) => state.signinSignup);
+  const { error } = useAppSelector((state) => state.signinSignup);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t: translate } = useTranslation();
 
   const onSubmit = (data: SignInFormValues | SignUpFormValues) => {
     if (mode === Mode.register) {
-      dispatch(signUp(data as SignUpFormValues)).then(() => {
-        // if (!error) {
-        console.log(error);
-        console.log(loading);
-        // dispatch(signIn(data));
-        // }
-      });
+      dispatch(signUp(data as SignUpFormValues));
     } else if (mode === Mode.login) {
       dispatch(signIn(data as SignInFormValues));
+      reset({
+        login: '',
+        password: '',
+      });
+      return;
+    } else if (mode === Mode.edit) {
+      dispatch(updateUser({ userData: data as SignUpFormValues, userId, token }));
+      navigate(Paths.home);
     }
+    reset({
+      name: '',
+      login: '',
+      password: '',
+    });
   };
 
   const showErrorMessage = useCallback(
@@ -95,13 +107,13 @@ export const SignInSignUp = () => {
     }
   }, [token, navigate, dispatch, userId, mode]);
 
-  useEffect(() => {
-    unregister('name');
-    reset({
-      login,
-      password: '',
-    });
-  }, [login, reset, unregister]);
+  // useEffect(() => {
+  //   unregister('name');
+  //   reset({
+  //     login,
+  //     password: '',
+  //   });
+  // }, [login, reset, unregister]);
 
   useEffect(() => {
     localStorage.setItem('token', token);
