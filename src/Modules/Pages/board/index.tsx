@@ -1,4 +1,4 @@
-import { Box, Button, Paper, Typography } from '@mui/material';
+import { Box, Button, Paper, ThemeProvider, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, DraggableId, Droppable } from 'react-beautiful-dnd';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import Column from '../../../components/Column/Column';
 import ModalNewBoard from '../../../components/ModalNewBoard/ModalNewBoard';
 import { Paths } from '../../../constants';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHooks';
+import { mainTheme } from '../../../mui';
 import { getCurrentBoard, updateColumn, updateTask } from '../../../store/slices/currentBoardSlice';
 import { Loader } from '../../Loader';
 import './board.scss';
@@ -132,90 +133,92 @@ const Board = () => {
   return loading ? (
     <Loader />
   ) : (
-    <div>
-      <Button onClick={() => navigate(-1)}>{translate('Back to main page')} </Button>
-      <ModalNewBoard isOpen={open} onClose={() => setOpen(false)} item="column" />
-      <div className="boardContainer">
-        <Paper
-          elevation={12}
+    <ThemeProvider theme={mainTheme}>
+      <div>
+        <Button onClick={() => navigate(-1)}>{translate('Back to main page')} </Button>
+        <ModalNewBoard isOpen={open} onClose={() => setOpen(false)} item="column" />
+        <div className="boardContainer">
+          <Paper
+            elevation={12}
+            sx={{
+              padding: '8px',
+              margin: '32px 32px ',
+              minWidth: '1100px',
+              maxWidth: '95vw',
+              height: '66vh',
+              overflowY: 'auto',
+            }}
+          >
+            <Typography variant="h3">{currentBoard.title}</Typography>
+            <Button variant="outlined" onClick={() => setOpen(true)}>
+              {translate('Create column')}
+            </Button>
+            <DragDropContext onDragEnd={(result) => columns && onDragEnd(result, columns)}>
+              {currentBoard.id && (
+                <Droppable droppableId={currentBoard.id} key={currentBoard.id}>
+                  {(provided) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={{ display: 'flex', maxHeight: '400px' }}
+                    >
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          flexWrap: 'nowrap',
+                          '& > :not(style)': {
+                            m: 1,
+                          },
+                        }}
+                      >
+                        {columns?.map((column: ColumnInterface, index) => {
+                          return (
+                            <Draggable
+                              key={column.id}
+                              draggableId={column?.id || index.toString()}
+                              index={index}
+                            >
+                              {(provided) => {
+                                return (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    {column?.id && (
+                                      <Column
+                                        key={column.id}
+                                        title={column.title}
+                                        order={column.order}
+                                        id={column.id}
+                                        tasks={column.tasks}
+                                      ></Column>
+                                    )}
+                                  </div>
+                                );
+                              }}
+                            </Draggable>
+                          );
+                        })}
+                      </Box>
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              )}
+            </DragDropContext>
+          </Paper>
+        </div>
+        <Typography
+          variant="h5"
           sx={{
-            padding: '8px',
-            margin: '32px 32px ',
-            minWidth: '1100px',
-            maxWidth: '95vw',
-            height: '66vh',
-            overflowY: 'auto',
+            textAlign: 'center',
           }}
         >
-          <Typography variant="h3">{currentBoard.title}</Typography>
-          <Button variant="outlined" onClick={() => setOpen(true)}>
-            {translate('Create column')}
-          </Button>
-          <DragDropContext onDragEnd={(result) => columns && onDragEnd(result, columns)}>
-            {currentBoard.id && (
-              <Droppable droppableId={currentBoard.id} key={currentBoard.id}>
-                {(provided) => (
-                  <div
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    style={{ display: 'flex', maxHeight: '400px' }}
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        flexWrap: 'nowrap',
-                        '& > :not(style)': {
-                          m: 1,
-                        },
-                      }}
-                    >
-                      {columns?.map((column: ColumnInterface, index) => {
-                        return (
-                          <Draggable
-                            key={column.id}
-                            draggableId={column?.id || index.toString()}
-                            index={index}
-                          >
-                            {(provided) => {
-                              return (
-                                <div
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                >
-                                  {column?.id && (
-                                    <Column
-                                      key={column.id}
-                                      title={column.title}
-                                      order={column.order}
-                                      id={column.id}
-                                      tasks={column.tasks}
-                                    ></Column>
-                                  )}
-                                </div>
-                              );
-                            }}
-                          </Draggable>
-                        );
-                      })}
-                    </Box>
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            )}
-          </DragDropContext>
-        </Paper>
+          {translate('Get things done!')}
+        </Typography>
       </div>
-      <Typography
-        variant="h5"
-        sx={{
-          textAlign: 'center',
-        }}
-      >
-        {translate('Get things done!')}
-      </Typography>
-    </div>
+    </ThemeProvider>
   );
 };
 
