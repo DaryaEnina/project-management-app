@@ -21,6 +21,8 @@ import { clearStorage } from '../../store/slices/signinSignupSlice';
 import './Header.scss';
 import ModalNewBoard from '../../components/ModalNewBoard/ModalNewBoard';
 import { useTranslation } from 'react-i18next';
+import { ThemeProvider } from '@mui/material';
+import { mainTheme } from '../../mui';
 
 const settings = ['Edit profile', 'Sign Out'];
 
@@ -59,131 +61,137 @@ const ResponsiveAppBar = () => {
   const toProfile = () => {
     navigate(Paths.profile);
   };
+
   return (
-    <AppBar position="sticky" sx={{ height: '64px' }}>
-      <ModalNewBoard isOpen={open} onClose={() => setOpen(false)} item="board" />
-      <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
-          <Box sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
-            <Link to={Paths.home} className="logo__link">
-              {translate('PMApp')}
-            </Link>
-          </Box>
-
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              gap: 3,
-            }}
-          >
-            <Box
-              sx={{
-                display: { xs: 'flex', md: 'none' },
-                justifyContent: 'space-between',
-                maxWidth: 'md',
-              }}
-            >
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                  display: { xs: 'block', md: 'none' },
-                }}
-              >
-                {pages.map((page) => (
-                  <MenuItem
-                    key={page}
-                    onClick={() => {
-                      setOpen(true);
-                      handleCloseNavMenu();
-                    }}
-                  >
-                    <Typography textAlign="center">{translate('Create New Board')}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-
-            <Box sx={{ flexGrow: 2, display: { xs: 'flex', md: 'none' } }}>
+    <ThemeProvider theme={mainTheme}>
+      <AppBar position="sticky" color="primary" sx={{ height: '64px' }}>
+        <ModalNewBoard isOpen={open} onClose={() => setOpen(false)} item="board" />
+        <Container maxWidth="xl">
+          <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
+            <Box sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}>
               <Link to={Paths.home} className="logo__link">
-                PMApp
+                {translate('PMApp')}
               </Link>
             </Box>
 
-            {token && (
-              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                {pages.map((page) => (
-                  <Button
-                    key={page}
-                    onClick={() => setOpen(true)}
-                    sx={{ color: 'white', display: 'block' }}
-                  >
-                    {translate('Create New Board')}
-                  </Button>
-                ))}
-              </Box>
-            )}
-            <CustomizedSwitches />
-            {token ? (
-              <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Open settings">
-                  <IconButton size="large" onClick={handleOpenUserMenu}>
-                    <PermIdentityIcon fontSize="inherit" sx={{ color: 'white' }}></PermIdentityIcon>
-                  </IconButton>
-                </Tooltip>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: 3,
+              }}
+            >
+              <Box
+                sx={{
+                  display: { xs: 'flex', md: 'none' },
+                  justifyContent: 'space-between',
+                  maxWidth: 'md',
+                }}
+              >
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenNavMenu}
+                  color="inherit"
+                >
+                  <MenuIcon />
+                </IconButton>
                 <Menu
-                  sx={{ mt: '45px' }}
                   id="menu-appbar"
-                  anchorEl={anchorElUser}
+                  anchorEl={anchorElNav}
                   anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
+                    vertical: 'bottom',
+                    horizontal: 'left',
                   }}
                   keepMounted
                   transformOrigin={{
                     vertical: 'top',
-                    horizontal: 'right',
+                    horizontal: 'left',
                   }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{
+                    display: { xs: 'block', md: 'none' },
+                  }}
                 >
-                  {settings.map((setting, index) => (
-                    <MenuItem key={setting} onClick={index === 1 ? signOut : toProfile}>
-                      <Typography textAlign="center">{setting}</Typography>
+                  {pages.map((page) => (
+                    <MenuItem
+                      key={page}
+                      onClick={() => {
+                        setOpen(true);
+                        handleCloseNavMenu();
+                      }}
+                    >
+                      <Typography textAlign="center">{translate('Create New Board')}</Typography>
                     </MenuItem>
                   ))}
                 </Menu>
               </Box>
-            ) : (
-              <></>
-            )}
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+
+              <Box sx={{ flexGrow: 2, display: { xs: 'flex', md: 'none' } }}>
+                <Link to={Paths.home} className="logo__link">
+                  PMApp
+                </Link>
+              </Box>
+
+              {token && (
+                <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                  {pages.map((page) => (
+                    <Button
+                      key={page}
+                      onClick={() => setOpen(true)}
+                      sx={{ color: 'white', display: 'block' }}
+                    >
+                      {translate('Create New Board')}
+                    </Button>
+                  ))}
+                </Box>
+              )}
+              <CustomizedSwitches />
+              {token ? (
+                <Box sx={{ flexGrow: 0 }}>
+                  <Tooltip title="Open settings">
+                    <IconButton size="large" onClick={handleOpenUserMenu}>
+                      <PermIdentityIcon
+                        fontSize="inherit"
+                        sx={{ color: 'white' }}
+                      ></PermIdentityIcon>
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: '45px' }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    {settings.map((setting, index) => (
+                      <MenuItem key={setting} onClick={index === 1 ? signOut : toProfile}>
+                        <Typography textAlign="center">{setting}</Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
+              ) : (
+                <></>
+              )}
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </ThemeProvider>
   );
 };
 export default ResponsiveAppBar;
