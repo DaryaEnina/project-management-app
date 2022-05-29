@@ -61,10 +61,18 @@ const ResponsiveAppBar = () => {
   const toProfile = () => {
     navigate(Paths.profile);
   };
-
+  const [header, setHeader] = useState(false);
+  const changeBackground = () => {
+    if (window.scrollY > 80) {
+      setHeader(true);
+    } else {
+      setHeader(false);
+    }
+  };
+  window.addEventListener('scroll', changeBackground);
   return (
     <ThemeProvider theme={mainTheme}>
-      <AppBar position="sticky" color="primary" sx={{ height: '64px' }}>
+      <AppBar position="sticky" color={header ? 'secondary' : 'primary'} sx={{ height: '64px' }}>
         <ModalNewBoard isOpen={open} onClose={() => setOpen(false)} item="board" />
         <Container maxWidth="xl">
           <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
