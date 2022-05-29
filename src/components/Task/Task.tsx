@@ -15,7 +15,7 @@ const Task = (task: TaskInterface) => {
   const { token } = useAppSelector((state) => state.signinSignup);
   const dispatch = useAppDispatch();
   const columnId = currentBoard.columns?.filter((column) =>
-    column.tasks?.filter((taskInside) => taskInside.id !== task.id)
+    column.tasks?.filter((taskInside) => taskInside.id === task.id)
   )[0].id;
 
   return (
@@ -28,6 +28,8 @@ const Task = (task: TaskInterface) => {
         taskId={task.id}
         taskOrder={task.order}
         editMode={true}
+        placeholderTitle={task.title}
+        placeholderDescription={task.description}
       />
       <Card sx={{ display: 'flex' }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '150px' }}>
