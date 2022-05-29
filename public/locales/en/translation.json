@@ -32,5 +32,21 @@
   "Go to Main Page": "Go to Main Page",
   "Create": "Create",
   "Add task": "Add task",
-  "Delete column": "Delete column"
+  "Delete column": "Delete column",
+  "Sign in": "Sign In",
+  "Sign up": "Sign Up",
+  "Project Management App Tittle": "Project Management App",
+  "About project": "Project Management App - a training project to create an application that helps an individual in a team or group of developers achieve their goals.",
+  "RS School. React course.": "RS School. React course.",
+  "About course": "The Rolling Scopes is an independent international developer community founded in 2013. This is a free public school from The Rolling Scopes community. The React course is aimed at learning the ReactJS framework, a popular JavaScript library for building user interfaces.",
+  "Our team": "Our team",
+  "Dmitry": "Dmitry",
+  "Mentor": "Mentor",
+  "Dmitry TeamLead": "Dmitry TeamLead",
+  "Front-end developer": "Front-end developer",
+  "Elena": "Elena",
+  "Darya": "Darya",
+  "Presentation": "Presentation",
+  "Video-presentation": "Video-presentation",
+  "Watch": "Watch"
 }
