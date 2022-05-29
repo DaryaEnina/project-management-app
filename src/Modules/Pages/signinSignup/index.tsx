@@ -52,16 +52,22 @@ export const SignInSignUp = () => {
     resolver: yupResolver(schema),
   });
   const { enqueueSnackbar } = useSnackbar();
-  const { error } = useAppSelector((state) => state.signinSignup);
+  const { error, loading } = useAppSelector((state) => state.signinSignup);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t: translate } = useTranslation();
 
   const onSubmit = (data: SignInFormValues | SignUpFormValues) => {
     if (mode === Mode.register) {
-      dispatch(signUp(data as SignUpFormValues));
+      dispatch(signUp(data as SignUpFormValues)).then(() => {
+        // if (!error) {
+        console.log(error);
+        console.log(loading);
+        // dispatch(signIn(data));
+        // }
+      });
     } else if (mode === Mode.login) {
-      dispatch(signIn(data));
+      dispatch(signIn(data as SignInFormValues));
     }
   };
 

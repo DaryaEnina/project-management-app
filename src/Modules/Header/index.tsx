@@ -57,7 +57,7 @@ const ResponsiveAppBar = () => {
     localStorage.removeItem('token');
   };
   const toProfile = () => {
-    setMode('edit');
+    dispatch(setMode('edit'));
     navigate(Paths.auth);
   };
   const [header, setHeader] = useState(false);
