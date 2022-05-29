@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHooks';
 import {
+  complete,
   createBoard,
   createColumn,
   createTask,
@@ -107,7 +108,9 @@ const ModalNewBoard = ({
                   order: taskOrder,
                   taskId: taskId,
                 })
-              ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })))
+              )
+                .then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })))
+                .then(() => dispatch(complete()))
             : currentBoard.id &&
               columnId &&
               dispatch(
@@ -119,7 +122,9 @@ const ModalNewBoard = ({
                   title: submitData.title,
                   description: submitData.description,
                 })
-              ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
+              )
+                .then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })))
+                .then(() => dispatch(complete()));
         }
         setOpen(true);
         break;
