@@ -36,7 +36,7 @@ const Column = (columns: ColumnInterface) => {
           order: column?.order,
           token: token,
         })
-      );
+      ).then(() => dispatch(getCurrentBoard({ boardId: currentBoard.id || '', token })));
     setCurrentTitle(submitData.title);
     setPreviousTitle(submitData.title);
   };
@@ -86,6 +86,7 @@ const Column = (columns: ColumnInterface) => {
             type="text"
             value={currentTitle}
             onFocus={() => setMode(true)}
+            onBlur={() => setMode(false)}
             onChange={handleInput}
           />
         </div>
@@ -104,7 +105,7 @@ const Column = (columns: ColumnInterface) => {
           {translate('Delete column')}
         </Button>
       </div>
-      <div className="column__tasks-container" data-testid="Column">
+      <div className="column__tasks-container" data-testid="Column" onClick={() => setMode(false)}>
         {column?.id && (
           <Droppable droppableId={column?.id} key={column?.id}>
             {(provided) => (
