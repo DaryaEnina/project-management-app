@@ -100,7 +100,7 @@ const Welcome = () => {
               <p className="welcome__video--link">
                 <a
                   className="welcome__video--btn"
-                  href="#"
+                  href="https://youtu.be/6Zphrm3wIZQ"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
