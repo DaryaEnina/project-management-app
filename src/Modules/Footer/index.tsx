@@ -44,6 +44,7 @@ function Footer() {
               alignItems: 'center',
               textDecoration: 'none',
               mx: '0',
+              px: '0',
             }}
           >
             <Button
