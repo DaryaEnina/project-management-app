@@ -161,7 +161,6 @@ const Board = () => {
               minWidth: '1100px',
               maxWidth: '95vw',
               height: '66vh',
-              overflowY: 'auto',
             }}
           >
             <Typography variant="h3">{currentBoard.title}</Typography>
@@ -170,7 +169,7 @@ const Board = () => {
             </Button>
             <DragDropContext onDragEnd={(result) => columns && onDragEnd(result, columns)}>
               {currentBoard.id && (
-                <Droppable droppableId="board" type="columns" direction="horizontal">
+                <Droppable droppableId={currentBoard.id} type="columns" direction="horizontal">
                   {(provided) => (
                     <div
                       {...provided.droppableProps}
