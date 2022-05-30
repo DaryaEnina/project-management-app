@@ -89,54 +89,56 @@ const ResponsiveAppBar = () => {
                 gap: 3,
               }}
             >
-              <Box
-                sx={{
-                  display: { xs: 'flex', md: 'none' },
-                  justifyContent: 'space-between',
-                  maxWidth: 'md',
-                }}
-              >
-                <IconButton
-                  size="large"
-                  aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
-                  onClick={handleOpenNavMenu}
-                  color="inherit"
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorElNav}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                  open={Boolean(anchorElNav)}
-                  onClose={handleCloseNavMenu}
+              {token && (
+                <Box
                   sx={{
-                    display: { xs: 'block', md: 'none' },
+                    display: { xs: 'flex', md: 'none' },
+                    justifyContent: 'space-between',
+                    maxWidth: 'md',
                   }}
                 >
-                  {pages.map((page) => (
-                    <MenuItem
-                      key={page}
-                      onClick={() => {
-                        setOpen(true);
-                        handleCloseNavMenu();
-                      }}
-                    >
-                      <Typography textAlign="center">{translate('Create New Board')}</Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleOpenNavMenu}
+                    color="inherit"
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorElNav}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}
+                    open={Boolean(anchorElNav)}
+                    onClose={handleCloseNavMenu}
+                    sx={{
+                      display: { xs: 'block', md: 'none' },
+                    }}
+                  >
+                    {pages.map((page) => (
+                      <MenuItem
+                        key={page}
+                        onClick={() => {
+                          setOpen(true);
+                          handleCloseNavMenu();
+                        }}
+                      >
+                        <Typography textAlign="center">{translate('Create New Board')}</Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </Box>
+              )}
 
               <Box sx={{ flexGrow: 2, display: { xs: 'flex', md: 'none' } }}>
                 <Link to={Paths.home} className="logo__link">
