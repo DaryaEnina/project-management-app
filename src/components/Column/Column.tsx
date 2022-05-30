@@ -114,7 +114,7 @@ const Column = (columns: ColumnInterface) => {
       </div>
       <div className="column__tasks-container" data-testid="Column" onClick={() => setMode(false)}>
         {column?.id && currentBoard.id && (
-          <Droppable droppableId={column?.id} type="tasks" direction="vertical">
+          <Droppable droppableId={column?.id} key={column.id} type="tasks" direction="vertical">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef} style={{ display: 'flex' }}>
                 <Stack direction={{ xs: 'column', sm: 'column' }} spacing={{ xs: 1, sm: 2, md: 4 }}>
